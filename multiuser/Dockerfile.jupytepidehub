@@ -21,6 +21,7 @@ COPY ./secrets_tmp/userlist /srv/jupyterhub/userlist
 
 COPY ./img/logo_jupytepide.png /opt/conda/share/jupyter/hub/static/images/jupyterhub-80.png
 COPY ./img/logo_jupytepide.png /opt/conda/share/jupyter/hub/static/images/jupyter.png
+COPY ./img/logo_jupytepide.png /opt/conda/share/jupyter/hub/static/images/logo_jupytepide_dark.png
 COPY ./jupyterhub_config.py /srv/jupyterhub/jupyterhub_config.py
 
 RUN cd /tmp && \
