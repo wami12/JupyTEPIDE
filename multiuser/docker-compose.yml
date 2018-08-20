@@ -15,6 +15,7 @@ services:
 
   postgis:
     image: kartoza/postgis:9.6-2.4
+    container_name: jupytepide-postgis
     volumes:
        - geo-db-data:/var/lib/postgresql
     ports:
@@ -27,6 +28,7 @@ services:
 
   geoserver:
     image: kartoza/geoserver:2.13.0
+    container_name: jupytepide-geoserver
     volumes:
     - geoserver-data:/opt/geoserver/data_dir
     ports:
