@@ -5,6 +5,9 @@ services:
     image: postgres:9.5
     container_name: jupytepide-hub-db
     restart: always
+    networks:
+      default:
+        ipv4_address: ${POSTGRES_HOST}
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       PGDATA: ${DB_VOLUME_CONTAINER}
@@ -12,48 +15,6 @@ services:
       - secrets/postgres.env
     volumes:
       - "db:${DB_VOLUME_CONTAINER}"
-
-  postgis:
-    image: kartoza/postgis:9.6-2.4
-    container_name: jupytepide-postgis
-    volumes:
-       - geo-db-data:/var/lib/postgresql
-    ports:
-      - "25432:5432"
-    env_file:
-    - postgis.env
-    restart: on-failure
-    healthcheck:
-      test: "exit 0"
-
-  geoserver:
-    image: kartoza/geoserver:2.13.0
-    container_name: jupytepide-geoserver
-    volumes:
-    - geoserver-data:/opt/geoserver/data_dir
-    ports:
-    - "8600:8080"
-    restart: on-failure
-    env_file:
-    - geoserver.env
-    depends_on:
-      postgis:
-        condition: service_healthy
-    healthcheck:
-      test: curl --fail -s http://localhost:8080/ || exit 1
-      interval: 1m30s
-      timeout: 10s
-      retries: 3
-
-  mapnik:
-    image: "jupytepide/tilestache-mapnik:ver_1.0.4"
-    container_name: jupytepide-mapnik
-    ports:
-     - "32798:22"
-     - "32799:9001"
-     - "32800:80"
-    volumes:
-     - mapnik:/etc/tilestache
 
   hub:
     depends_on:
@@ -98,9 +59,49 @@ services:
     command: >
       jupyterhub -f /srv/jupyterhub/jupyterhub_config.py
 
+  postgis:
+    image: kartoza/postgis:9.6-2.4
+    container_name: jupytepide-postgis
+    volumes:
+       - geo-db-data:/var/lib/postgresql
+    ports:
+      - "25432:5432"
+    env_file:
+    - postgis.env
+    restart: on-failure
+    healthcheck:
+      test: "exit 0"
+
+  geoserver:
+    image: kartoza/geoserver:2.13.0
+    container_name: jupytepide-geoserver
+    volumes:
+    - geoserver-data:/opt/geoserver/data_dir
+    ports:
+    - "8090:8080"
+    restart: on-failure
+    env_file:
+    - geoserver.env
+    depends_on:
+      postgis:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail -s http://localhost:8080/ || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+
+  mapnik:
+    image: "jupytepide/tilestache-mapnik:ver_1.0.4"
+    container_name: jupytepide-mapnik
+    ports:
+     - "32798:22"
+     - "32799:9001"
+     - "32800:80"
+    volumes:
+     - mapnik:/etc/tilestache
+
 volumes:
-  geoserver-data:
-  geo-db-data:
   data:
     external:
       name: ${DATA_VOLUME_HOST}
@@ -108,6 +109,8 @@ volumes:
     external:
       name: ${DB_VOLUME_HOST}
   eodata:
+  geoserver-data:
+  geo-db-data:
   mapnik:
     external:
       name: ${MAPNIK_VOLUME_HOST}
@@ -115,4 +118,4 @@ volumes:
 networks:
   default:
     external:
-      name: ${DOCKER_NETWORK_NAME}
+      name: jupyterhub-network
