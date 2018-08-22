@@ -27,6 +27,9 @@ services:
     restart: always
     image: jupytepide-hub
     container_name: jupytepide-hub
+    networks:
+      default:
+        ipv4_address: "172.18.0.4"
     volumes:
       # Bind Docker socket on the host so we can connect to the daemon from
       # within the container
@@ -62,6 +65,9 @@ services:
   postgis:
     image: kartoza/postgis:9.6-2.4
     container_name: jupytepide-postgis
+    networks:
+      default:
+        ipv4_address: "172.18.0.3"
     volumes:
        - geo-db-data:/var/lib/postgresql
     ports:
@@ -75,6 +81,9 @@ services:
   geoserver:
     image: kartoza/geoserver:2.13.0
     container_name: jupytepide-geoserver
+    networks:
+      default:
+        ipv4_address: "172.18.0.5"
     volumes:
     - geoserver-data:/opt/geoserver/data_dir
     ports:
@@ -94,6 +103,9 @@ services:
   mapnik:
     image: "jupytepide/tilestache-mapnik:ver_1.0.4"
     container_name: jupytepide-mapnik
+    networks:
+      default:
+        ipv4_address: "172.18.0.6"
     ports:
      - "32798:22"
      - "32799:9001"
@@ -114,6 +126,10 @@ volumes:
   mapnik:
     external:
       name: ${MAPNIK_VOLUME_HOST}
+
+#networks:
+#  jupyterhub-network:
+#    external: true
 
 networks:
   default:
