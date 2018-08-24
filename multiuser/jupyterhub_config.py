@@ -69,8 +69,8 @@ c.DockerSpawner.volumes = {
     'jupyterhub-user-{username}': notebook_dir,
     '/eodata': '/eodata',
     '/eodata-demo': '/home/jovyan/eodata-demo',
-    '/pub/shared': '/home/jovyan/shared',
-    '/opt/dev/JupyTEPIDE/notebooks': '/home/jovyan/shared/notebooks-dev',
+    '/opt/pub/shared': '/home/jovyan/shared',
+    '/opt/pub/dev/JupyTEPIDE/notebooks': '/home/jovyan/shared/notebooks-dev',
     'jupytepide-mapnik': '/home/jovyan/results',
     '/volumes/jupyterhub/{username}/': '/home/jovyan/permanent-data'}
 # Also should be added     '/eodata': '/home/jovyan/eodata' as a alias
