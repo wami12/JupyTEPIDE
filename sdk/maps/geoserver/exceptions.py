@@ -5,4 +5,4 @@ class ApiError(Exception):
         self.status = status
 
     def __str__(self):
-        return "APIError: status={}".format(self.status)
+        return "APIError: status = {}".format(self.status)
