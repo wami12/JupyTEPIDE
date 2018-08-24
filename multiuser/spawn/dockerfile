@@ -24,6 +24,7 @@ RUN wget --quiet http://step.esa.int/thirdparties/snaphu/1.4.2-2/snaphu-v1.4.2_l
 ENV PATH="/opt/snaphu/bin:${PATH}"
 
 RUN cd /tmp && \
+    ls && \
     git clone https://github.com/wasat/JupyTEPIDE.git && \
     cp -rf /tmp/JupyTEPIDE/GUI/res/jupyter/static/* "/opt/conda/lib/python3.6/site-packages/notebook/static" && \
     cd JupyTEPIDE && \
