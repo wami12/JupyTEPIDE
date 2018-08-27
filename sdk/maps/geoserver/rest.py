@@ -8,7 +8,7 @@ from sdk.maps.geoserver.json_builder import get_json_workspace
 
 
 def _url(params):
-    return 'http://localhost:8090/geoserver/rest/imports' + params
+    return 'http://89.250.194.14:8090/geoserver/rest/imports' + params
 
 
 def get_tasks():
