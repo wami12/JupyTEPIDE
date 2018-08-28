@@ -62,3 +62,5 @@ if not os.path.exists(os.path.join(homedir, 'grassdata', 'location', 'PERMANENT'
         f.writelines("e-w resol3: 1\n")
         f.writelines("n-s resol3: 1\n")
         f.writelines("t-b resol:  1\n")
+
+os.chdir(os.path.join(homedir))

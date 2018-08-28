@@ -1,4 +1,5 @@
 from sdk.maps.geoserver.rest import *
+from sdk.maps.geoserver.wms import get_wms
 
 
 def load_geotif(geotiff_name):
@@ -14,4 +15,11 @@ def load_geotif(geotiff_name):
     print("Finish import for ID: %s " % id)
     print(response_final.content)
 
+
 # load_geotif("/pub/shared/tifs/test_snappy.tif")
+
+def test_func():
+    get_wms("/home/jovyan/shared/tifs/test_snappy.tif")
+
+
+test_func()
