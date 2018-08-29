@@ -377,3 +377,5 @@ def Main():
 
 if __name__ == '__main__':
     Main()
+
+print("Added script 02-init-leaflet.py")

@@ -19,3 +19,6 @@ class Mapnik:
         mapnikmap.layers.append(layer)
         mapnikmap.zoom_all()
         mapnik.render_to_file(mapnikmap, outfile)
+
+
+print("Added script 99-mapnik.py")

@@ -98,4 +98,4 @@ class NotebookLoader(object):
 
 sys.meta_path.append(NotebookFinder())
 
-print("JupyTEP IDE 03-import-notebooks TEST")
+print("Added script 03-import-notebook_as_module.py")

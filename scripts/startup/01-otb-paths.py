@@ -9,3 +9,4 @@ except KeyError:
     user_paths = []
 os.environ['OTB_APPLICATION_PATH'] = "/opt/OTB-6.4.0-Linux64/lib/otb/applications"
 
+print("Added script 01-otb-paths.py")

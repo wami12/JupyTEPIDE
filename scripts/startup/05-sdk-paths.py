@@ -13,3 +13,5 @@ def add_paths():
 
 
 add_paths()
+
+print("Added script 05-sdk-paths.py")

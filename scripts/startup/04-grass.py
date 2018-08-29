@@ -64,3 +64,5 @@ if not os.path.exists(os.path.join(homedir, 'grassdata', 'location', 'PERMANENT'
         f.writelines("t-b resol:  1\n")
 
 os.chdir(os.path.join(homedir))
+
+print("Added script 04-grass.py")
