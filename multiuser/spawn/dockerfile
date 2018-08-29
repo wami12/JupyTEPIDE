@@ -23,6 +23,15 @@ RUN wget --quiet http://step.esa.int/thirdparties/snaphu/1.4.2-2/snaphu-v1.4.2_l
 
 ENV PATH="/opt/snaphu/bin:${PATH}"
 
+# apt-get installs
+RUN apt-get update -qq && \
+    apt-get install -y -qq htop python3-lxml && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN pip install -q --no-cache-dir --upgrade pixiedust && \
+    /bin/bash -c "source activate python27 && pip install -q --no-cache-dir --upgrade pixiedust requests Jinja2 pandas && source deactivate python27"
+
 RUN cd /tmp && \
     ls && \
     git clone https://github.com/wasat/JupyTEPIDE.git && \
@@ -48,11 +57,6 @@ RUN cd /tmp && \
     # fix-permissions /home/$NB_USER && \
     # fix-permissions /opt
 
-# apt-get installs
-RUN apt-get update -qq && \
-    apt-get install -y -qq htop python3-lxml && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
 
 # ------------ END TESTING -----------------------
 
@@ -62,9 +66,6 @@ RUN mkdir /home/$NB_USER/dev && \
     git clone -b dev --single-branch https://github.com/wasat/JupyTEPIDE.git && \
     rm -rf /home/jovyan/work/notebook_count/ && \
     fix-permissions /home/$NB_USER
-
-RUN pip install -q --no-cache-dir --upgrade pixiedust && \
-    /bin/bash -c "source activate python27 && pip install -q --no-cache-dir --upgrade pixiedust requests Jinja2 pandas && source deactivate python27"
 
 COPY spawn/docker-entrypoint.sh /srv/docker-entrypoint.sh
 RUN chmod 777 /srv/docker-entrypoint.sh

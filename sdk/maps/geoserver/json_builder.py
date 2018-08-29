@@ -1,6 +1,3 @@
-import json
-
-
 def get_json_workspace(workspace_name):
     json_str = """{
         "import": {
@@ -11,4 +8,4 @@ def get_json_workspace(workspace_name):
             }
         }
     }""" % workspace_name
-    return (json_str)
+    return json_str

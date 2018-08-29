@@ -2,7 +2,7 @@ from pathlib import PurePosixPath
 
 from owslib.wms import WebMapService
 
-from sdk.maps.geoserver.url import URL_WMS
+from maps.geoserver.url import URL_WMS
 
 
 def get_bbox(layer_name):

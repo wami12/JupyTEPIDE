@@ -3,9 +3,9 @@ import subprocess
 
 import requests
 
-from sdk.maps.geoserver.exceptions import ApiError
-from sdk.maps.geoserver.json_builder import get_json_workspace
-from sdk.maps.geoserver.url import URL_REST
+from maps.geoserver.exceptions import ApiError
+from maps.geoserver.json_builder import get_json_workspace
+from maps.geoserver.url import URL_REST
 
 
 def _url(params):
