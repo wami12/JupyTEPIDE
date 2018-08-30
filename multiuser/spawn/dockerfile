@@ -23,12 +23,6 @@ RUN wget --quiet http://step.esa.int/thirdparties/snaphu/1.4.2-2/snaphu-v1.4.2_l
 
 ENV PATH="/opt/snaphu/bin:${PATH}"
 
-# apt-get installs
-RUN apt-get update -qq && \
-    apt-get install -y -qq htop python3-lxml && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
 RUN pip install -q --no-cache-dir --upgrade pixiedust && \
     /bin/bash -c "source activate python27 && pip install -q --no-cache-dir --upgrade pixiedust requests Jinja2 pandas && source deactivate python27"
 
@@ -44,10 +38,6 @@ RUN cd /tmp && \
     mkdir -p /home/jovyan/.ipython/profile_default/startup && \
     find "/home/jovyan/.ipython/profile_default/startup" -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
     cp -a /tmp/JupyTEPIDE/scripts/startup/. /home/jovyan/.ipython/profile_default/startup/ && \
-    # cp /tmp/JupyTEPIDE/scripts/startup/02-init-leaflet.py /home/jovyan/.ipython/profile_default/startup/02-init-leaflet.py && \
-    # cp /tmp/JupyTEPIDE/scripts/startup/03-import_notebook_as_module.py /home/jovyan/.ipython/profile_default/startup/03-import_notebook_as_module.py && \
-    # cp /tmp/JupyTEPIDE/scripts/startup/04-grass.py /home/jovyan/.ipython/profile_default/startup/04-grass.py && \
-    # cp /tmp/JupyTEPIDE/scripts/startup/06-auxiliary_functions.py /home/jovyan/.ipython/profile_default/startup/06-auxiliary_functions.py && \
     mkdir -p /opt/jupytepide/scripts && \
     cp /tmp/JupyTEPIDE/scripts/metadata.py /opt/jupytepide/scripts/metadata.py && \
     mkdir -p /home/jovyan/.jupytepide/conf/gui && \
@@ -57,7 +47,6 @@ RUN cd /tmp && \
     # fix-permissions /home/$NB_USER && \
     # fix-permissions /opt
 
-
 # ------------ END TESTING -----------------------
 
 # Install JupyTEP IDE UI layout and enable it
@@ -66,6 +55,12 @@ RUN mkdir /home/$NB_USER/dev && \
     git clone -b dev --single-branch https://github.com/wasat/JupyTEPIDE.git && \
     rm -rf /home/jovyan/work/notebook_count/ && \
     fix-permissions /home/$NB_USER
+
+# apt-get installs
+RUN apt-get update -qq && \
+    apt-get install -y -qq htop python3-lxml && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY spawn/docker-entrypoint.sh /srv/docker-entrypoint.sh
 RUN chmod 777 /srv/docker-entrypoint.sh

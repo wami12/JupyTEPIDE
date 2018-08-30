@@ -79,7 +79,7 @@ services:
       test: "exit 0"
 
   geoserver:
-    image: kartoza/geoserver:2.13.0
+    image: jupytepide/geoserver:2.13.0-1.0
     container_name: jupytepide-geoserver
     networks:
       default:
