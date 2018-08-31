@@ -38,6 +38,8 @@ services:
       - "data:${DATA_VOLUME_CONTAINER}"
       - "eodata:${EODATA_VOLUME_CONTAINER}"
       - "mapnik:${MAPNIK_VOLUME_CONTAINER}"
+      - ./jupyterhub_config.py:/tmp/jupyterhub_config.py
+      - ./run-from-compose.sh:/run-from-compose.sh
     ports:
       - "443:443"
     links:
@@ -59,8 +61,7 @@ services:
     env_file:
       - secrets/postgres.env
       - secrets/oauth.env
-    command: >
-      jupyterhub -f /srv/jupyterhub/jupyterhub_config.py
+    command: sh /run-from-compose.sh
 
   postgis:
     image: kartoza/postgis:9.6-2.4
@@ -126,10 +127,6 @@ volumes:
   mapnik:
     external:
       name: ${MAPNIK_VOLUME_HOST}
-
-#networks:
-#  jupyterhub-network:
-#    external: true
 
 networks:
   default:
