@@ -3,9 +3,9 @@ import subprocess
 
 import requests
 
-from maps.geoserver.exceptions import ApiError
-from maps.geoserver.json_builder import get_json_workspace
-from maps.geoserver.url import URL_REST
+from jupytep.excpt.exceptions import ApiError
+from jupytep.maps.geoserver.json_builder import get_json_workspace
+from jupytep.maps.geoserver.url import URL_REST
 
 
 def _url(params):
