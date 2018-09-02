@@ -98,6 +98,11 @@ RUN mkdir /home/$NB_USER/dev && \
     rm -rf /home/jovyan/work/notebook_count/ && \
     fix-permissions /home/$NB_USER
 
+RUN pip install -q --no-cache-dir --upgrade ipgetter
+# RUN conda install  --quiet --yes opencv
+RUN pip install opencv-python
+RUN conda install -c conda-forge affine
+
 COPY spawn/docker-entrypoint.sh /srv/docker-entrypoint.sh
 RUN chmod 777 /srv/docker-entrypoint.sh
 ENTRYPOINT ["tini", "--", "/srv/docker-entrypoint.sh"]

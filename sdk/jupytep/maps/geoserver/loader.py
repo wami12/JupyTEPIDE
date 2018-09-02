@@ -13,12 +13,3 @@ def load_geotif(geotiff_name):
     response_final = post_import_final(id)
     print("Finish import for ID: %s " % id)
     # print(response_final.content)
-
-
-# load_geotif("/pub/shared/tifs/test_snappy.tif")
-
-# def test_func():
-#     get_wms("/home/jovyan/shared/tifs/test_snappy.tif")
-#
-#
-# test_func()
