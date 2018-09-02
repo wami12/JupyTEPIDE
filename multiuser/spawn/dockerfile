@@ -100,8 +100,9 @@ RUN mkdir /home/$NB_USER/dev && \
 
 RUN pip install -q --no-cache-dir --upgrade ipgetter
 # RUN conda install  --quiet --yes opencv
-RUN pip install opencv-python
-RUN conda install -c conda-forge affine
+# RUN pip install opencv-python
+RUN conda install -c conda-forge rpy2 opencv affine && \
+    conda upgrade pandas
 
 COPY spawn/docker-entrypoint.sh /srv/docker-entrypoint.sh
 RUN chmod 777 /srv/docker-entrypoint.sh
