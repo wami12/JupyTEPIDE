@@ -357,5 +357,3 @@ class ImageLayer():
     def change_attributes(self, name, value):
         self.attr[name] = value
 
-
-print("Added script 02-init-leaflet.py")

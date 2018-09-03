@@ -55,7 +55,7 @@ def post_tiff_curl(import_id, filename):
     url_str = str(_url(import_param))
     file_header = "filedata=@%s" % filename
     res = subprocess.call([
-        "curl", "-u", "admin:geoserver", "-F", "name=test", "-F", file_header, url_str], shell=False)
+        "curl", "-u", "admin:geoserver", "-F", "name=test", "-F", file_header, url_str], shell=True)
     return res
 
 

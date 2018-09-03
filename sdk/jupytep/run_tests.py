@@ -1,5 +1,7 @@
-from jupytep.maps.wms.parse import get_wms
+from jupytep.maps.content import show_on_map
+from jupytep.maps.geoserver.loader import load_geotif
 
-# load_geotif("/pub/shared/tifs/test_snappy.tif")
-wms = get_wms("/home/jovyan/shared/tifs/test_snappy.tif")
-print(wms)
+geotiff = '/opt/pub/shared/geotiffs/test1_rgb.tif'
+
+load_geotif(geotiff)
+show_on_map(geotiff)

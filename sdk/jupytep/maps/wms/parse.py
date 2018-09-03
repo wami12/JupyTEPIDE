@@ -14,7 +14,7 @@ def get_bbox(layer_name):
 
 def get_layer_name(tiff_path):
     filename = PurePosixPath(tiff_path).stem
-    return filename
+    return str(filename)
 
 
 def get_wms(tiff_path):
@@ -24,3 +24,7 @@ def get_wms(tiff_path):
                         "styles=&bbox=%s&width=768&height=768&srs=EPSG:4326&format=image/png" % (layer, bbox)
     # print(wms_url)
     return replace_ip(wms_url)
+
+
+def get_wms_base_url():
+    return replace_ip(URL_WMS)
