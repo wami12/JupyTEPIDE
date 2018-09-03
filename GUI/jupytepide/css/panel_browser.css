@@ -1,0 +1,221 @@
+#side_panel {
+    position: relative;
+    top: 0;
+    right: 0;
+    height: 100%;
+    font-size: 1em;
+    overflow: auto;
+    background-color: #FFFFFF;
+}
+
+@media print {
+    /* print-previews can't handle 100%-height element as main part of page */
+    #side_panel {
+        height: auto;
+    }
+
+    /*
+        see
+        stackoverflow.com/questions/19948474
+        stackoverflow.com/questions/20243767
+     */
+    .col-md-6 {
+        float: left;
+        width: 50%;
+    }
+
+    .quickhelp {
+        page-break-inside: avoid;
+    }
+}
+
+.side_panel_splitbar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    cursor: col-resize;
+    height: 100%;
+    width: 8px;
+    background: url(./img/handle-v.png) 2px 50% no-repeat;
+    background-color: #1c1c1c;
+}
+
+.side_panel_inner {
+    overflow: auto;
+    height: inherit;
+    margin-left: 8px;
+}
+
+.side_panel_inner > div:not(.alert) {
+    padding: 0.5em;
+}
+
+.help_panel_hide .modal-backdrop,
+.help_panel_hide .modal {
+    display: none !important;
+}
+/*Data browser - for searching RESTO data on map browser*/
+div.data_browser_panel {
+    /*border-top: solid grey 1px;
+    border-bottom: solid grey 1px;*/
+    box-shadow: 0px 0px 1px black;
+    margin-bottom: 4px;
+
+}
+
+i.btn.fa {
+    box-shadow: 0px 0px 1px black;
+    margin-right:3px;
+    margin-bottom:4px;
+}
+
+#ui-datepicker-div {
+
+}
+
+.data_browser_controlgroup {
+    padding:3px;
+}
+
+.data_browser_controlgroup label {
+    color: darkgray;
+    margin-right:3px;
+    margin-left:3px;
+    font-weight: normal;
+}
+
+.data_browser_combobox, .data_browser_input {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -webkit-padding-end: 0px;
+    -moz-padding-end: 0px;
+    -webkit-padding-start: 2px;
+    -moz-padding-start: 2px;
+    background-color: #1c1c1c; /* fallback color if gradients are not supported */
+    border: 1px solid #555;
+    border-radius: 4px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    color: #555;
+    font-size: inherit;
+    margin: 0;
+    overflow: hidden;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    outline: 0;
+    overflow: hidden;
+    /*height: 30px;*/
+    /*background: #2c343c;*/
+    color: #747a80;
+    /*border: #2c343c;*/
+    padding: 3px 0px 3px 2px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border: 1px solid #555;
+    -webkit-border: 1px solid #555;
+    /*border-radius: 10px;*/
+}
+
+.data_browser_combobox {
+    background-image: url(./img/MediaWiki_Vector_skin_action_arrow.svg), -webkit-linear-gradient(top, #1c1c1c, #1c1c1c); /* For Chrome and Safari */
+    background-image: url(./img/MediaWiki_Vector_skin_action_arrow.svg), -moz-linear-gradient(top, #1c1c1c, #1c1c1c); /* For old Fx (3.6 to 15) */
+    background-image: url(./img/MediaWiki_Vector_skin_action_arrow.svg), -ms-linear-gradient(top, #1c1c1c, #1c1c1c); /* For pre-releases of IE 10*/
+    background-image: url(./img/MediaWiki_Vector_skin_action_arrow.svg), -o-linear-gradient(top, #1c1c1c, #1c1c1c); /* For old Opera (11.1 to 12.0) */
+    background-image: url(./img/MediaWiki_Vector_skin_action_arrow.svg), linear-gradient(to bottom, #1c1c1c, #1c1c1c); /* Standard syntax; must be last */
+    background-position: center right;
+    background-repeat: no-repeat;
+
+}
+
+.data_browser_checkbox {
+    /*-moz-border-radius: 4px;*/
+    /*-webkit-border-radius: 4px;*/
+    /*-moz-border: 1px solid #555;*/
+    /*-webkit-border: 1px solid #555;*/
+
+    /*background-color: #1c1c1c; !* fallback color if gradients are not supported *!*/
+    /*border: 1px solid #555;*/
+    /*border-radius: 4px;*/
+    /*box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);*/
+
+    /*-webkit-appearance: button;*/
+    /*-moz-appearance: button;*/
+    /*-webkit-user-select: none;*/
+    /*-moz-user-select: none;*/
+
+
+}
+
+.data_browser_combobox option {
+    border: 1px solid #555;
+    background: #1c1c1c;
+}
+
+#restoSearchBtn i.fa{
+    margin-left:5px;
+    margin-right:0px;
+}
+
+#insertSearchShapeButton.selected{
+    background-color:darkgrey;
+    border-color:grey;
+}
+
+.data_browser_panel .data_layer_browser{
+
+    height:100px;
+    overflow:auto;
+}
+
+.data_browser_panel .data_layer_browser div{
+    background-color:black;
+    color:silver;
+}
+
+.data_browser_panel .data_layer_browser table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    border-color: #272727;
+    color: #ccc;
+}
+
+.data_browser_panel .data_layer_browser table a {
+    text-decoration: none;
+    background: #0b2283;
+    border-radius: 4px;
+    padding: 1px;
+}
+.data_browser_panel .data_layer_browser td, th {
+    border: 1px solid #272727;
+    text-align: left;
+    padding: 2px;
+}
+
+.data_browser_panel .data_layer_browser tr:hover {
+    background-color: #1b698e;
+}
+
+.data_browser_panel .data_layer_browser tr:hover {
+    box-shadow: 0px 0px 1px black;
+}
+
+
+.map_browser_toolbar button{
+    border-color:#1d1c20;
+}
+
+.map_browser_toolbar button.selected {
+    background:#b95000;
+}
+
+.container-fluid a:hover {
+    text-decoration:underline;
+}
+
+
+

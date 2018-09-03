@@ -38,7 +38,24 @@ RUN mkdir .snap && \
 ENV PATH="/opt/conda/bin:${PATH}"
 
 USER root
+
+# Download and install SnapHu
+# Standalone install
 WORKDIR /opt
+RUN wget --quiet http://step.esa.int/thirdparties/snaphu/1.4.2-2/snaphu-v1.4.2_linux.zip && \
+    unzip snaphu-v1.4.2_linux.zip && \
+    mv snaphu-v1.4.2_linux snaphu &&\
+    chmod 755 snaphu/bin/snaphu &&\
+    rm -rf snaphu-v1.4.2_linux.zip
+ENV PATH="/opt/snaphu/bin:${PATH}"
+
+RUN wget --quiet http://step.esa.int/thirdparties/snaphu/1.4.2-2/snaphu-v1.4.2_linux.zip && \
+   unzip snaphu-v1.4.2_linux.zip && \
+   mv snaphu-v1.4.2_linux snaphu &&\
+   chmod 755 snaphu/bin/snaphu &&\
+   rm -rf snaphu-v1.4.2_linux.zip
+
+ENV PATH="/opt/snaphu/bin:${PATH}"
 
 # Download and install Orfeo toolbox OTB
 # Standalone install
@@ -49,7 +66,7 @@ RUN chmod +x OTB-6.4.0-Linux64.run && \
     rm -rf OTB-6.4.0-Linux64.run
 
 RUN find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
-    npm cache clean && \
+    npm cache clean --force && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER && \
     fix-permissions "/opt/OTB-6.4.0-Linux64"

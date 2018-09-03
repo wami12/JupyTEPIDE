@@ -135,8 +135,7 @@ class Leaflet():
         display(HTML(htm))
 
 
-
-class WMSLayer():
+class WMSLayer:
     htm = ''
     wmsAttribs = {
         'layers': '',
@@ -158,7 +157,7 @@ class WMSLayer():
         return (wynik[:-1])
 
     def addWmsLayer(self, url, name, attrib=-1):
-        if (attrib != -1):
+        if attrib != -1:
             self.wmsAttribs = attrib
         self.name = name
         self.url = url
@@ -187,36 +186,8 @@ class ImageLayer():
         if not os.path.exists("thumbnailtmp"):
             os.makedirs("thumbnailtmp")
 
-    def thumbnail(self,product):
-        #TODO: add support for other missions and products
-        if os.path.isfile(product):
-            product=os.path.dirname(product)
-        files = [f for f in os.listdir(product) if os.path.isfile(os.path.join(product, f))]
-        bbox=None
-        if 'Envisat' in product:
-            return -1
-        elif 'Landsat-5' in product:
-            for f in files:
-                if f.lower().endswith('jpg'):
-                    thumbnail=f
-                if f.lower().endswith('bp.xml'):
-                    with open(os.path.join(product,f),'r') as xml:
-                        g=xml.readlines()
-                        for i in g:
-                            if 'rep:coordList' in i:
-                                m=re.findall(r'(?<=<rep:coordList>).*?(?=</rep:coordList>)',i,re.I)
-                                if not m:
-                                    return -1
-                                else:
-                                    bbox=[float(xx) for xx in m[0].split()]
-        thumbnail=os.path.join(product,thumbnail)
-        copyfile(thumbnail, "thumbnailtmp/thumb.jpg")        
-        bbox='''[[%f,%f],[%f,%f]]'''%(bbox[0],bbox[3],bbox[2],bbox[1])
-        print (bbox)
-        self.addImageLayer("thumbnailtmp/thumb.jpg",bbox,"thumb")
-        self.showLayer()
-
-    def getbb(self, product):
+    def thumbnail(self, product):
+        # TODO: add support for other missions and products
         if os.path.isfile(product):
             product = os.path.dirname(product)
         files = [f for f in os.listdir(product) if os.path.isfile(os.path.join(product, f))]
@@ -224,6 +195,58 @@ class ImageLayer():
         if 'Envisat' in product:
             return -1
         elif 'Landsat-5' in product:
+            for f in files:
+                if f.lower().endswith('jpg'):
+                    thumbnail = f
+                if f.lower().endswith('bp.xml'):
+                    with open(os.path.join(product, f), 'r') as xml:
+                        g = xml.readlines()
+                        for i in g:
+                            if 'rep:coordList' in i:
+                                m = re.findall(r'(?<=<rep:coordList>).*?(?=</rep:coordList>)', i, re.I)
+                                if not m:
+                                    return -1
+                                else:
+                                    bbox = [float(xx) for xx in m[0].split()]
+        thumbnail = os.path.join(product, thumbnail)
+        copyfile(thumbnail, "thumbnailtmp/thumb.jpg")
+        bbox = '''[[%f,%f],[%f,%f]]''' % (bbox[0], bbox[3], bbox[2], bbox[1])
+        print(bbox)
+        self.addImageLayer("thumbnailtmp/thumb.jpg", bbox, "thumb")
+        self.showLayer()
+
+    def getbb(self, product):
+        envprd = product
+        if os.path.isfile(product):
+            product = os.path.dirname(product)
+        files = [f for f in os.listdir(product) if os.path.isfile(os.path.join(product, f))]
+        bbox = None
+        if 'Envisat' in product:
+            product = envprd
+            import snappy
+            try:
+                prod = snappy.ProductIO.readProduct(product)
+                print(prod)
+            except IOError:
+                print("Error opening file....")
+                return 0
+            md = prod.getMetadataRoot()
+            corners = {}
+            for i in md.getElements():
+                if (i.getName() == "SPH"):
+                    atrybuty = i.getAttributes()
+                    for j in atrybuty:
+                        if (j.getName() in ["FIRST_FIRST_LAT", "FIRST_FIRST_LONG", "FIRST_MID_LAT", "FIRST_MID_LONG",
+                                            "FIRST_LAST_LAT", "FIRST_LAST_LONG", "LAST_FIRST_LAT", "LAST_FIRST_LONG",
+                                            "LAST_MID_LAT", "LAST_MID_LONG", "LAST_LAST_LAT", "LAST_LAST_LONG"]):
+                            corners[j.getName()] = str(j.getData())
+            lats = {x: float(corners[x]) * 1e-6 for x in corners if "LAT" in x}
+            lons = {x: float(corners[x]) * 1e-6 for x in corners if "LONG" in x}
+            print(max(lats.values()))
+            bbox = '''[[%f,%f],[%f,%f]]''' % (
+                max(lats.values()), min(lons.values()), min(lats.values()), max(lons.values()))
+            return bbox
+        elif 'Landsat-5' in product or 'Landsat-7' in product:
             for f in files:
                 if f.lower().endswith('bp.xml'):
                     with open(os.path.join(product, f), 'r') as xml:
@@ -235,9 +258,80 @@ class ImageLayer():
                                     return -1
                                 else:
                                     bbox = [float(xx) for xx in m[0].split()]
-        bbox = '''[[%f,%f],[%f,%f]]''' % (bbox[0], bbox[3], bbox[2], bbox[1])
-        return bbox        
-	
+                        bbox = '''[[%f,%f],[%f,%f]]''' % (bbox[0], bbox[3], bbox[2], bbox[1])
+        elif 'Landsat-8' in product:
+            for f in files:
+                if f.lower().endswith('mtl.txt'):
+                    with open(os.path.join(product, f), 'r') as txt:
+                        g = txt.readlines()
+                    bbox = [None, None, None, None]
+                    for i in g:
+                        if 'CORNER_UL_LAT_PRODUCT' in i:
+                            bbox[0] = float(i.split('=')[-1].strip())
+                        if 'CORNER_UL_LON_PRODUCT' in i:
+                            bbox[1] = float(i.split('=')[-1].strip())
+                        if 'CORNER_LR_LAT_PRODUCT' in i:
+                            bbox[2] = float(i.split('=')[-1].strip())
+                        if 'CORNER_LR_LON_PRODUCT' in i:
+                            bbox[3] = float(i.split('=')[-1].strip())
+                            print(bbox)
+                    bbox = '''[[%f,%f],[%f,%f]]''' % (bbox[2], bbox[3], bbox[0], bbox[1])
+        elif 'Sentinel-1' in product:
+            with open(os.path.join(product, 'manifest.safe')) as f:
+                g = f.readlines()
+            for i in g:
+                bbox = [None, None, None, None]
+                if ('coordinates') in i:
+                    print(i)
+                    m = re.findall(r'(?<=>).*?(?=<)', i, re.I)
+                    narozniki = m[0].split()
+                    narozniki = [(float(x.split(',')[0]), float(x.split(',')[1])) for x in narozniki]
+                    lat = [x[0] for x in narozniki]
+                    lon = [x[1] for x in narozniki]
+                    bbox[0] = min(lat)
+                    bbox[1] = max(lon)
+                    bbox[2] = max(lat)
+                    bbox[3] = min(lon)
+                    bbox = '''[[%f,%f],[%f,%f]]''' % (bbox[0], bbox[1], bbox[2], bbox[3])
+                    break
+        elif 'Sentinel-2' in product:
+            with open(os.path.join(product, 'manifest.safe')) as f:
+                g = f.readlines()
+            for i in g:
+                bbox = [None, None, None, None]
+                if ('coordinates') in i:
+                    m = re.findall(r'(?<=coordinates>).*?(?=</gml:)', i, re.I)
+                    narozniki = m[0].split()
+                    lat = narozniki[::2]
+                    lon = narozniki[1::2]
+                    lon = [float(x) for x in lon]
+                    lat = [float(x) for x in lat]
+                    bbox[0] = min(lat)
+                    bbox[1] = max(lon)
+                    bbox[2] = max(lat)
+                    bbox[3] = min(lon)
+                    bbox = '''[[%f,%f],[%f,%f]]''' % (bbox[0], bbox[1], bbox[2], bbox[3])
+                    break
+        elif 'Sentinel-3' in product:
+            with open(os.path.join(product, 'xfdumanifest.xml')) as f:
+                g = f.readlines()
+            for i in g:
+                bbox = [None, None, None, None]
+                if ('posList') in i:
+                    m = re.findall(r'(?<=posList>).*?(?=</gml:)', i, re.I)
+                    narozniki = m[0].split()
+                    lat = narozniki[::2]
+                    lon = narozniki[1::2]
+                    lon = [float(x) for x in lon]
+                    lat = [float(x) for x in lat]
+                    bbox[0] = min(lat)
+                    bbox[1] = max(lon)
+                    bbox[2] = max(lat)
+                    bbox[3] = min(lon)
+                    bbox = '''[[%f,%f],[%f,%f]]''' % (bbox[0], bbox[1], bbox[2], bbox[3])
+                    break
+        return bbox
+
     def attributesTostring(self):
         wynik = ''
         for k, v in self.attribs.items():
@@ -257,12 +351,11 @@ class ImageLayer():
         display(HTML(self.htm))
 
     def removeLayer(self):
-        htm = '''<script type="text/javascript">Jupytepide.map_removeLayer("%s");</script>''' %self.name
+        htm = '''<script type="text/javascript">Jupytepide.map_removeLayer("%s");</script>''' % self.name
         display(HTML(htm))
 
     def changeAttributes(self, name, value):
         self.attribs[name] = value
-
 
 
 def Main():
@@ -284,3 +377,5 @@ def Main():
 
 if __name__ == '__main__':
     Main()
+
+print("Added script 02-init-leaflet.py")

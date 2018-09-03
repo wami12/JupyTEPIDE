@@ -1,0 +1,6 @@
+@import "bootstrap.min.css";
+@import "jupytepide.css";
+
+.container {
+    width: 100% !important;
+}

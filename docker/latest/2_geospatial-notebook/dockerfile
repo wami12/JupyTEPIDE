@@ -1,7 +1,7 @@
 # Copyright (c) JupyTEP IDE Development Team.
 # Distributed under the terms of the Modified BSD License.
 ARG DOCKER_VER
-FROM jupytepide/scipy-ext-notebook:$DOCKER_VER
+FROM jupytepide/science-notebook:$DOCKER_VER
 
 LABEL maintainer="JupyTEP IDE Project <jupytep@wasat.pl>"
 
@@ -11,18 +11,31 @@ USER root
 RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable && \
     apt-get update -qq && \
     apt-get install -qq -y --no-install-recommends grass-dev* grass && \
-    apt-get autoremove && \
-    apt-get clean && \
+    apt-get autoremove -qq && \
+    apt-get clean -qq && \
     rm -rf /var/lib/apt/lists/*
+
+# --------------- Configuration Grass GIS -------------------
+COPY "scripts/.grassrc.8888" "/home/$NB_USER/.grassrc.8888"
+
+ENV GISBASE=/usr/lib/grass74 \
+    GISRC="/home/$NB_USER/.grassrc.8888" \
+    GRASS_RENDER_IMMEDIATE=png \
+    GRASS_RENDER_TRUECOLOR=TRUE \
+    LD_LIBRARY_PATH=/usr/lib/grass74/lib:$LD_LIBRARY_PATH \
+    PYTHONPATH=/usr/lib/grass74/etc/python:$PYTHONPATH \
+    PATH=/usr/lib/grass74/bin:/usr/lib/grass74/scripts:$PATH
+# ------------------------------------------------------------
 
 USER $NB_USER
 
 # Conda installs
 RUN conda install --quiet --yes -c conda-forge \
-    'libgdal=2.2.3*' \
-    'gdal=2.2.3*' \
+    'libgdal=2.2.4*' \
+    'gdal=2.2.4*' \
     'shapely=1.6.3*' \
     'fiona=1.7.10*' \
+    'geoalchemy2=0.4.*' \
     'geojson=2.3.0' \
     'geopandas=0.3.0*' \
     'geopy=1.11.0*' \
@@ -33,7 +46,7 @@ RUN conda install --quiet --yes -c conda-forge \
 USER root
 
 RUN find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
-    npm cache clean && \
+    npm cache clean --force && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
 

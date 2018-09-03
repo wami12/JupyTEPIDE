@@ -97,3 +97,5 @@ class NotebookLoader(object):
 
 
 sys.meta_path.append(NotebookFinder())
+
+print("Added script 03-import-notebook_as_module.py")
