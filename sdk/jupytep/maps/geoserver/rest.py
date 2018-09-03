@@ -51,11 +51,13 @@ def post_tiff(import_id):
 
 
 def post_tiff_curl(import_id, filename):
-    import_param = "/%s/tasks" % import_id
-    url_str = str(_url(import_param))
-    file_header = "filedata=@%s" % filename
+    # import_param = "/%s/tasks" % import_id
+    # url_str = str(_url(import_param))
+    # file_header = "filedata=@%s" % filename
     res = subprocess.call([
-        "curl", "-u", "admin:geoserver", "-F", "name=test", "-F", file_header, url_str], shell=True)
+        "curl", "-u", "admin:geoserver", "-F", "name=test", "-F", "filedata=@%s" % filename,
+                                                                  "http://172.18.0.5:8080/geoserver/rest/imports/%s/tasks" % import_id],
+        shell=False)
     return res
 
 

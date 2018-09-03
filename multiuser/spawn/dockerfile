@@ -23,9 +23,6 @@ RUN wget --quiet http://step.esa.int/thirdparties/snaphu/1.4.2-2/snaphu-v1.4.2_l
 
 ENV PATH="/opt/snaphu/bin:${PATH}"
 
-RUN pip install -q --no-cache-dir --upgrade pixiedust && \
-    /bin/bash -c "source activate python27 && pip install -q --no-cache-dir --upgrade pixiedust requests Jinja2 pandas && source deactivate python27"
-
 # apt-get installs
 RUN add-apt-repository -y ppa:ubuntugis/ppa && \
     add-apt-repository -y ppa:opencpu/imagemagick && \
@@ -34,6 +31,14 @@ RUN add-apt-repository -y ppa:ubuntugis/ppa && \
     libcairo2-dev libxt-dev git-core libmagick++-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+RUN pip install --upgrade pip &&\
+    pip install -q --no-cache-dir --upgrade pixiedust ipgetter && \
+    /bin/bash -c "source activate python27 && pip install -q --no-cache-dir --upgrade pixiedust requests Jinja2 pandas && source deactivate python27"
+
+RUN conda install --quiet --yes -c conda-forge rpy2 opencv affine && \
+    conda upgrade --quiet --yes pandas && \
+    conda clean -tipsy
 
 RUN cd /tmp && \
     /bin/bash -c "R -e \"install.packages('devtools', repos='http://cran.cnr.berkeley.edu/', clean = TRUE, quiet = TRUE)\"" && \
@@ -61,10 +66,9 @@ RUN cd /tmp && \
     R -e "devtools::install_git(\"https://github.com/gowusu/sebkc.git\", branch = \"master\")" && \
     wget --quiet https://download2.rstudio.org/rstudio-server-0.99.903-amd64.deb && \
     gdebi -n rstudio-server-0.99.903-amd64.deb  && \
-    find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
-    fix-permissions /home/$NB_USER && \
-    fix-permissions $CONDA_DIR
-
+    find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf
+#    fix-permissions /home/$NB_USER && \
+#    fix-permissions $CONDA_DIR
 
 RUN cd /tmp && \
     ls && \
@@ -75,19 +79,20 @@ RUN cd /tmp && \
     cd JupyTEPIDE && \
     cp -R notebooks /home/jovyan/ && \
     cd GUI && \
-    jupyter nbextension install source_UI --user && \
-    jupyter nbextension enable source_UI/main --sys-prefix && \
+    jupyter nbextension disable source_UI/main --sys-prefix && \
+    jupyter nbextension install jupytepide --user && \
+    jupyter nbextension enable jupytepide/main --sys-prefix && \
     mkdir -p /home/jovyan/.ipython/profile_default/startup && \
     find "/home/jovyan/.ipython/profile_default/startup" -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
     cp -a /tmp/JupyTEPIDE/scripts/startup/. /home/jovyan/.ipython/profile_default/startup/ && \
     mkdir -p /opt/jupytepide/scripts && \
     cp /tmp/JupyTEPIDE/scripts/metadata.py /opt/jupytepide/scripts/metadata.py && \
     mkdir -p /home/jovyan/.jupytepide/conf/gui && \
-    cp /tmp/JupyTEPIDE/GUI/source_UI/code_snippets.json /home/jovyan/.jupytepide/conf/gui/code_snippets.json && \
+    cp /tmp/JupyTEPIDE/GUI/jupytepide/code_snippets.json /home/jovyan/.jupytepide/conf/gui/code_snippets.json && \
     cp -R /tmp/JupyTEPIDE /opt/ && \
-    find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf
-    # fix-permissions /home/$NB_USER && \
-    # fix-permissions /opt
+    find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
+    fix-permissions /home/$NB_USER && \
+    fix-permissions /opt
 
 # ------------ END TESTING -----------------------
 
@@ -97,18 +102,6 @@ RUN mkdir /home/$NB_USER/dev && \
     git clone -b dev --single-branch https://github.com/wasat/JupyTEPIDE.git && \
     rm -rf /home/jovyan/work/notebook_count/ && \
     fix-permissions /home/$NB_USER
-
-RUN pip install --upgrade pip
-RUN pip install -q --no-cache-dir ipgetter
-# RUN conda install  --quiet --yes opencv
-# RUN pip install opencv-python
-# RUN conda install --yes -c conda-forge rpy2
-# RUN conda install --yes -c conda-forge opencv
-# RUN conda install --yes -c conda-forge affine
-# RUN conda upgrade --yes pandas
-
-RUN conda install --quiet --yes -c conda-forge rpy2 opencv affine
-RUN conda upgrade --quiet --yes pandas
 
 COPY spawn/docker-entrypoint.sh /srv/docker-entrypoint.sh
 RUN chmod 777 /srv/docker-entrypoint.sh
