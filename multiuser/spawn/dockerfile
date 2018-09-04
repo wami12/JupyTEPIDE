@@ -71,7 +71,6 @@ RUN cd /tmp && \
 #    fix-permissions $CONDA_DIR
 
 RUN cd /tmp && \
-    ls && \
     git clone https://github.com/wasat/JupyTEPIDE.git && \
     cp -rf /tmp/JupyTEPIDE/GUI/res/jupyter/static/* "/opt/conda/lib/python3.6/site-packages/notebook/static" && \
     cp -rf /tmp/JupyTEPIDE/GUI/res/pixiedust/* "/opt/conda/lib/python3.6/site-packages/pixiedust" && \
