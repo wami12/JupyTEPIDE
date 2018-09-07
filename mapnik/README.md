@@ -1,41 +1,12 @@
-docker-mapnik
-===================
+This repo contains map service witch allows to publish geotiff images via https.
+Javascript frameworks like openlayers or leaflet, can communicate with this solution to get images which can be presented on the dynamic map. 
 
-The purpose of this project is to provide a tile server using mapnik and tilestache.
+The solution used modified WMS protocol(GetMap only). Needed request arguments are:
+1. BBOX - should be in the same coordinate system as datasource
+2. WIDTH - width in pixels of destination image
+3. HEIGHT - height in pixels of destination image
+4. PATH - path to tif data source, available for www-data user on docker maschine (it was planed to store ds on external docker volume)
 
-## Mapnik
+Repo contains also html tester, simple html file which allows to check if service is working. 
 
-Mapnik is a Free Toolkit for developing mapping applications. It's written in C++ and there are Python bindings to facilitate fast-paced agile development. It can comfortably be used for both desktop and web development
-
-## TileStache
-
-TileStache is a Python-based server application that can serve up map tiles based on rendered geographic data.
-
-## Building docker-mapnik
-
-Running this will build a docker image with mapnik 3.0.10 and TileStache.
-
-    git clone https://github.com/srounet/docker-mapnik
-    cd docker-mapnik
-    docker build -t mapnik .
-
-
-## Running docker-mapnik
-
-This image expose three ports 22 for ssh and 80 for Nginx/TileStache and 9001 for supervisord
-
-    sudo docker run -d -P -v $(readlink --canonicalize ressources):/etc/tilestache/ressources/ -v $(readlink --canonicalize ressources/tilestache.cfg):/etc/tilestache/tilestache.cfg --name mapnik mapnik
-
-## Image active users
-
-The root password is `toor`.
-
-## Supervisord remote access
-
-Default user and password are: ma/ma1337
-
-### Side note on tilestache
-
-Use ressources folder to synchronize your mapnik styles.
-Modify tilestache.cfg according to your needs, it should be synchronized with your Docker.
-Don't forget to restart tilestache from uwsgi / supervisord.
+This software can have bugs, work unexpected or randomly :)
