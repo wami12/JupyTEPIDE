@@ -100,15 +100,13 @@ services:
       retries: 3
 
   mapnik:
-    image: "jupytepide/tilestache-mapnik:ver_1.0.4"
+    image: "jupytepide/mapnik-flask:1.0"
     container_name: jupytepide-mapnik
     networks:
       default:
         ipv4_address: "172.18.0.6"
     ports:
-     - "32798:22"
-     - "32799:9001"
-     - "32800:80"
+    - "9443:443"
     volumes:
      - mapnik:/etc/tilestache
 
@@ -121,9 +119,7 @@ volumes:
       name: ${DB_VOLUME_HOST}
   geoserver-data:
   geo-db-data:
-  mapnik:
-    external:
-      name: ${MAPNIK_VOLUME_HOST}
+
 
 networks:
   default:

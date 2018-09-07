@@ -1,0 +1,9 @@
+version: '3'
+services:
+  mapnik:
+    image: "jupytepide/mapnik-flask"
+    container_name: jupytepide-mapnik
+    ports:
+    - "9443:443"
+    volumes:
+    - /opt/pub/mapnik:/opt/mapnik

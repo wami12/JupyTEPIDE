@@ -3,7 +3,7 @@ FROM debian:9-slim
 LABEL maintainer="JupyTEP IDE Project <jupytep@wasat.pl>"
 
 RUN apt-get update -qq && \
-    apt-get install -qq -y apache2 libapache2-mod-wsgi-py3 python3-pip python3-mapnik && \
+    apt-get install -qq -y apache2 libapache2-mod-wsgi-py3 python3-pip python3-mapnik mc nano && \
     apt-get autoremove -qq && \
     apt-get clean -qq && \
     rm -rf /var/lib/apt/lists/*
@@ -27,12 +27,12 @@ RUN a2enmod wsgi && \
 
 COPY apache_wsgi /etc/apache2/ssl/apache.crt
 COPY apache_wsgi /etc/apache2/ssl/.
-COPY apache_wsgi /etc/apache2/sites-available/flask_wsgi.conf
+COPY apache_wsgi /etc/apache2/sites-available/.
 COPY flask /var/www/mydomain/wms_service.py
 COPY flask /var/www/mydomain/.
 
-RUN a2ensite flask_wsgi.conf
-# RUN service apache2 restart
+RUN a2ensite flask_wsgi.conf && \
+    service apache2 restart
 
 EXPOSE 443
 
