@@ -10,3 +10,6 @@ The solution used modified WMS protocol(GetMap only). Needed request arguments a
 Repo contains also html tester, simple html file which allows to check if service is working. 
 
 This software can have bugs, work unexpected or randomly :)
+
+test url:
+https://89.250.194.14:9443/?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS=RGB&PATH=%2Fopt%2Fmapnik%2Fmapnik-test.tif&CRS=EPSG%3A3857&STYLES=&FORMAT_OPTIONS=dpi%3A113&WIDTH=1076&HEIGHT=929&BBOX=318956.43162838346%2C4239381.03756376%2C2424460.237960534%2C6057237.019053135

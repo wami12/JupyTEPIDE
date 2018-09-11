@@ -108,7 +108,16 @@ services:
     ports:
     - "9443:443"
     volumes:
-     - mapnik:/etc/tilestache
+    - /opt/pub/mapnik:/opt/mapnik
+
+  pywps:
+    image: "pywps/flask-ubuntu:latest"
+    container_name: jupytepide-pywps
+    networks:
+      default:
+        ipv4_address: "172.18.0.7"
+    ports:
+    - "5000:5000"
 
 volumes:
   data:

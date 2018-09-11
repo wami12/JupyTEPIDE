@@ -19,8 +19,8 @@
     var own_lyr = new ol.layer.Image
     ({
         source: new ol.source.ImageWMS({
-            url: "https://localhost",
-            params: {'LAYERS': "RGB", 'PATH': '/test_data/s2_rgb.tif'},
+            url: "https://89.250.194.14:9443",
+            params: {'LAYERS': "RGB", 'PATH': '/opt/mapnik/mapnik-test.tif'},
             ratio: 1,
             serverType: 'geoserver'
         }),
