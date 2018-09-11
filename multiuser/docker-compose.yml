@@ -19,11 +19,6 @@ services:
   hub:
     depends_on:
       - hub-db
-    build:
-      context: .
-      dockerfile: Dockerfile.jupytepidehub
-      args:
-        JUPYTERHUB_VERSION: ${JUPYTERHUB_VERSION}
     restart: always
     image: jupytepide-hub
     container_name: jupytepide-hub
@@ -111,7 +106,7 @@ services:
     - /opt/pub/mapnik:/opt/mapnik
 
   pywps:
-    image: "pywps/flask-ubuntu:latest"
+    image: "pywps/flask-ubuntu:16.0.4"
     container_name: jupytepide-pywps
     networks:
       default:
