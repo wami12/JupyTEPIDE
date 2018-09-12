@@ -95,7 +95,7 @@ services:
       retries: 3
 
   mapnik:
-    image: "jupytepide/mapnik-flask:1.0"
+    image: "jupytepide/mapnik-flask:1.2"
     container_name: jupytepide-mapnik
     networks:
       default:
@@ -113,6 +113,7 @@ services:
         ipv4_address: "172.18.0.7"
     ports:
     - "5000:5000"
+
 
 volumes:
   data:
