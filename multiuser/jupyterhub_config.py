@@ -3,7 +3,6 @@
 
 # Configuration file for JupyterHub
 import os
-import shutil
 
 c = get_config()
 
@@ -14,7 +13,7 @@ c = get_config()
 # Spawn single-user servers as Docker containers
 c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
 # Spawn containers from this image
-c.DockerSpawner.image = os.environ['DOCKER_NOTEBOOK_IMAGE']
+c.DockerSpawner.container_image = os.environ['DOCKER_NOTEBOOK_IMAGE']
 # JupyterHub requires a single-user instance of the Notebook server, so we
 # default to using the `start-singleuser.sh` script included in the
 # jupyter/docker-stacks *-notebook images as the Docker run command when
@@ -28,38 +27,10 @@ c.DockerSpawner.use_internal_ip = True
 c.DockerSpawner.network_name = network_name
 # Pass the network name as argument to spawned containers
 c.DockerSpawner.extra_host_config = {'network_mode': network_name}
-
-
 # Explicitly set notebook directory because we'll be mounting a host volume to
 # it.  Most jupyter/docker-stacks *-notebook images run the Notebook server as
 # user `jovyan`, and set the notebook directory to `/home/jovyan/work`.
 # We follow the same convention.
-def create_dir_hook(spawner):
-    username = spawner.user.name  # get the username
-    volume_path = os.path.join('/volumes/jupyterhub', username)
-    if not os.path.exists(volume_path):
-        os.mkdir(volume_path, 0o755)
-        # now do whatever you think your user needs
-        # ...
-
-
-def clean_dir_hook(spawner):
-    username = spawner.user.name  # get the username
-    temp_path = os.path.join('/volumes/jupyterhub', username, 'temp')
-    if os.path.exists(temp_path) and os.path.isdir(temp_path):
-        shutil.rmtree(temp_path)
-
-
-# attach the hook functions to the spawner
-# c.Spawner.pre_spawn_hook = create_dir_hook
-# c.Spawner.post_stop_hook = clean_dir_hook
-
-# Set the log level by value or name.
-c.JupyterHub.log_level = 'DEBUG'
-
-# Enable debug-logging of the single-user server
-c.LocalProcessSpawner.debug = True
-
 notebook_dir = os.environ.get('DOCKER_NOTEBOOK_DIR') or '/home/jovyan/work'
 c.DockerSpawner.notebook_dir = notebook_dir
 # Mount the real user's Docker volume on the host to the notebook user's
@@ -118,7 +89,9 @@ with open(os.path.join(pwd, 'userlist')) as f:
         if not line:
             continue
         parts = line.split()
-        name = parts[0]
-        whitelist.add(name)
-        if len(parts) > 1 and parts[1] == 'admin':
-            admin.add(name)
+        # in case of newline at the end of userlist file
+        if len(parts) >= 1:
+            name = parts[0]
+            whitelist.add(name)
+            if len(parts) > 1 and parts[1] == 'admin':
+                admin.add(name)
