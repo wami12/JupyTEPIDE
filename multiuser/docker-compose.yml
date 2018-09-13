@@ -19,6 +19,11 @@ services:
   hub:
     depends_on:
       - hub-db
+    build:
+      context: .
+      dockerfile: Dockerfile.jupytepidehub
+      args:
+        JUPYTERHUB_VERSION: ${JUPYTERHUB_VERSION}
     restart: always
     image: jupytepide-hub
     container_name: jupytepide-hub

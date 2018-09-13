@@ -21,7 +21,6 @@ RUN cd /tmp && \
     cd JupyTEPIDE && \
     cp -R notebooks /home/jovyan/ && \
     cd GUI && \
-    jupyter nbextension disable source_UI/main --sys-prefix && \
     jupyter nbextension install jupytepide --user && \
     jupyter nbextension enable jupytepide/main --sys-prefix && \
     mkdir -p /home/jovyan/.ipython/profile_default/startup && \
