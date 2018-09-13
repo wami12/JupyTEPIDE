@@ -46,30 +46,51 @@ RUN wget --quiet http://step.esa.int/thirdparties/snaphu/1.4.2-2/snaphu-v1.4.2_l
     unzip snaphu-v1.4.2_linux.zip && \
     mv snaphu-v1.4.2_linux snaphu &&\
     chmod 755 snaphu/bin/snaphu &&\
-    rm -rf snaphu-v1.4.2_linux.zip
-ENV PATH="/opt/snaphu/bin:${PATH}"
-
-RUN wget --quiet http://step.esa.int/thirdparties/snaphu/1.4.2-2/snaphu-v1.4.2_linux.zip && \
-   unzip snaphu-v1.4.2_linux.zip && \
-   mv snaphu-v1.4.2_linux snaphu &&\
-   chmod 755 snaphu/bin/snaphu &&\
-   rm -rf snaphu-v1.4.2_linux.zip
-
+    rm -rf snaphu-v1.4.2_linux*
 ENV PATH="/opt/snaphu/bin:${PATH}"
 
 # Download and install Orfeo toolbox OTB
 # Standalone install
-COPY OTB-6.4.0-Linux64.run /opt/OTB-6.4.0-Linux64.run
+COPY OTB-6.6.0-Linux64.run /opt/OTB-6.6.0-Linux64.run
 # RUN wget --quiet https://www.orfeo-toolbox.org/packages/OTB-6.4.0-Linux64.run && \
-RUN chmod +x OTB-6.4.0-Linux64.run && \
-    /bin/bash -c "OTB_PYTHON_EXE=/opt/conda/envs/python27/bin/python2.7 ./OTB-6.4.0-Linux64.run" -q &&\
-    rm -rf OTB-6.4.0-Linux64.run
+RUN chmod +x OTB-6.6.0-Linux64.run && \
+    /bin/bash -c "OTB_PYTHON_EXE=/opt/conda/envs/python27/bin/python2.7 ./OTB-6.6.0-Linux64.run" -q &&\
+    rm -rf OTB-6.6.0-Linux64.run
+
+RUN cd /tmp && \
+    /bin/bash -c "R -e \"install.packages('devtools', repos='http://cran.cnr.berkeley.edu/', clean = TRUE, quiet = TRUE)\"" && \
+    /bin/bash -c "R -e \"install.packages('Rcpp', repos='http://cran.rstudio.com/', clean = TRUE, quiet = TRUE)\"" && \
+    /bin/bash -c "R -e \"install.packages('RcppEigen', repos='http://cran.rstudio.com/', clean = TRUE, quiet = TRUE)\"" && \
+    /bin/bash -c "R -e \"install.packages('ggplot2', repos='http://cran.rstudio.com/', clean = TRUE, quiet = TRUE)\"" && \
+    /bin/bash -c "R -e \"install.packages('Cairo', repos='http://cran.rstudio.com/', clean = TRUE, quiet = TRUE)\"" && \
+    /bin/bash -c "R -e \"install.packages('evaluate', repos='http://cran.rstudio.com/', clean = TRUE, quiet = TRUE)\"" && \
+    /bin/bash -c "R -e \"install.packages('formatR', repos='http://cran.rstudio.com/', clean = TRUE, quiet = TRUE)\"" && \
+    /bin/bash -c "R -e \"install.packages('highr', repos='http://cran.rstudio.com/', clean = TRUE, quiet = TRUE)\"" && \
+    /bin/bash -c "R -e \"install.packages('markdown', repos='http://cran.rstudio.com/', clean = TRUE, quiet = TRUE)\"" && \
+    /bin/bash -c "R -e \"install.packages('yaml', repos='http://cran.rstudio.com/', clean = TRUE, quiet = TRUE)\"" && \
+    /bin/bash -c "R -e \"install.packages('htmltools', repos='http://cran.rstudio.com/', clean = TRUE, quiet = TRUE)\"" && \
+    /bin/bash -c "R -e \"install.packages('knitr', repos='http://cran.rstudio.com/', clean = TRUE, quiet = TRUE)\"" && \
+    /bin/bash -c "R -e \"install.packages('rmarkdown', repos='http://cran.rstudio.com/', clean = TRUE, quiet = TRUE)\"" && \
+    /bin/bash -c "R -e \"install.packages('RColorBrewer', repos='http://cran.rstudio.com/', clean = TRUE, quiet = TRUE)\"" && \
+    /bin/bash -c "R -e \"install.packages('sp', repos='http://cran.cnr.berkeley.edu/', clean = TRUE, quiet = TRUE)\"" && \
+    /bin/bash -c "R -e \"install.packages('raster', repos='http://cran.cnr.berkeley.edu/', clean = TRUE, quiet = TRUE)\"" && \
+    /bin/bash -c "R -e \"install.packages('gstat', repos='http://cran.cnr.berkeley.edu/', clean = TRUE, quiet = TRUE)\"" && \
+    /bin/bash -c "R -e \"install.packages('httr', repos='http://cran.rstudio.com/', clean = TRUE, quiet = TRUE)\"" && \
+    /bin/bash -c "R -e \"install.packages('githubinstall', repos='http://cran.rstudio.com/', clean = TRUE, quiet = TRUE)\""  && \
+    /bin/bash -c "R -e \"install.packages('magick', repos='http://cran.rstudio.com/', clean = TRUE, quiet = TRUE)\"" && \
+    /bin/bash -c "R -e \"install.packages('rgdal', repos='http://cran.rstudio.com/', clean = TRUE, quiet = TRUE)\"" && \
+    /bin/bash -c "R -e \"library(devtools)\"" && \
+    /bin/bash -c "R -e \"options(unzip='internal')\"" && \
+    R -e "devtools::install_git(\"https://github.com/gowusu/sebkc.git\", branch = \"master\")" && \
+    wget --quiet https://download2.rstudio.org/rstudio-server-0.99.903-amd64.deb && \
+    gdebi -n rstudio-server-0.99.903-amd64.deb  && \
+    find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf
 
 RUN find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
     npm cache clean --force && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER && \
-    fix-permissions "/opt/OTB-6.4.0-Linux64"
+    fix-permissions "/opt/OTB-6.6.0-Linux64"
 
 WORKDIR /home/$NB_USER
 USER $NB_USER

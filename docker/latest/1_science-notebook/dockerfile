@@ -11,8 +11,12 @@ USER root
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 # apt-get installs
+#RUN add-apt-repository -y ppa:ubuntugis/ppa && \
+#    add-apt-repository -y ppa:opencpu/imagemagick && \
 RUN apt-get update -qq && \
-    apt-get install -y -qq --no-install-recommends software-properties-common apt-utils nano mc python-autopep8 && \
+    apt-get install -y -qq --no-install-recommends software-properties-common apt-utils nano mc python-autopep8 \
+    htop python3-lxml libapparmor1 libcurl4-gnutls-dev libxml2-dev libssl-dev gdebi-core \
+    libcairo2-dev libxt-dev git-core libmagick++-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -83,31 +87,34 @@ RUN conda create --quiet --yes -p $CONDA_DIR/envs/python27 python=2.7 ipython ip
     /bin/bash -c "source activate python27 && kernda -o -y /opt/conda/envs/python27/share/jupyter/kernels/python2/kernel.json && source deactivate python27" && \
     conda clean -tipsy
 
+RUN pip install --upgrade pip &&\
+    pip install -q --no-cache-dir --upgrade pixiedust ipgetter && \
+    /bin/bash -c "source activate python27 && pip install -q --no-cache-dir --upgrade pixiedust requests Jinja2 pandas && source deactivate python27"
 
 # Install JupyTEP IDE UI layout and enable it
 RUN cd /tmp && \
     git clone https://github.com/wasat/JupyTEPIDE.git && \
     cp -rf /tmp/JupyTEPIDE/GUI/res/jupyter/static/* "/opt/conda/lib/python3.6/site-packages/notebook/static" && \
+    cp -rf /tmp/JupyTEPIDE/GUI/res/pixiedust/* "/opt/conda/lib/python3.6/site-packages/pixiedust" && \
+    cp -rf /tmp/JupyTEPIDE/GUI/res/pixiedust/* "/opt/conda/envs/python27/lib/python2.7/site-packages/pixiedust" && \
     cd JupyTEPIDE && \
     cp -R notebooks /home/jovyan/ && \
     cd GUI && \
-    jupyter nbextension install source_UI --user && \
-    jupyter nbextension enable source_UI/main --sys-prefix && \
+    jupyter nbextension disable source_UI/main --sys-prefix && \
+    jupyter nbextension install jupytepide --user && \
+    jupyter nbextension enable jupytepide/main --sys-prefix && \
     mkdir -p /home/jovyan/.ipython/profile_default/startup && \
     find "/home/jovyan/.ipython/profile_default/startup" -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
-    cp /tmp/JupyTEPIDE/scripts/startup/01-otb-paths.py /home/jovyan/.ipython/profile_default/startup/01-otb-paths.py && \
-    cp /tmp/JupyTEPIDE/scripts/startup/02-init-leaflet.py /home/jovyan/.ipython/profile_default/startup/02-init-leaflet.py && \
-    cp /tmp/JupyTEPIDE/scripts/startup/03-import_notebook_as_module.py /home/jovyan/.ipython/profile_default/startup/03-import_notebook_as_module.py && \
-    cp /tmp/JupyTEPIDE/scripts/startup/04-grass.py /home/jovyan/.ipython/profile_default/startup/04-grass.py && \
-    cp /tmp/JupyTEPIDE/scripts/startup/06-auxiliary_functions.py /home/jovyan/.ipython/profile_default/startup/06-auxiliary_functions.py && \
+    cp -a /tmp/JupyTEPIDE/scripts/startup/. /home/jovyan/.ipython/profile_default/startup/ && \
     mkdir -p /opt/jupytepide/scripts && \
     cp /tmp/JupyTEPIDE/scripts/metadata.py /opt/jupytepide/scripts/metadata.py && \
     mkdir -p /home/jovyan/.jupytepide/conf/gui && \
-    cp /tmp/JupyTEPIDE/GUI/source_UI/code_snippets.json /home/jovyan/.jupytepide/conf/gui/code_snippets.json && \
+    cp /tmp/JupyTEPIDE/GUI/jupytepide/code_snippets.json /home/jovyan/.jupytepide/conf/gui/code_snippets.json && \
     cp -R /tmp/JupyTEPIDE /opt/ && \
     find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
     fix-permissions /home/$NB_USER && \
-    fix-permissions $CONDA_DIR
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /opt && \
 
 WORKDIR /home/$NB_USER
 USER $NB_USER
