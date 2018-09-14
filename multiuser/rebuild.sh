@@ -4,7 +4,7 @@ docker-compose down
 docker rmi -f jupytepide-hub
 # docker rmi -f jupytepide-hub-user:latest
 
-make build
+# make build
 # make jupytep_user_spawn_image
 
 #cd /opt
