@@ -23,6 +23,9 @@ RUN cd /tmp && \
     cd GUI && \
     jupyter nbextension install jupytepide --user && \
     jupyter nbextension enable jupytepide/main --sys-prefix && \
+    jupyter nbextension install --sys-prefix --py ipyparallel && \
+    jupyter nbextension enable --sys-prefix --py ipyparallel && \
+    jupyter serverextension enable --sys-prefix --py ipyparallel && \
     mkdir -p /home/jovyan/.ipython/profile_default/startup && \
     find "/home/jovyan/.ipython/profile_default/startup" -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
     cp -a /tmp/JupyTEPIDE/scripts/startup/. /home/jovyan/.ipython/profile_default/startup/ && \
