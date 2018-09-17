@@ -114,7 +114,7 @@ RUN cd /tmp && \
     find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
     fix-permissions /home/$NB_USER && \
     fix-permissions $CONDA_DIR && \
-    fix-permissions /opt && \
+    fix-permissions /opt
 
 WORKDIR /home/$NB_USER
 USER $NB_USER
