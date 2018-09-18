@@ -52,7 +52,7 @@ ENV PATH="/opt/snaphu/bin:${PATH}"
 # Download and install Orfeo toolbox OTB
 # Standalone install
 COPY OTB-6.6.0-Linux64.run /opt/OTB-6.6.0-Linux64.run
-# RUN wget --quiet https://www.orfeo-toolbox.org/packages/OTB-6.4.0-Linux64.run && \
+# RUN wget --quiet https://www.orfeo-toolbox.org/packages/OTB-6.6.0-Linux64.run && \
 RUN chmod +x OTB-6.6.0-Linux64.run && \
     /bin/bash -c "OTB_PYTHON_EXE=/opt/conda/envs/python27/bin/python2.7 ./OTB-6.6.0-Linux64.run" -q &&\
     rm -rf OTB-6.6.0-Linux64.run
