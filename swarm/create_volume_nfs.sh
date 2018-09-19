@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 docker volume create --driver local \
     --opt type=nfs4 \
     --opt o=addr=NFS_SERVER_IP,rw \
