@@ -3,25 +3,20 @@ import os
 c = get_config()
 
 c.JupyterHub.authenticator_class = 'oauthenticator.GitHubOAuthenticator'
-c.GitHubOAuthenticator.oauth_callback_url = 'http://185.52.194.216/hub/oauth_callback'
+c.GitHubOAuthenticator.oauth_callback_url = 'http://185.48.235.7:8000/hub/oauth_callback'
 c.GitHubOAuthenticator.client_id = 'b72e40ee67ccbe92b05a'
 c.GitHubOAuthenticator.client_secret = 'd0e0d4f5b0ad3670a8bba5e3654295083245abd5'
 
 # c.JupyterHub.authenticator_class = GoogleOAuthenticator
-# c.GoogleOAuthenticator.oauth_callback_url = 'http://jupytepide-swarm.wasat.pl/hub/oauth_callback'
-# c.GoogleOAuthenticator.client_id = '484740039031-okb9brgs9b8saj00u6asltastmbd4ko1.apps.googleusercontent.com'
-# c.GoogleOAuthenticator.client_secret = 'wfFbhwoDlMfcgeVcENcH-SaT'
+# c.GoogleOAuthenticator.oauth_callback_url = 'http://185.48.235.7/hub/oauth_callback'
+# c.GoogleOAuthenticator.client_id = ''
+# c.GoogleOAuthenticator.client_secret = ''
 
-# c.JupyterHub.authenticator_class = 'oauthenticator.GitHubOAuthenticator'
-# c.GitHubOAuthenticator.oauth_callback_url = 'https://185.52.193.12/hub/oauth_callback'
-# c.GitHubOAuthenticator.client_id = 'b68114058cb019b0a42e'
-# c.GitHubOAuthenticator.client_secret = '770dfe07a7a75fd9d02a27a19f24534610e17cd8'
-
-## The public facing port of the proxy
+# The public facing port of the proxy
 c.JupyterHub.port = 8000
-## The public facing ip of the whole application (the proxy)
+# The public facing ip of the whole application (the proxy)
 c.JupyterHub.ip = '0.0.0.0'
-## The ip for this process
+# The ip for this process
 c.JupyterHub.hub_ip = '0.0.0.0'
 #  Defaults to an empty set, in which case no user has admin access.
 c.GoogleOAuthenticator.admin_users = {"zinkiewicz.daniel@gmail.com"}
@@ -42,7 +37,7 @@ c.SwarmSpawner.notebook_dir = notebook_dir
 #                'name': 'local',
 #                'options': {
 #                    'type': 'nfs4',
-#                    'o': 'addr=192.168.0.6,rw',
+#                    'o': 'addr=192.168.0.9",rw',
 #                    'device': ':/var/nfs/{username}/'
 #                }
 #            },

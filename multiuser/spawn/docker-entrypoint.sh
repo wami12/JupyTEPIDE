@@ -11,8 +11,8 @@ if [ "$(which "$1")" = "/usr/local/bin/start-singleuser.sh" ]; then
   # if target directory already exists and is not empty, which likely means
   # that we've already done it, so just ignore.
   : ${NOTEBOOK_DIR:=/home/$NB_USER}
-  cd $NOTEBOOK_DIR/dev
-  git pull || true
+#  cd $NOTEBOOK_DIR/dev
+#  git pull || true
   cd $NOTEBOOK_DIR
 fi
 

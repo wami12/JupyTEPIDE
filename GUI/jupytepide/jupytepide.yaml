@@ -1,0 +1,6 @@
+Type: IPython Notebook Extension
+Compatibility: 4.x, 5.x
+Name: jupytepide
+Main: main.js
+Description: Extensions for JupytepIDE User Interface. It's a preliminary version.
+Link: README.md

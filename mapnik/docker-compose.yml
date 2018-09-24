@@ -1,16 +1,9 @@
 version: '3'
 services:
   mapnik:
-    image: "jupytepide/tilestache-mapnik"
+    image: "jupytepide/mapnik-flask"
     container_name: jupytepide-mapnik
     ports:
-     - "32798:22"
-     - "32799:9001"
-     - "32800:80"
+    - "9443:443"
     volumes:
-     - mapnik:/etc/tilestache
-
-volumes:
-  mapnik:
-    external:
-      name: jupytepide-mapnik
+    - /opt/pub/mapnik:/opt/mapnik

@@ -4,6 +4,7 @@ docker service create \
   --mount type=bind,src=/etc/jupyterhub,dst=/srv/jupyterhub \
   --name jupyterhubserver \
   --network jupyterhub \
+  --publish 8000:8000 \
   --constraint 'node.role == manager' \
   --detach=true \
   jupytepide/jupyterhub-docker:latest
