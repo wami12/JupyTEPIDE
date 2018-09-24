@@ -1,9 +1,10 @@
-FROM jupyterhub/jupyterhub:0.8.0
+FROM jupyterhub/jupyterhub:0.8.1
 
 EXPOSE 8081
 
-RUN /opt/conda/bin/pip install oauthenticator swarmspawner
-RUN chmod 0755 /srv/jupyterhub/
+# RUN /opt/conda/bin/pip install oauthenticator swarmspawner
 
 # Install modified version of swarmspawner that creates user folders
-#RUN /opt/conda/bin/pip install oauthenticator https://github.com/zonca/SwarmSpawner/archive/createfolder.zip
+RUN /opt/conda/bin/pip install oauthenticator https://github.com/zonca/SwarmSpawner/archive/createfolder.zip
+
+# RUN chmod 0755 /srv/jupyterhub/
