@@ -3,7 +3,7 @@ import os
 c = get_config()
 
 c.JupyterHub.authenticator_class = 'oauthenticator.GitHubOAuthenticator'
-c.GitHubOAuthenticator.oauth_callback_url = 'http://185.48.235.7:8000/hub/oauth_callback'
+c.GitHubOAuthenticator.oauth_callback_url = 'https://jupytepide.ga/hub/oauth_callback'
 c.GitHubOAuthenticator.client_id = 'b72e40ee67ccbe92b05a'
 c.GitHubOAuthenticator.client_secret = 'd0e0d4f5b0ad3670a8bba5e3654295083245abd5'
 
