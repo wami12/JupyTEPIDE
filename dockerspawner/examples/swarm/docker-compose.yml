@@ -25,6 +25,8 @@ services:
     # mount the docker socket
     volumes:
     - "/var/run/docker.sock:/var/run/docker.sock"
+    - ./jupyterhub_config.py:/tmp/jupyterhub_config.py
+    - ./run-from-compose.sh:/run-from-compose.sh
     networks:
       default:
     # This is necessary to prevent the singleton hub from using its service number as its hostname
