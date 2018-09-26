@@ -1,0 +1,40 @@
+version: "3"
+services:
+  proxy:
+    env_file: .env
+    image: jupyterhub/configurable-http-proxy:3.1.1
+    container_name: jupytepide-swarm-proxy
+    networks:
+      default:
+    # expose the proxy to the world
+    ports:
+    - "80:8000"
+    command:
+    - configurable-http-proxy
+    - '--error-target'
+    - 'http://hub/hub/error'
+
+  hub:
+    # build an image with SwarmSpawner and our jupyterhub_config.py
+    env_file: .env
+    build:
+      context: "../.."
+      dockerfile: "examples/swarm/Dockerfile"
+    image: jupytepide-hub
+    container_name: jupytepide-hub
+    # mount the docker socket
+    volumes:
+    - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      default:
+    # This is necessary to prevent the singleton hub from using its service number as its hostname
+    hostname: jupyterhub
+    environment:
+      DOCKER_NETWORK_NAME: jupytepide-swarm-net
+    # Ensure that we execute on a Swarm manager
+    command: sh /run-from-compose.sh
+
+networks:
+  default:
+    external:
+      name: jupytepide-swarm-net
