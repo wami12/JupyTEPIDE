@@ -7,5 +7,12 @@ include .env
 
 network:
 	@docker network create --driver overlay --attachable jupytepide-swarm-net
-#	\
-#	--gateway 172.18.0.1 --subnet 172.18.0.0/24
+#	\ --gateway 172.18.0.1 --subnet 172.18.0.0/24
+
+volumes:
+	@docker volume inspect $(DB_VOLUME_DATA) >/dev/null 2>&1 || docker volume create --name $(DB_VOLUME_DATA)
+
+jupytep_user_spawn_image:
+	docker build -t $(DOCKER_SPAWN_NOTEBOOK_IMAGE) \
+		-f ../spawn/dockerfile \
+		--build-arg DOCKER_NOTEBOOK_IMAGE=$(DOCKER_NOTEBOOK_IMAGE) .

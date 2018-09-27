@@ -16,29 +16,32 @@ c.JupyterHub.spawner_class = 'dockerspawner.SwarmSpawner'
 
 c.DockerSpawner.use_internal_ip = True
 
-c.SwarmSpawner.network_name = 'jupytepide-swarm-net'
-c.DockerSpawner.extra_host_config = {'network_mode': 'jupytepide-swarm-net'}
-c.DockerSpawner.extra_start_kwargs = {'network_mode': 'jupytepide-swarm-net'}
+network_name = os.environ['DOCKER_NETWORK_NAME']
+c.SwarmSpawner.network_name = network_name
+c.SwarmSpawner.extra_host_config = {'network_mode': network_name}
+c.DockerSpawner.extra_start_kwargs = {'network_mode': network_name}
 
-c.JupyterHub.hub_ip = 'jupytepide-hub'
-c.DockerSpawner.hub_ip_connect = 'jupytepide-hub'
+c.JupyterHub.ip = '0.0.0.0'
+c.JupyterHub.hub_ip = '0.0.0.0'
+c.DockerSpawner.host_ip = "0.0.0.0"
+c.DockerSpawner.hub_ip_connect = 'hub'
 c.DockerSpawner.container_ip = "0.0.0.0"
-
 c.JupyterHub.port = 8000
 
-c.Spawner.start_timeout = 200
-c.Spawner.http_timeout = 200
+c.SwarmSpawner.start_timeout = 100
+c.SwarmSpawner.http_timeout = 100
 
 c.JupyterHub.cookie_secret_file = 'jupyterhub_cookie_secret'
 
 # debug-logging for testing
 c.JupyterHub.log_level = logging.DEBUG
 
-c.DockerSpawner.image = 'jupytepide/eodata-notebook:latest'
+c.DockerSpawner.image = os.environ['DOCKER_SPAWN_NOTEBOOK_IMAGE']
 
-notebook_dir = os.environ.get('DOCKER_NOTEBOOK_DIR') or '/home/jovyan/work'
-c.DockerSpawner.notebook_dir = notebook_dir
+notebook_dir = os.environ.get('DOCKER_NOTEBOOK_DIR') or '/home/jovyan'
+c.SwarmSpawner.notebook_dir = notebook_dir
 
+c.Spawner.mem_limit = '20G'
 
 # Explicitly set notebook directory because we'll be mounting a host volume to
 # it.  Most jupyter/docker-stacks *-notebook images run the Notebook server as
@@ -51,14 +54,11 @@ c.DockerSpawner.notebook_dir = notebook_dir
 # notebook directory in the container
 # c.DockerSpawner.volumes = {'jupyterhub-user-{username}': notebook_dir}
 
-# mounts = [{'type': 'bind',
-#            'source': '/var/hostdir',
-#            'target': notebook_dir, }]
+mounts = [{'type': 'bind',
+           'source': '/var/hostdir',
+           'target': '/home/jovyan/work', }]
 #
-# c.SwarmSpawner.container_spec = {
-#     # The command to run inside the service
-#     'args': ['/usr/local/bin/start-singleuser.sh'],  # (string or list)
-#     'Image': 'jupytepide/stack-notebook:latest',
-#     # Replace mounts with [] to disable permanent storage
-#     'mounts': mounts
-# }
+c.SwarmSpawner.extra_container_spec = {
+    # Replace mounts with [] to disable permanent storage
+    'mounts': mounts
+}
