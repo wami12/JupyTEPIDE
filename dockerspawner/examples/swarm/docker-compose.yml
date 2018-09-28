@@ -1,11 +1,12 @@
 version: "3"
 services:
-  proxy:
+  jupytepide-proxy:
     env_file: .env
     image: jupyterhub/configurable-http-proxy:3.1.1
     container_name: jupytepide-proxy
+    hostname: jupytepide-proxy
     networks:
-      - jupyterhub-net
+    - jupyterhub-net
     # expose the proxy to the world
     ports:
     - "80:8000"
@@ -13,9 +14,9 @@ services:
     command:
     - configurable-http-proxy
     - '--error-target'
-    - 'http://hub/hub/error'
+    - 'http://jupytepide-hub/hub/error'
 
-  hub:
+  jupytepide-hub:
     # build an image with SwarmSpawner and our jupyterhub_config.py
     env_file: .env
     build:
@@ -29,7 +30,7 @@ services:
     - ./jupyterhub_config.py:/tmp/jupyterhub_config.py
     - ./run-from-compose.sh:/run-from-compose.sh
     networks:
-      - jupyterhub-net
+    - jupyterhub-net
     # This is necessary to prevent the singleton hub from using its service number as its hostname
     ports:
     - "8000:8000"

@@ -5,7 +5,7 @@ c = get_config()
 
 # The proxy is in another container
 c.ConfigurableHTTPProxy.should_start = False
-c.ConfigurableHTTPProxy.api_url = 'http://proxy:8001'
+c.ConfigurableHTTPProxy.api_url = 'http://jupytepide-proxy:8001'
 # tell the hub to use Dummy Auth (for testing)
 c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
 # use SwarmSpawner
@@ -14,18 +14,18 @@ c.JupyterHub.spawner_class = 'dockerspawner.SwarmSpawner'
 # so user servers can connect
 # c.JupyterHub.hub_ip = '0.0.0.0'
 
-c.SwarmSpawner.use_internal_ip = True
+# c.SwarmSpawner.use_internal_ip = True
 
 network_name = os.environ['DOCKER_NETWORK_NAME']
 c.SwarmSpawner.network_name = network_name
 c.SwarmSpawner.extra_host_config = {'network_mode': network_name}
 # c.SwarmSpawner.extra_start_kwargs = {'network_mode': network_name}
 
-c.JupyterHub.ip = 'jupytepide-hub'
+# c.JupyterHub.ip = '0.0.0.0'
 c.JupyterHub.hub_ip = '0.0.0.0'
-c.SwarmSpawner.host_ip = "0.0.0.0"
-c.SwarmSpawner.hub_ip_connect = 'jupytepide-hub'
-# c.SwarmSpawner.container_ip = "0.0.0.0"
+# c.DockerSpawner.host_ip = "0.0.0.0"
+c.DockerSpawner.hub_ip_connect = 'jupytepide-hub'
+# c.DockerSpawner.container_ip = "0.0.0.0"
 c.JupyterHub.port = 8000
 
 c.SwarmSpawner.start_timeout = 100
@@ -36,12 +36,14 @@ c.JupyterHub.cookie_secret_file = 'jupyterhub_cookie_secret'
 # debug-logging for testing
 c.JupyterHub.log_level = logging.DEBUG
 
-c.SwarmSpawner.image = os.environ['DOCKER_SPAWN_NOTEBOOK_IMAGE']
+# c.SwarmSpawner.image = os.environ['DOCKER_SPAWN_NOTEBOOK_IMAGE']
+# c.DockerSpawner.image = 'jupyter/minimal-notebook:30f16d52126f'
+c.DockerSpawner.image = 'jupyter/minimal-notebook:8ccdfc1da8d5'
 
-notebook_dir = os.environ.get('DOCKER_NOTEBOOK_DIR') or '/home/jovyan'
-c.SwarmSpawner.notebook_dir = notebook_dir
-
-# c.Spawner.mem_limit = '20G'
+# notebook_dir = os.environ.get('DOCKER_NOTEBOOK_DIR') or '/home/jovyan'
+# c.SwarmSpawner.notebook_dir = notebook_dir
+#
+# c.Spawner.mem_limit = '10G'
 
 # Explicitly set notebook directory because we'll be mounting a host volume to
 # it.  Most jupyter/docker-stacks *-notebook images run the Notebook server as
