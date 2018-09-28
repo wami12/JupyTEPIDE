@@ -18,9 +18,9 @@ WORKDIR /tmp
 
 # Download and install ESA SNAP toolbox (with all components)
 # Install and configure Snappy
-COPY esa-snap_all_unix_6_0.sh /tmp/esa-snap_all_unix_6_0.sh
-# RUN wget --quiet http://step.esa.int/downloads/6.0/installers/esa-snap_all_unix_6_0.sh && \
-RUN chmod +x esa-snap_all_unix_6_0.sh && \
+# COPY esa-snap_all_unix_6_0.sh /tmp/esa-snap_all_unix_6_0.sh
+RUN wget --quiet http://step.esa.int/downloads/6.0/installers/esa-snap_all_unix_6_0.sh && \
+    chmod +x esa-snap_all_unix_6_0.sh && \
     /bin/bash "esa-snap_all_unix_6_0.sh" -q
 
 USER $NB_USER
@@ -51,9 +51,9 @@ ENV PATH="/opt/snaphu/bin:${PATH}"
 
 # Download and install Orfeo toolbox OTB
 # Standalone install
-COPY OTB-6.6.0-Linux64.run /opt/OTB-6.6.0-Linux64.run
-# RUN wget --quiet https://www.orfeo-toolbox.org/packages/OTB-6.6.0-Linux64.run && \
-RUN chmod +x OTB-6.6.0-Linux64.run && \
+# COPY OTB-6.6.0-Linux64.run /opt/OTB-6.6.0-Linux64.run
+RUN wget --quiet https://www.orfeo-toolbox.org/packages/OTB-6.6.0-Linux64.run && \
+    chmod +x OTB-6.6.0-Linux64.run && \
     /bin/bash -c "OTB_PYTHON_EXE=/opt/conda/envs/python27/bin/python2.7 ./OTB-6.6.0-Linux64.run" -q &&\
     rm -rf OTB-6.6.0-Linux64.run
 
@@ -82,8 +82,8 @@ RUN cd /tmp && \
     /bin/bash -c "R -e \"library(devtools)\"" && \
     /bin/bash -c "R -e \"options(unzip='internal')\"" && \
     R -e "devtools::install_git(\"https://github.com/gowusu/sebkc.git\", branch = \"master\")" && \
-    wget --quiet https://download2.rstudio.org/rstudio-server-0.99.903-amd64.deb && \
-    gdebi -n rstudio-server-0.99.903-amd64.deb  && \
+    # wget --quiet https://download2.rstudio.org/rstudio-server-0.99.903-amd64.deb && \
+    # gdebi -n rstudio-server-0.99.903-amd64.deb  && \
     find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf
 
 RUN find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
