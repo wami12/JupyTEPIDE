@@ -10,6 +10,7 @@ USER root
 
 # ------------------------- START TESTING --------------------------------
 
+RUN conda install -c conda-forge jupyterhub==0.9.2
 
 # ------------------------- END TESTING ----------------------------------
 
@@ -34,9 +35,9 @@ RUN cd /tmp && \
     mkdir -p /home/jovyan/.jupytepide/conf/gui && \
     cp /tmp/JupyTEPIDE/GUI/jupytepide/code_snippets.json /home/jovyan/.jupytepide/conf/gui/code_snippets.json && \
     cp -R /tmp/JupyTEPIDE /opt/ && \
-    find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
-    fix-permissions /home/$NB_USER && \
-    fix-permissions /opt
+    find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf
+#    fix-permissions /home/$NB_USER && \
+#    fix-permissions /opt
 
 # Install JupyTEP IDE UI layout and enable it
 #RUN mkdir /home/$NB_USER/dev && \
@@ -48,7 +49,8 @@ RUN cd /tmp && \
 COPY docker-entrypoint.sh /srv/docker-entrypoint.sh
 RUN chmod 777 /srv/docker-entrypoint.sh
 ENTRYPOINT ["tini", "--", "/srv/docker-entrypoint.sh"]
-CMD ["start-singleuser.sh"]
+# CMD ["start-singleuser.sh"]
+CMD ["jupyterhub-singleuser"]
 
 WORKDIR /home/$NB_USER
 USER $NB_USER
