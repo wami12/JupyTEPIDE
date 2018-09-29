@@ -42,14 +42,14 @@ services:
       DOCKER_NOTEBOOK_DIR: ${DOCKER_NOTEBOOK_DIR}
     command: sh /run-from-compose.sh
 
-#networks:
-#  default:
-#    external:
-#      name: jupytepide-swarm-net
-
 networks:
   jupyterhub-net:
-    driver: overlay
+    external:
+      name: jupytepide-swarm-net
+
+#networks:
+#  jupyterhub-net:
+#    driver: overlay
 
 volumes:
   db:

@@ -36,9 +36,12 @@ c.JupyterHub.cookie_secret_file = 'jupyterhub_cookie_secret'
 # debug-logging for testing
 c.JupyterHub.log_level = logging.DEBUG
 
-# c.SwarmSpawner.image = os.environ['DOCKER_SPAWN_NOTEBOOK_IMAGE']
+c.SwarmSpawner.image = os.environ['DOCKER_SPAWN_NOTEBOOK_IMAGE']
 # c.DockerSpawner.image = 'jupyter/minimal-notebook:30f16d52126f'
-c.DockerSpawner.image = 'jupyter/minimal-notebook:8ccdfc1da8d5'
+# c.DockerSpawner.image = 'jupyter/minimal-notebook:8ccdfc1da8d5'
+# c.DockerSpawner.image = 'jupytepide/base-scipy-r-notebook:1.3.0-dev'
+# c.DockerSpawner.image = 'jupyter/scipy-notebook:8ccdfc1da8d5'
+# c.DockerSpawner.image = 'jupyter/scipy-notebook:177037d09150'
 
 # notebook_dir = os.environ.get('DOCKER_NOTEBOOK_DIR') or '/home/jovyan'
 # c.SwarmSpawner.notebook_dir = notebook_dir

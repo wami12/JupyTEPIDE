@@ -4,9 +4,10 @@
 ARG JUPYTERHUB_VERSION=0.9.2
 FROM jupyterhub/jupyterhub:${JUPYTERHUB_VERSION}
 # install dockerspawner from the current repo
-ADD . /tmp/dockerspawner
-RUN pip install --upgrade pip
-RUN pip install --no-cache /tmp/dockerspawner
+# ADD . /tmp/dockerspawner
+# RUN pip install --upgrade pip
+# RUN pip install --no-cache /tmp/dockerspawner
+RUN pip install --no-cache dockerspawner
 # install dummyauthenticator
 RUN pip install --no-cache jupyterhub-dummyauthenticator
 # load example configuration
