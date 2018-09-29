@@ -4,8 +4,8 @@ import os
 c = get_config()
 
 # The proxy is in another container
-c.ConfigurableHTTPProxy.should_start = False
-c.ConfigurableHTTPProxy.api_url = 'http://jupytepide-proxy:8001'
+# c.ConfigurableHTTPProxy.should_start = False
+# c.ConfigurableHTTPProxy.api_url = 'http://jupytepide-proxy:8001'
 # tell the hub to use Dummy Auth (for testing)
 c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
 # use SwarmSpawner
@@ -21,11 +21,8 @@ c.SwarmSpawner.network_name = network_name
 c.SwarmSpawner.extra_host_config = {'network_mode': network_name}
 # c.SwarmSpawner.extra_start_kwargs = {'network_mode': network_name}
 
-# c.JupyterHub.ip = '0.0.0.0'
 c.JupyterHub.hub_ip = '0.0.0.0'
-# c.DockerSpawner.host_ip = "0.0.0.0"
 c.DockerSpawner.hub_ip_connect = 'jupytepide-hub'
-# c.DockerSpawner.container_ip = "0.0.0.0"
 c.JupyterHub.port = 8000
 
 c.SwarmSpawner.start_timeout = 100
@@ -62,3 +59,9 @@ c.SwarmSpawner.extra_container_spec = {
     # Replace mounts with [] to disable permanent storage
     'mounts': mounts
 }
+
+c.SwarmSpawner.service_name = 'jupytepide-hub'
+# To use user_options in service creation
+c.SwarmSpawner.use_user_options = False
+# The public facing ip of the whole application (the proxy)
+c.JupyterHub.ip = '0.0.0.0'
