@@ -37,16 +37,11 @@ c.JupyterHub.cookie_secret_file = 'jupyterhub_cookie_secret'
 c.JupyterHub.log_level = logging.DEBUG
 
 c.SwarmSpawner.image = os.environ['DOCKER_SPAWN_NOTEBOOK_IMAGE']
-# c.DockerSpawner.image = 'jupyter/minimal-notebook:30f16d52126f'
-# c.DockerSpawner.image = 'jupyter/minimal-notebook:8ccdfc1da8d5'
-# c.DockerSpawner.image = 'jupytepide/base-scipy-r-notebook:1.3.0-dev'
-# c.DockerSpawner.image = 'jupyter/scipy-notebook:8ccdfc1da8d5'
-# c.DockerSpawner.image = 'jupyter/scipy-notebook:177037d09150'
 
-# notebook_dir = os.environ.get('DOCKER_NOTEBOOK_DIR') or '/home/jovyan'
-# c.SwarmSpawner.notebook_dir = notebook_dir
-#
-# c.Spawner.mem_limit = '10G'
+notebook_dir = os.environ.get('DOCKER_NOTEBOOK_DIR') or '/home/jovyan'
+c.SwarmSpawner.notebook_dir = notebook_dir
+
+c.Spawner.mem_limit = '15G'
 
 # Explicitly set notebook directory because we'll be mounting a host volume to
 # it.  Most jupyter/docker-stacks *-notebook images run the Notebook server as
@@ -59,11 +54,11 @@ c.SwarmSpawner.image = os.environ['DOCKER_SPAWN_NOTEBOOK_IMAGE']
 # notebook directory in the container
 # c.DockerSpawner.volumes = {'jupyterhub-user-{username}': notebook_dir}
 
-# mounts = [{'type': 'bind',
-#            'source': '/var/hostdir',
-#            'target': '/home/jovyan/work', }]
-# #
-# c.SwarmSpawner.extra_container_spec = {
-#     # Replace mounts with [] to disable permanent storage
-#     'mounts': mounts
-# }
+mounts = [{'type': 'bind',
+           'source': '/var/hostdir',
+           'target': '/home/jovyan/work', }]
+
+c.SwarmSpawner.extra_container_spec = {
+    # Replace mounts with [] to disable permanent storage
+    'mounts': mounts
+}
