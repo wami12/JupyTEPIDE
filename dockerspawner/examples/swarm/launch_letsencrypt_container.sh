@@ -3,7 +3,7 @@ docker run \
   --cap-add=NET_ADMIN \
   --name nginx \
   -p 443:443 \
-  -p 80:80 \
+  -p 80:443 \
   --detach \
   -e EMAIL=your_email@domain.edu \
   -e URL=jupytepide.ga \
