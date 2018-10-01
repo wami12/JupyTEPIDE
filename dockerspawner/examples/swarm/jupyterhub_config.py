@@ -52,8 +52,12 @@ c.Spawner.mem_limit = '15G'
 # c.DockerSpawner.volumes = {'jupyterhub-user-{username}': notebook_dir}
 
 mounts = [{'type': 'bind',
-           'source': '/var/hostdir',
-           'target': '/home/jovyan/work', }]
+           'source': '/opt/pub/shared',
+           'target': '/home/jovyan/shared', },
+          {'type': 'bind',
+           'source': '/eodata',
+           'target': '/home/jovyan/eodata', }
+          ]
 
 c.SwarmSpawner.extra_container_spec = {
     # Replace mounts with [] to disable permanent storage
@@ -61,7 +65,5 @@ c.SwarmSpawner.extra_container_spec = {
 }
 
 c.SwarmSpawner.service_name = 'jupytepide-hub'
-# To use user_options in service creation
-c.SwarmSpawner.use_user_options = False
 # The public facing ip of the whole application (the proxy)
 c.JupyterHub.ip = '0.0.0.0'
