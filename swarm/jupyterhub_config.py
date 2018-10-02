@@ -10,23 +10,25 @@ c = get_config()
 c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
 # use SwarmSpawner
 c.JupyterHub.spawner_class = 'dockerspawner.SwarmSpawner'
-# The Hub should listen on all interfaces,
-# so user servers can connect
-# c.JupyterHub.hub_ip = '0.0.0.0'
 
-# c.SwarmSpawner.use_internal_ip = True
 
 network_name = os.environ['DOCKER_NETWORK_NAME']
 c.SwarmSpawner.network_name = network_name
 c.SwarmSpawner.extra_host_config = {'network_mode': network_name}
 # c.SwarmSpawner.extra_start_kwargs = {'network_mode': network_name}
 
+# The Hub should listen on all interfaces,
+# so user servers can connect
+# The public facing ip of the whole application (the proxy)
+c.JupyterHub.ip = '0.0.0.0'
 c.JupyterHub.hub_ip = '0.0.0.0'
 c.DockerSpawner.hub_ip_connect = 'jupytepide-hub'
 c.JupyterHub.port = 8000
 
 c.SwarmSpawner.start_timeout = 100
 c.SwarmSpawner.http_timeout = 100
+
+c.SwarmSpawner.service_name = 'jupytepide-hub'
 
 c.JupyterHub.cookie_secret_file = 'jupyterhub_cookie_secret'
 
@@ -38,7 +40,7 @@ c.SwarmSpawner.image = os.environ['DOCKER_SPAWN_NOTEBOOK_IMAGE']
 notebook_dir = os.environ.get('DOCKER_NOTEBOOK_DIR') or '/home/jovyan'
 c.SwarmSpawner.notebook_dir = notebook_dir
 
-c.Spawner.mem_limit = '15G'
+c.Spawner.mem_limit = '25G'
 
 # Explicitly set notebook directory because we'll be mounting a host volume to
 # it.  Most jupyter/docker-stacks *-notebook images run the Notebook server as
@@ -66,7 +68,3 @@ c.SwarmSpawner.extra_container_spec = {
     # Replace mounts with [] to disable permanent storage
     'mounts': mounts
 }
-
-c.SwarmSpawner.service_name = 'jupytepide-hub'
-# The public facing ip of the whole application (the proxy)
-c.JupyterHub.ip = '0.0.0.0'

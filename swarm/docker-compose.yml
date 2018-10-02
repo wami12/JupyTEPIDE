@@ -20,9 +20,9 @@ services:
     # build an image with SwarmSpawner and our jupyterhub_config.py
     env_file: .env
     build:
-      context: "../.."
-      dockerfile: "./Dockerfile"
-    image: jupytepide-hub
+      context: .
+      dockerfile: Dockerfile
+    image: "jupytepide/hub"
     container_name: jupytepide-hub
     # mount the docker socket
     volumes:
