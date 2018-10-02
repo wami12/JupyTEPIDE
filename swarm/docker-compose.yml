@@ -21,7 +21,7 @@ services:
     env_file: .env
     build:
       context: "../.."
-      dockerfile: "examples/swarm/Dockerfile"
+      dockerfile: "./Dockerfile"
     image: jupytepide-hub
     container_name: jupytepide-hub
     # mount the docker socket
