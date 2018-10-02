@@ -9,5 +9,5 @@ docker run \
   -e URL=jupytepide.ga \
   -v nginx_volume:/config \
   --network jupytepide-swarm-net \
-  --mount type=bind,src=/home/eouser/dockerspawner/examples/swarm/letsencrypt_container_nginx.conf,dst=/config/nginx/site-confs/default \
+  --mount type=bind,src=/home/eouser/jupytep-dev/dockerspawner/examples/swarm/letsencrypt_container_nginx.conf,dst=/config/nginx/site-confs/default \
   linuxserver/letsencrypt

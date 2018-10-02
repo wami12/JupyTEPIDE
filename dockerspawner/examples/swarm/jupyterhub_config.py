@@ -55,8 +55,11 @@ mounts = [{'type': 'bind',
            'source': '/opt/pub/shared',
            'target': '/home/jovyan/shared', },
           {'type': 'bind',
+           'source': '/eodata-jovyan',
+           'target': '/home/jovyan/eodata', },
+          {'type': 'bind',
            'source': '/eodata',
-           'target': '/home/jovyan/eodata', }
+           'target': '/eodata', }
           ]
 
 c.SwarmSpawner.extra_container_spec = {

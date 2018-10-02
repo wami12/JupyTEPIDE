@@ -7,7 +7,7 @@ FROM jupyterhub/jupyterhub:${JUPYTERHUB_VERSION}
 # ADD . /tmp/dockerspawner
 # RUN pip install --upgrade pip
 # RUN pip install --no-cache /tmp/dockerspawner
-RUN pip install --no-cache dockerspawner==1.0.0*
+RUN pip install --no-cache dockerspawner==0.10.0
 # install dummyauthenticator
 RUN pip install --no-cache jupyterhub-dummyauthenticator
 # load example configuration

@@ -6,5 +6,5 @@ docker-compose down
 #docker rmi -f jupytepide-hub:latest
 #docker-compose build
 docker-compose up -d
-bash launch_letsencrypt_container.sh
+# bash launch_letsencrypt_container.sh
 docker ps -a
