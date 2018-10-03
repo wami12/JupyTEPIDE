@@ -43,6 +43,7 @@ services:
     - "/var/run/docker.sock:/var/run/docker.sock"
     - ./jupyterhub_config.py:/tmp/jupyterhub_config.py
     - ./run-from-compose.sh:/run-from-compose.sh
+    - /opt/data/priv/:/opt/data/priv/
     networks:
     - jupyterhub-net
     # This is necessary to prevent the singleton hub from using its service number as its hostname
