@@ -16,6 +16,20 @@ services:
   #    - '--error-target'
   #    - 'http://jupytepide-hub/hub/error'
 
+  #  docker run \
+  #  --cap-add=NET_ADMIN \
+  #  --name nginx \
+  #  -p 443:443 \
+  #  -p 80:80 \
+  #  --detach \
+  #  -e EMAIL=jupytep@wasat.pl \
+  #  # -e URL=jupyteo.com \
+  #  -e URL=jupytepide.ga \
+  #  -v nginx_volume:/config \
+  #  --network jupytepide-swarm-net \
+  #  --mount type=bind,src=/home/eouser/jupytep-dev/swarm/letsencrypt_container_nginx.conf,dst=/config/nginx/site-confs/default \
+  #  linuxserver/letsencrypt
+
   jupytepide-hub:
     # build an image with SwarmSpawner and our jupyterhub_config.py
     env_file: .env
@@ -42,6 +56,26 @@ services:
       DOCKER_NOTEBOOK_DIR: ${DOCKER_NOTEBOOK_DIR}
     command: sh /run-from-compose.sh
 
+  nginx:
+    env_file: .env
+    image: linuxserver/letsencrypt
+    container_name: nginx
+    hostname: nginx
+    networks:
+    - jupyterhub-net
+    # expose the proxy to the world
+    ports:
+    - "80:80"
+    - "443:443"
+    volumes:
+    - "nginx_volume:/config"
+    - /home/eouser/jupytep-dev/swarm/letsencrypt_container_nginx.conf:/config/nginx/site-confs/default
+    environment:
+      EMAIL: ${EMAIL}
+      URL: ${URL}
+    cap_add:
+    - NET_ADMIN
+
 networks:
   jupyterhub-net:
     external:
@@ -55,5 +89,8 @@ volumes:
   db:
     external:
       name: ${DB_VOLUME_DATA}
+  nginx_volume:
+    external:
+      name: nginx_volume
   geoserver-data:
   postgis-db-data:
