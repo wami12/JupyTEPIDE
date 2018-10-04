@@ -48,6 +48,60 @@ services:
     cap_add:
     - NET_ADMIN
 
+  postgis:
+    image: kartoza/postgis:9.6-2.4
+    container_name: jupytepide-postgis
+    networks:
+    - jupyterhub-net
+    volumes:
+    - postgis-db-data:/var/lib/postgresql
+    ports:
+    - "25432:5432"
+    env_file:
+    - postgis.env
+    restart: on-failure
+    healthcheck:
+      test: "exit 0"
+
+  geoserver:
+    image: jupytepide/geoserver:2.13.0-1.0
+    container_name: jupytepide-geoserver
+    networks:
+    - jupyterhub-net
+    volumes:
+    - geoserver-data:/opt/geoserver/data_dir
+    ports:
+    - "8090:8080"
+    restart: on-failure
+    env_file:
+    - geoserver.env
+    #    depends_on:
+    #      postgis:
+    #        condition: service_healthy
+    healthcheck:
+      test: curl --fail -s http://localhost:8080/ || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+
+  mapnik:
+    image: "jupytepide/mapnik-flask:1.2"
+    container_name: jupytepide-mapnik
+    networks:
+    - jupyterhub-net
+    ports:
+    - "9443:443"
+    volumes:
+    - /opt/pub/mapnik:/opt/mapnik
+
+  pywps:
+    image: "pywps/flask-ubuntu:16.0.4"
+    container_name: jupytepide-pywps
+    networks:
+    - jupyterhub-net
+    ports:
+    - "5000:5000"
+
 networks:
   jupyterhub-net:
     external:
@@ -59,6 +113,10 @@ volumes:
       name: ${DB_VOLUME_DATA}
   nginx_volume:
     external:
-      name: nginx_volume
+      name: ${NGINX_VOLUME_DATA}
   geoserver-data:
+    external:
+      name: ${GEOSERVER_VOLUME_DATA}
   postgis-db-data:
+    external:
+      name: ${POSTGIS_VOLUME_DATA}

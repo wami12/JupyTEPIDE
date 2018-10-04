@@ -11,6 +11,8 @@ network:
 
 volumes:
 	@docker volume inspect $(DB_VOLUME_DATA) >/dev/null 2>&1 || docker volume create --name $(DB_VOLUME_DATA)
+	@docker volume inspect $(POSTGIS_VOLUME_DATA) >/dev/null 2>&1 || docker volume create --name $(POSTGIS_VOLUME_DATA)
+	@docker volume inspect $(GEOSERVER_VOLUME_DATA) >/dev/null 2>&1 || docker volume create --name $(GEOSERVER_VOLUME_DATA)
 
 jupytep_user_spawn_image:
 	docker build -t $(DOCKER_SPAWN_NOTEBOOK_IMAGE) \
