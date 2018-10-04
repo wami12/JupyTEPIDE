@@ -58,15 +58,31 @@ c.SwarmSpawner.notebook_dir = notebook_dir
 # notebook directory in the container
 # c.DockerSpawner.volumes = {'/opt/data/priv/jupyterhub-user-{username}': {'bind': '/home/jovyan/work', 'mode': 'ro'}, }
 
+
 def create_dir_hook(spawner):
     username = spawner.user.name  # get the username
     volume_path = os.path.join('/opt/data/priv', username)
     if not os.path.exists(volume_path):
-        # create a directory with umask 0755
-        # hub and container user must have the same UID to be writeable
-        # still readable by other users on the system
         os.mkdir(volume_path, 0o777)
         os.chmod(volume_path, 0o777)
+
+    os.environ['SPAWN_USER'] = str(username)
+    mounts_user = [{'type': 'bind',
+                    'source': '/opt/data/pub/shared',
+                    'target': '/home/jovyan/shared', },
+                   {'type': 'bind',
+                    'source': '/opt/data/priv/' + username,
+                    'target': '/home/jovyan/work', },
+                   {'type': 'bind',
+                    'source': '/eodata-jovyan',
+                    'target': '/home/jovyan/eodata', },
+                   {'type': 'bind',
+                    'source': '/eodata',
+                    'target': '/eodata', }
+                   ]
+    spawner.extra_container_spec = {
+        'mounts': mounts_user
+    }
 
 
 # attach the hook function to the spawner
@@ -76,24 +92,17 @@ c.Spawner.pre_spawn_hook = create_dir_hook
 #
 # print("User: " + user)
 
-mounts = [{'type': 'bind',
-           'source': '/opt/data/pub/shared',
-           'target': '/home/jovyan/shared', },
-          {'type': 'bind',
-           'source': '/opt/data/priv/cde',
-           'target': '/home/jovyan/work', },
-          {'type': 'bind',
-           'source': '/eodata-jovyan',
-           'target': '/home/jovyan/eodata', },
-          {'type': 'bind',
-           'source': '/eodata',
-           'target': '/eodata', }
-          ]
-
-c.SwarmSpawner.extra_container_spec = {
-    # Replace mounts with [] to disable permanent storage
-    'mounts': mounts
-}
+# if os.environ['SPAWN_USER'] is None:
+#     os.environ['SPAWN_USER'] = 'test-user'
+#
+# username = str(os.environ['SPAWN_USER'])
+#
+#
+#
+# c.SwarmSpawner.extra_container_spec = {
+#     # Replace mounts with [] to disable permanent storage
+#     'mounts': mounts
+# }
 
 c.Spawner.mem_limit = '4G'
 c.Spawner.cpu_limit = 2.0

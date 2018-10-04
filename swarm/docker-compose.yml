@@ -55,6 +55,7 @@ services:
       DOCKER_SPAWN_NOTEBOOK_IMAGE: ${DOCKER_SPAWN_NOTEBOOK_IMAGE}
       # Notebook directory inside user image
       DOCKER_NOTEBOOK_DIR: ${DOCKER_NOTEBOOK_DIR}
+      SPAWN_USER: ${SPAWN_USER}
     command: sh /run-from-compose.sh
 
   nginx:
