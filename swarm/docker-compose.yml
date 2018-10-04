@@ -1,35 +1,5 @@
 version: "3"
 services:
-  #  jupytepide-proxy:
-  #    env_file: .env
-  #    image: jupyterhub/configurable-http-proxy:3.1.1
-  #    container_name: jupytepide-proxy
-  #    hostname: jupytepide-proxy
-  #    networks:
-  #    - jupyterhub-net
-  #    # expose the proxy to the world
-  #    ports:
-  #    - "80:8000"
-  #    - "443:8000"
-  #    command:
-  #    - configurable-http-proxy
-  #    - '--error-target'
-  #    - 'http://jupytepide-hub/hub/error'
-
-  #  docker run \
-  #  --cap-add=NET_ADMIN \
-  #  --name nginx \
-  #  -p 443:443 \
-  #  -p 80:80 \
-  #  --detach \
-  #  -e EMAIL=jupytep@wasat.pl \
-  #  # -e URL=jupyteo.com \
-  #  -e URL=jupytepide.ga \
-  #  -v nginx_volume:/config \
-  #  --network jupytepide-swarm-net \
-  #  --mount type=bind,src=/home/eouser/jupytep-dev/swarm/letsencrypt_container_nginx.conf,dst=/config/nginx/site-confs/default \
-  #  linuxserver/letsencrypt
-
   jupytepide-hub:
     # build an image with SwarmSpawner and our jupyterhub_config.py
     env_file: .env
@@ -82,10 +52,6 @@ networks:
   jupyterhub-net:
     external:
       name: jupytepide-swarm-net
-
-#networks:
-#  jupyterhub-net:
-#    driver: overlay
 
 volumes:
   db:

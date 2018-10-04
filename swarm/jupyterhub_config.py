@@ -27,8 +27,6 @@ c.JupyterHub.port = 8000
 c.SwarmSpawner.start_timeout = 100
 c.SwarmSpawner.http_timeout = 100
 
-# c.SwarmSpawner.service_name = 'jupytepide-hub'
-
 c.JupyterHub.cookie_secret_file = 'jupyterhub_cookie_secret'
 
 # debug-logging for testing
@@ -37,9 +35,6 @@ c.JupyterHub.log_level = logging.DEBUG
 c.Spawner.debug = True
 # Enable debug-logging of the single-user server
 c.LocalProcessSpawner.debug = True
-c.JupyterHub.extra_log_file = '/opt/data/priv/jupyterhub.log'
-logging.log(logging.DEBUG,
-            "adasdasd asd asd asd asd a sda sd asd asd as d  asdasd  a sd asd a sd as da sd a sd as da sd asd ")
 
 c.SwarmSpawner.image = os.environ['DOCKER_SPAWN_NOTEBOOK_IMAGE']
 
@@ -87,18 +82,6 @@ def create_dir_hook(spawner):
 
 # attach the hook function to the spawner
 c.Spawner.pre_spawn_hook = create_dir_hook
-# user = SwarmSpawner.user.name
-# vol_path = "/opt/data/priv/" + user
-#
-# print("User: " + user)
-
-# if os.environ['SPAWN_USER'] is None:
-#     os.environ['SPAWN_USER'] = 'test-user'
-#
-# username = str(os.environ['SPAWN_USER'])
-#
-#
-#
 # c.SwarmSpawner.extra_container_spec = {
 #     # Replace mounts with [] to disable permanent storage
 #     'mounts': mounts
