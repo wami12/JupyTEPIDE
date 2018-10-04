@@ -8,10 +8,13 @@ FROM $DOCKER_NOTEBOOK_IMAGE
 # ------------------------- START TESTING --------------------------------
 
 # Install Tensorflow
-#RUN conda install --quiet --yes \
-#    'tensorflow=1.5*' \
-#    'keras=2.1*' && \
-#    conda clean -tipsy
+RUN conda install -c anaconda markdown
+
+RUN conda install --quiet --yes \
+    -c anaconda markdown  \
+    'tensorflow=1.5*' \
+    'keras=2.1*' && \
+    conda clean -tipsy
 
 # ------------------------- END TESTING ----------------------------------
 # Use custom startup script
