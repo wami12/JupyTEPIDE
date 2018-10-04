@@ -46,7 +46,6 @@ c.SwarmSpawner.image = os.environ['DOCKER_SPAWN_NOTEBOOK_IMAGE']
 notebook_dir = os.environ.get('DOCKER_NOTEBOOK_DIR') or '/home/jovyan'
 c.SwarmSpawner.notebook_dir = notebook_dir
 
-
 # Explicitly set notebook directory because we'll be mounting a host volume to
 # it.  Most jupyter/docker-stacks *-notebook images run the Notebook server as
 # user `jovyan`, and set the notebook directory to `/home/jovyan/work`.
@@ -56,9 +55,12 @@ c.SwarmSpawner.notebook_dir = notebook_dir
 
 # Mount the real user's Docker volume on the host to the notebook user's
 # notebook directory in the container
-# c.DockerSpawner.volumes = {'/opt/data/priv/jupyterhub-user-{username}': {'bind': '/home/jovyan/work', 'mode': 'ro'}, }
+# c.DockerSpawner.volumes = {'/opt/data/priv/jupyterhub-user-{username}': {'bind': '/home/jovyan/work', 'mode': 'rw'}, }
+username = "test-user"
+
 
 def create_dir_hook(spawner):
+    global username
     username = spawner.user.name  # get the username
     volume_path = os.path.join('/opt/data/priv', username)
     if not os.path.exists(volume_path):
@@ -67,20 +69,28 @@ def create_dir_hook(spawner):
         # still readable by other users on the system
         os.mkdir(volume_path, 0o777)
         os.chmod(volume_path, 0o777)
+        # mounts_usr = [{'type': 'bind',
+        #            'source': '/opt/data/priv/' + str(username),
+        #            'target': '/home/jovyan/work', }
+        #           ]
+        # c.SwarmSpawner.extra_container_spec = {
+        #     # Replace mounts with [] to disable permanent storage
+        #     'mounts': mounts_usr
+        # }
 
 
 # attach the hook function to the spawner
 c.Spawner.pre_spawn_hook = create_dir_hook
-# user = SwarmSpawner.user.name
+# user = c.SwarmSpawner.user.name
 # vol_path = "/opt/data/priv/" + user
 #
-# print("User: " + user)
+print("User: " + str(c.SwarmSpawner.user))
 
 mounts = [{'type': 'bind',
            'source': '/opt/data/pub/shared',
            'target': '/home/jovyan/shared', },
           {'type': 'bind',
-           'source': '/opt/data/priv/cde',
+           'source': '/opt/data/priv/' + str(username),
            'target': '/home/jovyan/work', },
           {'type': 'bind',
            'source': '/eodata-jovyan',
