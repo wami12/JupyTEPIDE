@@ -23,11 +23,13 @@ RUN mkdir /opt/scilab  && \
     rm -rf scilab-6.0.1.bin.linux-x86_64.tar.gz && \
     cd scilab-6.0.1 && \
     echo "PATH=$PATH:/opt/scilab/scilab-6.0.1/bin" >> ~/.bashrc && \
-    echo "PATH=$PATH:/opt/scilab/Software/scilab-6.0.1/bin" >> ~/.profile && \
+    echo "PATH=$PATH:/opt/scilab/scilab-6.0.1/bin" >> ~/.profile && \
     mkdir -p ~/.local/share/applications && \
     sed -i 's/^Terminal=false$/Terminal=true/' /opt/scilab/scilab-6.0.1/share/applications/{scilab,scinotes,xcos}.desktop && \
     cp -a /opt/scilab/scilab-6.0.1/share/{icons,applications,mime} ~/.local/share/ && \
     update-mime-database ~/.local/share/mime/
+
+ENV SCILAB_EXECUTABLE /opt/scilab/scilab-6.0.1/bin/scilab-adv-cli
 
 RUN pip install --no-cache scilab_kernel
 
@@ -56,9 +58,9 @@ RUN cd /tmp && \
     mkdir -p /home/jovyan/.jupytepide/conf/gui && \
     cp /tmp/JupyTEPIDE/GUI/jupytepide/code_snippets.json /home/jovyan/.jupytepide/conf/gui/code_snippets.json && \
     cp -R /tmp/JupyTEPIDE /opt/ && \
-    find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
-    fix-permissions /home/$NB_USER && \
-    fix-permissions /opt
+    find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf
+#    fix-permissions /home/$NB_USER && \
+#    fix-permissions /opt
 
 COPY docker-entrypoint.sh /srv/docker-entrypoint.sh
 RUN chmod 777 /srv/docker-entrypoint.sh
