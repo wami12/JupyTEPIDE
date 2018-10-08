@@ -6,6 +6,12 @@ ARG DOCKER_NOTEBOOK_IMAGE
 FROM $DOCKER_NOTEBOOK_IMAGE
 
 # ------------------------- START TESTING --------------------------------
+USER root
+
+# Fix sh
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
+USER $NB_USER
 
 # Install Tensorflow
 RUN conda install --quiet --yes \
