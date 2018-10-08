@@ -65,7 +65,6 @@ RUN cd /tmp && \
 COPY docker-entrypoint.sh /srv/docker-entrypoint.sh
 RUN chmod 777 /srv/docker-entrypoint.sh
 ENTRYPOINT ["tini", "--", "/srv/docker-entrypoint.sh"]
-# CMD ["start-singleuser.sh"]
 CMD ["jupyterhub-singleuser"]
 
 WORKDIR /home/$NB_USER
