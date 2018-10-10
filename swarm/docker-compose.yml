@@ -92,7 +92,7 @@ services:
     ports:
     - "9443:443"
     volumes:
-    - /opt/pub/mapnik:/opt/mapnik
+    - /opt/pub/shared/mapnik:/opt/mapnik
 
   pywps:
     image: "pywps/flask-ubuntu:16.0.4"
