@@ -23,22 +23,23 @@ RGB_STYLE = rgb_style()
 
 @app.route('/')
 def get_map():
-    if 'BBOX' in request.args:
-        req_bbox = request.args.get('BBOX')
+    
+    if 'bbox' in request.args:
+        req_bbox = request.args.get('bbox')
     else:
-        return "BBOX is required"
-    if 'WIDTH' in request.args:
-        req_width = request.args.get('WIDTH')
+        return "bbox is required"
+    if 'width' in request.args:
+        req_width = request.args.get('width')
     else:
-        return "WIDTH is required"
-    if 'HEIGHT' in request.args:
-        req_height = request.args.get('HEIGHT')
+        return "width is required"
+    if 'height' in request.args:
+        req_height = request.args.get('height')
     else:
-        return "HEIGHT is required"
-    if 'PATH' in request.args:
-        req_path = request.args.get('PATH')
+        return "height is required"
+    if 'path' in request.args:
+        req_path = request.args.get('path')
     else:
-        return "PATH is required"
+        return "path is required"
 
     ret_map = mapnik.Map(int(req_width), int(req_height))
     im = mapnik.Image(int(req_width), int(req_height))
