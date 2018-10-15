@@ -18,6 +18,7 @@ def get_tasks():
 
 def post_init_import():
     url = _url("")
+    print(url)
     json_ws = get_json_workspace("demo")
     headers = {
         'Content-type': 'application/json',
@@ -56,7 +57,7 @@ def post_tiff_curl(import_id, filename):
     # file_header = "filedata=@%s" % filename
     res = subprocess.call([
         "curl", "-u", "admin:geoserver", "-F", "name=test", "-F", "filedata=@%s" % filename,
-                                                                  "http://172.18.0.5:8080/geoserver/rest/imports/%s/tasks" % import_id],
+                                                                  "http://jupytepide-geoserver:8080/geoserver/rest/imports/%s/tasks" % import_id],
         shell=False)
     return res
 
