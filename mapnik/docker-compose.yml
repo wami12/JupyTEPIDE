@@ -1,9 +1,12 @@
 version: '3'
 services:
   mapnik:
-    image: "jupytepide/mapnik-flask"
+    image: "jupytepide/mapnik-flask:1.2.1"
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: jupytepide-mapnik
     ports:
     - "9443:443"
     volumes:
-    - /opt/pub/mapnik:/opt/mapnik
+    - /opt/pub/mapnik:/opt/pub/mapnik

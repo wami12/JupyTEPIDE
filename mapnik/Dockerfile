@@ -8,7 +8,7 @@ RUN apt-get update -qq && \
     apt-get clean -qq && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install Flask
+RUN pip3 install --quiet Flask
 
 # apache2 sys envs
 ENV APACHE_CONFDIR /etc/apache2
