@@ -100,14 +100,14 @@ def get_map():
     layer = mapnik.Layer("requested_lyr")
     layer.styles.append("requested_lyr")
 
-    if req_style.lowercase() == "rgb":
+    if req_style.lower() == "rgb":
         layer.datasource = mapnik.Gdal(file=req_path)
         ret_map.append_style("requested_lyr", RGB_STYLE)
         ret_map.layers.append(layer)
         
-    elif req_style.lowercase() == "rb":
+    elif req_style.lower() == "rb":
         layer.datasource = mapnik.Gdal(file=req_path, band=1)
-        minval, maxval = [int(x) for x in req_delta.split['|']]
+        minval, maxval = [int(x) for x in req_delta.split('|')]
         ret_map.append_style("requested_lyr", red_blue_style(minval, maxval, int(req_nodata)))
         ret_map.layers.append(layer)
         
