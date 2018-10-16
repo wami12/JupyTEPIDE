@@ -73,7 +73,10 @@ def create_dir_hook(spawner):
                     'target': '/home/jovyan/eodata', },
                    {'type': 'bind',
                     'source': '/eodata',
-                    'target': '/eodata', }
+                    'target': '/eodata', },
+                   {'type': 'bind',
+                    'source': '/opt/var',
+                    'target': '/opt/var', }
                    ]
     spawner.extra_container_spec = {
         'mounts': mounts_user

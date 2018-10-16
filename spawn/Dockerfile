@@ -6,6 +6,12 @@ ARG DOCKER_NOTEBOOK_IMAGE
 FROM $DOCKER_NOTEBOOK_IMAGE
 
 # ------------------------- START TESTING --------------------------------
+USER root
+
+# Fix sh
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
+USER $NB_USER
 
 # Install Tensorflow
 RUN conda install --quiet --yes \
@@ -65,7 +71,6 @@ RUN cd /tmp && \
 COPY docker-entrypoint.sh /srv/docker-entrypoint.sh
 RUN chmod 777 /srv/docker-entrypoint.sh
 ENTRYPOINT ["tini", "--", "/srv/docker-entrypoint.sh"]
-# CMD ["start-singleuser.sh"]
 CMD ["jupyterhub-singleuser"]
 
 WORKDIR /home/$NB_USER

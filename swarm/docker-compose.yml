@@ -85,14 +85,14 @@ services:
       retries: 3
 
   mapnik:
-    image: "jupytepide/mapnik-flask:1.2"
+    image: "jupytepide/mapnik-flask:1.2.1"
     container_name: jupytepide-mapnik
     networks:
     - jupyterhub-net
     ports:
     - "9443:80"
     volumes:
-    - /opt/pub/mapnik:/opt/mapnik
+    - /opt/var/mapnik:/opt/var/mapnik
 
   pywps:
     image: "pywps/flask-ubuntu:16.0.4"
