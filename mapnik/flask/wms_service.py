@@ -127,6 +127,12 @@ def get_map():
         ret_map.append_style("requested_lyr", red_blue_style(minval, maxval, int(req_nodata)))
         ret_map.layers.append(layer)
         
+    elif req_style.lower() == "gyr":
+        layer.datasource = mapnik.Gdal(file=req_path, band=1)
+        minval, maxval = [int(x) for x in req_delta.split('|')]
+        ret_map.append_style("requested_lyr", green_yellow_red_style(minval, maxval, int(req_nodata)))
+        ret_map.layers.append(layer)
+        
     else:
         return "syle error"
 
