@@ -90,7 +90,7 @@ services:
     networks:
     - jupyterhub-net
     ports:
-    - "9443:443"
+    - "9443:80"
     volumes:
     - /opt/pub/mapnik:/opt/mapnik
 
