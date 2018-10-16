@@ -29,7 +29,7 @@ def two_collor_style(min_val, max_val, nodata_val, color1, color2):
     mono_style.rules.append(mono_rule)
     return mono_style
 
-def three_collor_style(min_val, max_val, nodata_val, color1, color2, colo3):
+def three_collor_style(min_val, max_val, nodata_val, color1, color2, color3):
     mono_symb = mapnik.RasterSymbolizer()
     mono_colorizer = mapnik.RasterColorizer()
     mono_colorizer.add_stop(min_val, mapnik.Color(color1))
@@ -50,7 +50,7 @@ def red_blue_style(min_val, max_val, nodata_val):
 def blue_red_style(min_val, max_val, nodata_val):
     return two_collor_style(min_val, max_val, nodata_val, 'blue', 'red')
     
-def green_yellow_red_style():
+def green_yellow_red_style(min_val, max_val, nodata_val):
     return three_collor_style(min_val, max_val, nodata_val, 'green', 'yellow', 'red')
 
 
