@@ -21,6 +21,11 @@ RUN conda install --quiet --yes \
     scikit-learn && \
     conda clean -tipsy
 
+RUN conda install --quiet --yes -c conda-forge \
+    'libgdal=2.2.4*' \
+    'gdal=2.2.4*' && \
+    conda clean -tipsy
+
 
 RUN mkdir /opt/scilab  && \
     cd  /opt/scilab && \
