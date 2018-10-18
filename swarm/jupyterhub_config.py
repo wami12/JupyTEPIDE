@@ -90,13 +90,13 @@ c.Spawner.pre_spawn_hook = create_dir_hook
 #     'mounts': mounts
 # }
 
-c.Spawner.mem_limit = '2G'
+c.Spawner.mem_limit = '7.5G'
 c.Spawner.cpu_limit = 1.5
 c.Spawner.cpu_guarantee = 0.5
 
 # shutdown the server after no activity for an hour
-c.NotebookApp.shutdown_no_activity_timeout = 60 * 60
+# c.NotebookApp.shutdown_no_activity_timeout = 60 * 60
 # shutdown kernels after no activity for 20 minutes
-c.MappingKernelManager.cull_idle_timeout = 20 * 60
+# c.MappingKernelManager.cull_idle_timeout = 20 * 60
 # check for idle kernels every two minutes
 # c.MappingKernelManager.cull_interval = 2 * 60
