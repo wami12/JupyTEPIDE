@@ -8,7 +8,7 @@ RUN apt-get update -qq && \
     apt-get clean -qq && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install Flask
+RUN pip3 install --quiet Flask
 
 # apache2 sys envs
 ENV APACHE_CONFDIR /etc/apache2
@@ -21,19 +21,16 @@ ENV APACHE_LOCK_DIR /var/lock/apache2
 ENV APACHE_LOG_DIR /var/log/apache2
 ENV LANG C
 
-RUN a2enmod wsgi && \
-    a2enmod ssl  && \
-    mkdir /etc/apache2/ssl
+RUN a2enmod wsgi
 
-COPY apache_wsgi /etc/apache2/ssl/apache.crt
-COPY apache_wsgi /etc/apache2/ssl/.
 COPY apache_wsgi /etc/apache2/sites-available/.
 COPY flask /var/www/mydomain/wms_service.py
 COPY flask /var/www/mydomain/.
 
 RUN a2ensite flask_wsgi.conf && \
+    a2dissite 000-default.conf && \
     service apache2 restart
 
-EXPOSE 443
+EXPOSE 80
 
 CMD ["apache2", "-D", "FOREGROUND"]

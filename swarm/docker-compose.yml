@@ -26,6 +26,13 @@ services:
       # Notebook directory inside user image
       DOCKER_NOTEBOOK_DIR: ${DOCKER_NOTEBOOK_DIR}
       SPAWN_USER: ${SPAWN_USER}
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+        - node.role == manager
     command: sh /run-from-compose.sh
 
   nginx:
@@ -45,6 +52,13 @@ services:
     environment:
       EMAIL: ${EMAIL}
       URL: ${URL}
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+        - node.role == manager
     cap_add:
     - NET_ADMIN
 
@@ -59,6 +73,13 @@ services:
     - "25432:5432"
     env_file:
     - postgis.env
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+        - node.role == manager
     restart: on-failure
     healthcheck:
       test: "exit 0"
@@ -75,9 +96,13 @@ services:
     restart: on-failure
     env_file:
     - geoserver.env
-    #    depends_on:
-    #      postgis:
-    #        condition: service_healthy
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+        - node.role == manager
     healthcheck:
       test: curl --fail -s http://localhost:8080/ || exit 1
       interval: 1m30s
@@ -85,14 +110,21 @@ services:
       retries: 3
 
   mapnik:
-    image: "jupytepide/mapnik-flask:1.2"
+    image: "jupytepide/mapnik-flask:1.2.2"
     container_name: jupytepide-mapnik
     networks:
     - jupyterhub-net
     ports:
-    - "9443:443"
+    - "9443:80"
     volumes:
-    - /opt/pub/mapnik:/opt/mapnik
+    - /opt/var/mapnik:/opt/var/mapnik
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+        - node.role == manager
 
   pywps:
     image: "pywps/flask-ubuntu:16.0.4"
@@ -101,6 +133,13 @@ services:
     - jupyterhub-net
     ports:
     - "5000:5000"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+        - node.role == manager
 
 networks:
   jupyterhub-net:

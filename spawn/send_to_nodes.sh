@@ -1,12 +1,19 @@
 #!/usr/bin/env bash
 
-#docker save jupytepide/jupyterhub:0.9.2-1.3 | bzip2 | pv | \
-#     tee >(ssh -i ~/.ssh/jupytep-swarm.key eouser@192.168.0.10 'bunzip2 | docker load')
-#     >(ssh -i ~/.ssh/jupytep-swarm.key eouser@192.168.0.11 'bunzip2 | docker load')
+# IMAGE="alpine:latest"
+# IMAGE="jupytepide/jupyterhub:0.9.2-1.3"
+IMAGE=jupytepide/user-spawn-notebook:dev
+TAR_FILE="/tmp/jupytepide_tmp.tar.gz"
 
+TIMEFORMAT='It takes %R seconds to complete this task...'
+time {
+    docker save ${IMAGE} | gzip --fast > ${TAR_FILE}
+ }
 
-docker save jupytepide/user-spawn-notebook:dev | bzip2 | pv | \
-     scp -C -i ~/.ssh/jupytep-swarm.key eouser@192.168.0.11 | ssh -i ~/.ssh/jupytep-swarm.key eouser@192.168.0.10 'bunzip2 | docker load'
+scp -i ~/.ssh/jupytep-swarm.key ${TAR_FILE} eouser@192.168.0.10:${TAR_FILE} | pv
+ssh -i ~/.ssh/jupytep-swarm.key eouser@192.168.0.10 'docker rmi -f '${IMAGE}'; docker load < '${TAR_FILE}'; rm '${TAR_FILE}
 
-docker save jupytepide/user-spawn-notebook:dev | bzip2 | pv | \
-     scp -C -i ~/.ssh/jupytep-swarm.key eouser@192.168.0.11 | ssh -i ~/.ssh/jupytep-swarm.key eouser@192.168.0.11 'bunzip2 | docker load'
+scp -i ~/.ssh/jupytep-swarm.key ${TAR_FILE} eouser@192.168.0.11:${TAR_FILE} | pv
+ssh -i ~/.ssh/jupytep-swarm.key eouser@192.168.0.11 'docker rmi -f '${IMAGE}'; docker load < '${TAR_FILE}'; rm '${TAR_FILE}
+
+rm ${TAR_FILE}
