@@ -8,8 +8,8 @@ docker run \
   -p 443:443 \
   -p 80:80 \
   -e EMAIL=jupytep@wasat.pl \
-# -e URL=jupyteo.com \
-  -e URL=jupytepide.ga \
+  -e URL=jupyteo.com \
+#  -e URL=jupytepide.ga \
   -e SUBDOMAINS=www \
   -v nginx_volume:/config \
   linuxserver/letsencrypt
