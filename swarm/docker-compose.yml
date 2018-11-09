@@ -52,6 +52,7 @@ services:
     environment:
       EMAIL: ${EMAIL}
       URL: ${URL}
+      SUBDOMAINS: cloud,demo,try,notebooks
     deploy:
       replicas: 1
       restart_policy:
