@@ -6,48 +6,10 @@ ARG DOCKER_NOTEBOOK_IMAGE
 FROM $DOCKER_NOTEBOOK_IMAGE
 
 # ------------------------- START TESTING --------------------------------
-USER root
-
-# Fix sh
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
-
-USER $NB_USER
-
-# Install Tensorflow
-RUN conda install --quiet --yes \
-    -c anaconda markdown  \
-    'tensorflow=1.5*' \
-    'keras=2.1*' \
-    scikit-learn && \
-    conda clean -tipsy
-
-RUN conda install --quiet --yes -c conda-forge \
-    'libgdal=2.2.4*' \
-    'gdal=2.2.4*' && \
-    conda clean -tipsy
-
-
-RUN mkdir /opt/scilab  && \
-    cd  /opt/scilab && \
-    wget --quiet http://www.scilab.org/download/6.0.1/scilab-6.0.1.bin.linux-x86_64.tar.gz && \
-    tar -xzf scilab-6.0.1.bin.linux-x86_64.tar.gz && \
-    rm -rf scilab-6.0.1.bin.linux-x86_64.tar.gz && \
-    cd scilab-6.0.1 && \
-    echo "PATH=$PATH:/opt/scilab/scilab-6.0.1/bin" >> ~/.bashrc && \
-    echo "PATH=$PATH:/opt/scilab/scilab-6.0.1/bin" >> ~/.profile && \
-    mkdir -p ~/.local/share/applications && \
-    sed -i 's/^Terminal=false$/Terminal=true/' /opt/scilab/scilab-6.0.1/share/applications/{scilab,scinotes,xcos}.desktop && \
-    cp -a /opt/scilab/scilab-6.0.1/share/{icons,applications,mime} ~/.local/share/ && \
-    update-mime-database ~/.local/share/mime/
-
-ENV SCILAB_EXECUTABLE /opt/scilab/scilab-6.0.1/bin/scilab-adv-cli
-
-RUN pip install --no-cache scilab_kernel
 
 # ------------------------- END TESTING ----------------------------------
-# Use custom startup script
-USER root
 
+USER root
 RUN cd /tmp && \
     git clone -b dev --single-branch https://github.com/wasat/JupyTEPIDE.git && \
     cp -rf /tmp/JupyTEPIDE/GUI/res/jupyter/static/* "/opt/conda/lib/python3.6/site-packages/notebook/static" && \
