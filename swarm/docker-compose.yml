@@ -53,6 +53,7 @@ services:
       EMAIL: ${EMAIL}
       URL: ${URL}
       SUBDOMAINS: cloud,demo,try,notebooks
+      ONLY_SUBDOMAINS: 'true'
     deploy:
       replicas: 1
       restart_policy:
