@@ -95,6 +95,7 @@ services:
     - geoserver-data:/opt/geoserver/data_dir
     ports:
     - "8090:8080"
+    hostname: jupytepide-geoserver
     restart: on-failure
     env_file:
     - geoserver.env
@@ -118,6 +119,7 @@ services:
     - jupyterhub-net
     ports:
     - "9443:80"
+    hostname: jupytepide-mapnik
     volumes:
     - /opt/var/mapnik:/opt/var/mapnik
     deploy:
@@ -135,6 +137,7 @@ services:
     - jupyterhub-net
     ports:
     - "5000:5000"
+    hostname: jupytepide-pywps
     deploy:
       replicas: 1
       restart_policy:
