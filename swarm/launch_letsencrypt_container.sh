@@ -7,6 +7,7 @@ docker run \
   --detach \
   -e EMAIL=jupytep@wasat.pl \
   -e URL=jupytepide.ga \
+  -e SUBDOMAINS=cloud,demo,try,notebooks \
   -v nginx_volume:/config \
   --network jupytepide-swarm-net \
   --mount type=bind,src=/home/eouser/jupytep-dev/swarm/letsencrypt_container_nginx.conf,dst=/config/nginx/site-confs/default \

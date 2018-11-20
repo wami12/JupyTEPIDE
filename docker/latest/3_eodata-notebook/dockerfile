@@ -81,7 +81,7 @@ RUN cd /tmp && \
     /bin/bash -c "R -e \"install.packages('rgdal', repos='http://cran.rstudio.com/', clean = TRUE, quiet = TRUE)\"" && \
     /bin/bash -c "R -e \"library(devtools)\"" && \
     /bin/bash -c "R -e \"options(unzip='internal')\"" && \
-    R -e "devtools::install_git(\"https://github.com/gowusu/sebkc.git\", branch = \"master\")" && \
+    # R -e "devtools::install_git(\"https://github.com/gowusu/sebkc.git\", ref = \"master\")" && \
     # wget --quiet https://download2.rstudio.org/rstudio-server-0.99.903-amd64.deb && \
     # gdebi -n rstudio-server-0.99.903-amd64.deb  && \
     find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf

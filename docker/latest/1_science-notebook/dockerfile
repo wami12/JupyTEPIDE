@@ -59,7 +59,11 @@ ENV PATH="/opt/conda/bin:${PATH}"
 
 # Conda installs
 RUN conda install --quiet --yes -c anaconda \
-    'numpy=1.12.1*' && \
+    'numpy=1.12.1*'  \
+    markdown  \
+    'tensorflow=1.5*' \
+    'keras=2.1*' \
+    scikit-learn && \
     conda clean -tipsy && \
     conda install --quiet --yes -c conda-forge \
     'ipyleaflet=0.6.5*' \
@@ -88,12 +92,29 @@ RUN conda create --quiet --yes -p $CONDA_DIR/envs/python27 python=2.7 ipython ip
     conda clean -tipsy
 
 RUN pip install --upgrade pip &&\
-    pip install -q --no-cache-dir --upgrade pixiedust ipgetter && \
+    pip install -q --no-cache-dir --upgrade pixiedust && \
     /bin/bash -c "source activate python27 && pip install -q --no-cache-dir --upgrade pixiedust requests Jinja2 pandas && source deactivate python27"
+
+RUN mkdir /opt/scilab  && \
+    cd  /opt/scilab && \
+    wget --quiet http://www.scilab.org/download/6.0.1/scilab-6.0.1.bin.linux-x86_64.tar.gz && \
+    tar -xzf scilab-6.0.1.bin.linux-x86_64.tar.gz && \
+    rm -rf scilab-6.0.1.bin.linux-x86_64.tar.gz && \
+    cd scilab-6.0.1 && \
+    echo "PATH=$PATH:/opt/scilab/scilab-6.0.1/bin" >> ~/.bashrc && \
+    echo "PATH=$PATH:/opt/scilab/scilab-6.0.1/bin" >> ~/.profile && \
+    mkdir -p ~/.local/share/applications && \
+    sed -i 's/^Terminal=false$/Terminal=true/' /opt/scilab/scilab-6.0.1/share/applications/{scilab,scinotes,xcos}.desktop && \
+    cp -a /opt/scilab/scilab-6.0.1/share/{icons,applications,mime} ~/.local/share/ && \
+    update-mime-database ~/.local/share/mime/
+
+ENV SCILAB_EXECUTABLE /opt/scilab/scilab-6.0.1/bin/scilab-adv-cli
+
+RUN pip install --no-cache scilab_kernel
 
 # Install JupyTEP IDE UI layout and enable it
 RUN cd /tmp && \
-    git clone https://github.com/wasat/JupyTEPIDE.git && \
+    git clone -b dev --single-branch https://github.com/wasat/JupyTEPIDE.git && \
     cp -rf /tmp/JupyTEPIDE/GUI/res/jupyter/static/* "/opt/conda/lib/python3.6/site-packages/notebook/static" && \
     cp -rf /tmp/JupyTEPIDE/GUI/res/pixiedust/* "/opt/conda/lib/python3.6/site-packages/pixiedust" && \
     cp -rf /tmp/JupyTEPIDE/GUI/res/pixiedust/* "/opt/conda/envs/python27/lib/python2.7/site-packages/pixiedust" && \
@@ -102,6 +123,9 @@ RUN cd /tmp && \
     cd GUI && \
     jupyter nbextension install jupytepide --user && \
     jupyter nbextension enable jupytepide/main --sys-prefix && \
+    jupyter nbextension install --sys-prefix --py ipyparallel && \
+    jupyter nbextension enable --sys-prefix --py ipyparallel && \
+    jupyter serverextension enable --sys-prefix --py ipyparallel && \
     mkdir -p /home/jovyan/.ipython/profile_default/startup && \
     find "/home/jovyan/.ipython/profile_default/startup" -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
     cp -a /tmp/JupyTEPIDE/scripts/startup/. /home/jovyan/.ipython/profile_default/startup/ && \

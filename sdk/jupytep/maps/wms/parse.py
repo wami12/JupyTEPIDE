@@ -2,7 +2,7 @@ from pathlib import PurePosixPath
 
 from owslib.wms import WebMapService
 
-from jupytep.maps.geoserver.url import URL_WMS, replace_ip
+from jupytep.maps.geoserver.url import URL_WMS, replace_pub_host
 
 
 def get_bbox(layer_name):
@@ -23,8 +23,8 @@ def get_wms(tiff_path):
     wms_url = URL_WMS + "?service=WMS&version=1.1.1&request=GetMap&layers=demo:%s&" \
                         "styles=&bbox=%s&width=768&height=768&srs=EPSG:4326&format=image/png" % (layer, bbox)
     # print(wms_url)
-    return replace_ip(wms_url)
+    return replace_pub_host(wms_url)
 
 
 def get_wms_base_url():
-    return replace_ip(URL_WMS)
+    return replace_pub_host(URL_WMS)
