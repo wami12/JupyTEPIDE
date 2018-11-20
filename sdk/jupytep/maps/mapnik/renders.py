@@ -34,7 +34,7 @@ class RenderMap:
             }
             catch(err){ //if there is nothing to remove do nothing    
             }
-            Jupytepide.map_addWmsLayer('http://jupytepide.ga:9443/',
+            Jupytepide.map_addWmsLayer('https://try.jupytepide.ga/mapnik/',
             {layers:'renderer',format:'image/png',transparent:true, path:'%s', style:'%s', delta:'%s', nodata:
             '%s'},'%s');
             """ % (self.destfile, self.style, self.stats, self.nodata, self.name))
