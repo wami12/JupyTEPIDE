@@ -4,6 +4,9 @@ networks:
   net:
     driver: overlay
     attachable: true
+  jupyterhub-net:
+    external:
+      name: jupytepide-swarm-net
 
 volumes:
   prometheus: {}

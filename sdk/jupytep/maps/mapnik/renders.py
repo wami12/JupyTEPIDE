@@ -6,6 +6,8 @@ import gdal
 import numpy as np
 from IPython.display import Javascript
 
+from jupytep.config.urls import PUB_HOST
+
 
 class RenderMap:
 
@@ -34,10 +36,10 @@ class RenderMap:
             }
             catch(err){ //if there is nothing to remove do nothing    
             }
-            Jupytepide.map_addWmsLayer('https://try.jupytepide.ga/mapnik/',
+            Jupytepide.map_addWmsLayer('%s/mapnik/',
             {layers:'renderer',format:'image/png',transparent:true, path:'%s', style:'%s', delta:'%s', nodata:
             '%s'},'%s');
-            """ % (self.destfile, self.style, self.stats, self.nodata, self.name))
+            """ % (PUB_HOST, self.destfile, self.style, self.stats, self.nodata, self.name))
         return ret
 
     def __del__(self):

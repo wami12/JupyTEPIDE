@@ -53,11 +53,12 @@ def post_tiff(import_id):
 
 def post_tiff_curl(import_id, filename):
     # import_param = "/%s/tasks" % import_id
-    # url_str = str(_url(import_param))
+    url_str = _url('/%s/tasks' % import_id)
+    print("CURL: " + url_str)
+    # "http://jupytepide-geoserver:8080/geoserver/rest/imports/%s/tasks" % import_id
     # file_header = "filedata=@%s" % filename
     res = subprocess.call([
-        "curl", "-u", "admin:geoserver", "-F", "name=test", "-F", "filedata=@%s" % filename,
-                                                                  "http://jupytepide-geoserver:8080/geoserver/rest/imports/%s/tasks" % import_id],
+        "curl", "-u", "admin:geoserver", "-F", "name=test", "-F", "filedata=@%s" % filename, "%s" % url_str],
         shell=False)
     return res
 
