@@ -7,8 +7,18 @@ c = get_config()
 # c.ConfigurableHTTPProxy.should_start = False
 # c.ConfigurableHTTPProxy.api_url = 'http://jupytepide-proxy:8001'
 # tell the hub to use Dummy Auth (for testing)
-c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
+# c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
 # use SwarmSpawner
+
+# The docker instances need access to the Hub, so the default loopback port doesn't work:
+# from jupyter_client.localinterfaces import public_ips
+# c.JupyterHub.hub_ip = public_ips()[0]
+
+# OAuth with GitHub
+c.JupyterHub.authenticator_class = 'oauthenticator.GitHubOAuthenticator'
+c.GitHubOAuthenticator.oauth_callback_url = os.environ['OAUTH_CALLBACK_URL']
+c.JupyterHub.admin_access = True
+
 c.JupyterHub.spawner_class = 'dockerspawner.SwarmSpawner'
 
 network_name = os.environ['DOCKER_NETWORK_NAME']

@@ -2,7 +2,9 @@ version: "3"
 services:
   jupytepide-hub:
     # build an image with SwarmSpawner and our jupyterhub_config.py
-    env_file: .env
+    env_file:
+      - .env
+      - secrets/oauth.env
     build:
       context: .
       dockerfile: Dockerfile
