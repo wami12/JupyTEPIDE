@@ -6,6 +6,7 @@ FROM jupyterhub/jupyterhub:${JUPYTERHUB_VERSION}
 # install dockerspawner dummyauthenticator
 RUN pip install --no-cache \
     dockerspawner==0.10.0 \
+    oauthenticator==0.8.* \
     jupyterhub-dummyauthenticator
 
 RUN cd /tmp && \
