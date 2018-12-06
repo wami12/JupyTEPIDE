@@ -51,6 +51,7 @@ c.SwarmSpawner.image = os.environ['DOCKER_SPAWN_NOTEBOOK_IMAGE']
 notebook_dir = os.environ.get('DOCKER_NOTEBOOK_DIR') or '/home/jovyan'
 c.SwarmSpawner.notebook_dir = notebook_dir
 
+
 # Explicitly set notebook directory because we'll be mounting a host volume to
 # it.  Most jupyter/docker-stacks *-notebook images run the Notebook server as
 # user `jovyan`, and set the notebook directory to `/home/jovyan/work`.

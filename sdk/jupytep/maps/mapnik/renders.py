@@ -7,6 +7,7 @@ import numpy as np
 from IPython.display import Javascript
 
 from jupytep.config.urls import PUB_HOST
+from jupytep.maps.proj import reproject
 
 
 class RenderMap:
@@ -29,7 +30,17 @@ class RenderMap:
         ret = "%s|%s" % (min_val, max_val)
         return ret
 
-    def print(self):
+    def reproject(self):
+        tmp_file = "/opt/var/mapnik/%s%s" % (self.uniqnam, "_tmp")
+        os.rename(self.destfile, tmp_file)
+
+        input_raster = tmp_file
+        output_raster = self.destfile
+        dest_srs = 'EPSG:3857'
+        reproject(input_raster, output_raster, dest_srs)
+        os.remove(tmp_file)
+
+    def show_on_map(self):
         ret = Javascript("""
             try{
                 Jupytepide.map_removeLayer('Map Renderer');
@@ -40,6 +51,7 @@ class RenderMap:
             {layers:'renderer',format:'image/png',transparent:true, path:'%s', style:'%s', delta:'%s', nodata:
             '%s'},'%s');
             """ % (PUB_HOST, self.destfile, self.style, self.stats, self.nodata, self.name))
+        print(self.destfile)
         return ret
 
     def __del__(self):
