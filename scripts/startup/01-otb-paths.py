@@ -2,6 +2,7 @@ import os
 import sys
 
 sys.path.append("/opt/OTB-6.6.0-Linux64/lib/python")
+sys.path.append("/opt/var/JupyTEPIDE/sdk")
 try:
     user_paths = os.environ['PYTHONPATH'].split(os.pathsep)
     print("JupyTEP IDE 01-otb-paths TEST")
