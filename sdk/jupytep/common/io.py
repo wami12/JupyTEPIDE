@@ -2,4 +2,8 @@ import os
 
 
 def get_work_dir():
-    os.getcwd() + "/work/"
+    return "/home/jovyan/work/"
+
+
+def get_curr_dir():
+    return os.getcwd()

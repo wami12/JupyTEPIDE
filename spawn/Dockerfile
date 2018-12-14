@@ -6,7 +6,14 @@ ARG DOCKER_NOTEBOOK_IMAGE
 FROM $DOCKER_NOTEBOOK_IMAGE
 
 # ------------------------- START TESTING --------------------------------
+USER $NB_UID
 
+# Install Python 3 packages
+# Remove pyqt and qt pulled in for matplotlib since we're only ever going to
+# use notebook-friendly backends in these images
+RUN conda install --quiet --yes -c conda-forge \
+    'rpy2=2.8*' && \
+    conda clean -tipsy 
 # ------------------------- END TESTING ----------------------------------
 
 USER root
