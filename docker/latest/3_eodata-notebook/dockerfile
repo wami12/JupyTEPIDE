@@ -52,10 +52,10 @@ ENV PATH="/opt/snaphu/bin:${PATH}"
 # Download and install Orfeo toolbox OTB
 # Standalone install
 # COPY OTB-6.6.0-Linux64.run /opt/OTB-6.6.0-Linux64.run
-RUN wget --quiet https://www.orfeo-toolbox.org/packages/OTB-6.6.0-Linux64.run && \
-    chmod +x OTB-6.6.0-Linux64.run && \
-    /bin/bash -c "OTB_PYTHON_EXE=/opt/conda/envs/python27/bin/python2.7 ./OTB-6.6.0-Linux64.run" -q &&\
-    rm -rf OTB-6.6.0-Linux64.run
+RUN wget --quiet https://www.orfeo-toolbox.org/packages/OTB-6.6.1-Linux64.run && \
+    chmod +x OTB-6.6.1-Linux64.run && \
+    /bin/bash -c "OTB_PYTHON_EXE=/opt/conda/envs/python27/bin/python2.7 ./OTB-6.6.1-Linux64.run" -q &&\
+    rm -rf OTB-6.6.1-Linux64.run
 
 RUN cd /tmp && \
     /bin/bash -c "R -e \"install.packages('devtools', repos='http://cran.cnr.berkeley.edu/', clean = TRUE, quiet = TRUE)\"" && \
@@ -90,7 +90,7 @@ RUN find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
     npm cache clean --force && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER && \
-    fix-permissions "/opt/OTB-6.6.0-Linux64"
+    fix-permissions "/opt/OTB-6.6.1-Linux64"
 
 WORKDIR /home/$NB_USER
 USER $NB_USER

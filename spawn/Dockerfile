@@ -11,9 +11,6 @@ USER $NB_UID
 # Install Python 3 packages
 # Remove pyqt and qt pulled in for matplotlib since we're only ever going to
 # use notebook-friendly backends in these images
-RUN conda install --quiet --yes -c conda-forge \
-    'rpy2=2.8*' && \
-    conda clean -tipsy 
 # ------------------------- END TESTING ----------------------------------
 
 USER root
@@ -37,13 +34,11 @@ RUN cd /tmp && \
     cp /tmp/JupyTEPIDE/scripts/metadata.py /opt/jupytepide/scripts/metadata.py && \
     mkdir -p /home/jovyan/.jupytepide/conf/gui && \
     cp /tmp/JupyTEPIDE/GUI/jupytepide/code_snippets.json /home/jovyan/.jupytepide/conf/gui/code_snippets.json && \
-    #/bin/bash -c "/opt/conda/envs/python27/bin/python2.7 /tmp/JupyTEPIDE/sdk/jupytep/add_paths.py" -q &&\
     cp -R /tmp/JupyTEPIDE /opt/ && \
     find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf
 #    fix-permissions /home/$NB_USER && \
 #    fix-permissions /opt
 
-# ENV PATH="/opt/var/JupyTEPIDE/sdk:${PATH}"
 
 COPY docker-entrypoint.sh /srv/docker-entrypoint.sh
 RUN chmod 777 /srv/docker-entrypoint.sh
