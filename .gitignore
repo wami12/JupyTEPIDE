@@ -109,3 +109,5 @@ multiuser/userlist
 /multiuser/userlist
 www/
 /swarm/secrets/
+/website/docker/launch_letsencrypt_container.sh
+website/docker/
