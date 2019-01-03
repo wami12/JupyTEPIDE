@@ -12,26 +12,26 @@ services:
   mongo:
     image: healthcheck/mongo:latest
     networks:
-    - net
+      - net
     deploy:
       mode: replicated
       replicas: 1
       placement:
         constraints:
-        - node.role != manager
+          - node.role != manager
 
   mongo-exporter:
     image: forekshub/percona-mongodb-exporter:latest
     networks:
-    - net
-    - mon_net
+      - net
+      - mon_net
     ports:
-    - "9216:9216"
+      - "9216:9216"
     environment:
-    - MONGODB_URL=mongodb://mongo:27017
+      - MONGODB_URL=mongodb://mongo:27017
     deploy:
       mode: replicated
       replicas: 1
       placement:
         constraints:
-        - node.role == manager
+          - node.role == manager
