@@ -107,7 +107,7 @@ notebooks/GDAL/
 notebooks/GEO/
 multiuser/userlist
 /multiuser/userlist
-www/
+website/
 /swarm/secrets/
 /website/docker/launch_letsencrypt_container.sh
 website/docker/

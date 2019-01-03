@@ -6,7 +6,8 @@ docker run \
   -p 80:80 \
   --detach \
   -e EMAIL=jupytep@wasat.pl \
-  -e URL=jupytepide.ga \
+# -e URL=jupytepide.ga \
+  -e URL=jupyteo.com \
   -e SUBDOMAINS=cloud,demo,try,notebooks \
   -v nginx_volume:/config \
   --network jupytepide-swarm-net \

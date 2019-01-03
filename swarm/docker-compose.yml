@@ -40,8 +40,8 @@ services:
   nginx:
     env_file: .env
     image: linuxserver/letsencrypt
-    container_name: nginx
-    hostname: nginx
+    container_name: jupytepide-nginx
+    hostname: jupytepide-nginx
     networks:
     - jupyterhub-net
     # expose the proxy to the world
@@ -148,6 +148,20 @@ services:
         constraints:
         - node.role == manager
 
+  portainer:
+    image: portainer/portainer
+    container_name: jupytepide-portainer
+    networks:
+      - jupyterhub-net
+    hostname: jupytepide-portainer
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    ports:
+      - 9000:9000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer-data:/data
+
 networks:
   jupyterhub-net:
     external:
@@ -166,3 +180,6 @@ volumes:
   postgis-db-data:
     external:
       name: ${POSTGIS_VOLUME_DATA}
+  portainer-data:
+    external:
+      name: ${PORTAINER_VOLUME_DATA}
