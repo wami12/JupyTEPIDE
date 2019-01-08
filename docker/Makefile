@@ -21,25 +21,25 @@ jupytep_user_notebook: pull singleuser/Dockerfile
 		singleuser
 
 base_notebook_build:
-    docker build -t $(DOCKER_BASE_IMAGE):$(DOCKER_VER) \
+	docker build -t $(DOCKER_BASE_IMAGE):$(DOCKER_VER) \
 		--file latest/0_$(DOCKER_BASE_NAME)/dockerfile \
 		--build-arg DOCKER_STACK_VER=$(DOCKER_STACK_VER) \
 		. 2>&1 | tee logs/$(DOCKER_BASE_NAME)_$(DOCKER_VER).log
 
 sci_notebook_build:
-    docker build -t $(DOCKER_SCI_IMAGE):$(DOCKER_VER) \
+	docker build -t $(DOCKER_SCI_IMAGE):$(DOCKER_VER) \
 		--file latest/1_$(DOCKER_SCI_NAME)/dockerfile \
 		--build-arg DOCKER_VER=$(DOCKER_VER) \
 		. 2>&1 | tee logs/$(DOCKER_SCI_NAME)_$(DOCKER_VER).log
 
 geo_notebook_build:
-    docker build -t $(DOCKER_GEO_IMAGE):$(DOCKER_VER) \
+	docker build -t $(DOCKER_GEO_IMAGE):$(DOCKER_VER) \
 		--file latest/2_$(DOCKER_GEO_NAME)/dockerfile \
 		--build-arg DOCKER_VER=$(DOCKER_VER) \
 		. 2>&1 | tee logs/$(DOCKER_GEO_NAME)_$(DOCKER_VER).log
 
 eodata_notebook_build:
-    docker build -t $(DOCKER_EO_IMAGE):$(DOCKER_VER) \
+	docker build -t $(DOCKER_EO_IMAGE):$(DOCKER_VER) \
 		--file latest/3_$(DOCKER_EO_NAME)/dockerfile \
 		--build-arg DOCKER_VER=$(DOCKER_VER) \
 		. 2>&1 | tee logs/$(DOCKER_EO_NAME)_$(DOCKER_VER).log
