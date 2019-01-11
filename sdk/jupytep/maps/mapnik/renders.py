@@ -12,7 +12,7 @@ from jupytep.maps.proj import reproject
 
 class RenderMap:
 
-    def __init__(self, file_path, name="RenderMap", style="rb", nodata="-9999"):
+    def __init__(self, file_path, name="RenderMap", style="rgb", nodata="-9999"):
         self.name = name
         self.uniqnam = uuid.uuid4()
         self.destfile = "/opt/var/mapnik/%s" % self.uniqnam

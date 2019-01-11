@@ -11,6 +11,15 @@ USER $NB_UID
 # Install Python 3 packages
 # Remove pyqt and qt pulled in for matplotlib since we're only ever going to
 # use notebook-friendly backends in these images
+
+RUN conda install --quiet --yes -c conda-forge \
+    'rasterio=1.0.9*' \
+    'opencv=3.4.3*' \
+    'scikit-image=0.14.1*' && \
+    pip install --upgrade pip &&\
+    pip install -q --no-cache-dir --upgrade pixiedust && \
+    /bin/bash -c "source activate python27 && pip install -q --no-cache-dir --upgrade pixiedust && source deactivate python27" && \
+     conda clean -tipsy
 # ------------------------- END TESTING ----------------------------------
 
 USER root
