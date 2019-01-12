@@ -99,7 +99,7 @@ c.Spawner.pre_spawn_hook = create_dir_hook
 #     'mounts': mounts
 # }
 
-c.Spawner.mem_limit = '12.5G'
+c.Spawner.mem_limit = '8.0G'
 c.Spawner.cpu_limit = 2.5
 c.Spawner.cpu_guarantee = 1.0
 
