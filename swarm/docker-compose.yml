@@ -115,7 +115,7 @@ services:
       retries: 3
 
   mapnik:
-    image: "jupytepide/mapnik-flask:1.2.2"
+    image: "jupytepide/mapnik-flask:1.2.3"
     container_name: jupytepide-mapnik
     networks:
     - jupyterhub-net
@@ -133,7 +133,7 @@ services:
         - node.role == manager
 
   pywps:
-    image: "pywps/flask-ubuntu:16.0.4"
+    image: "jupytepide/pywps-flask:16.0.4-1.3.5"
     container_name: jupytepide-pywps
     networks:
     - jupyterhub-net
