@@ -348,6 +348,7 @@ class ImageLayer():
     def show_layer(self):
         self.htm = '''<script type="text/javascript">Jupytepide.map_addImageLayer("%s",%s,'%s',{%s});</script>''' \
                    % (self.url, self.bounds, self.name, self.attributes2string())
+        print(self.htm)
         display(HTML(self.htm))
 
     def remove_layer(self):
