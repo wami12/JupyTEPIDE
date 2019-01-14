@@ -1,8 +1,10 @@
+import os
+
 from flask import Flask
 from flask import make_response
 from flask import request
+
 import mapnik
-import os
 
 os.chdir('/var/www/mydomain/')
 app = Flask(__name__)
@@ -33,7 +35,7 @@ def three_collor_style(min_val, max_val, nodata_val, color1, color2, color3):
     mono_symb = mapnik.RasterSymbolizer()
     mono_colorizer = mapnik.RasterColorizer()
     mono_colorizer.add_stop(min_val, mapnik.Color(color1))
-    mono_colorizer.add_stop(int((max_val-min_val)/2.), mapnik.Color(color2))
+    mono_colorizer.add_stop(((max_val - min_val) / 2.), mapnik.Color(color2))
     mono_colorizer.add_stop(max_val, mapnik.Color(color3))
     mono_colorizer.add_stop(nodata_val, mapnik.Color("transparent"))
     mono_symb.colorizer = mono_colorizer
@@ -123,13 +125,13 @@ def get_map():
         
     elif req_style.lower() == "rb":
         layer.datasource = mapnik.Gdal(file=req_path, band=1)
-        minval, maxval = [int(x) for x in req_delta.split('|')]
-        ret_map.append_style("requested_lyr", red_blue_style(minval, maxval, int(req_nodata)))
+        minval, maxval = [float(x) for x in req_delta.split('|')]
+        ret_map.append_style("requested_lyr", red_blue_style(minval, maxval, float(req_nodata)))
         ret_map.layers.append(layer)
         
     elif req_style.lower() == "gyr":
         layer.datasource = mapnik.Gdal(file=req_path, band=1)
-        minval, maxval = [int(x) for x in req_delta.split('|')]
+        minval, maxval = [float(x) for x in req_delta.split('|')]
         ret_map.append_style("requested_lyr", green_yellow_red_style(minval, maxval, int(req_nodata)))
         ret_map.layers.append(layer)
         
