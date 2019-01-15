@@ -26,8 +26,8 @@ USER root
 RUN cd /tmp && \
     git clone -b dev --single-branch https://github.com/wasat/JupyTEPIDE.git && \
     cp -rf /tmp/JupyTEPIDE/GUI/res/jupyter/static/* "/opt/conda/lib/python3.6/site-packages/notebook/static" && \
-    cp -rf /tmp/JupyTEPIDE/GUI/res/pixiedust/* "/opt/conda/lib/python3.6/site-packages/pixiedust" && \
-    cp -rf /tmp/JupyTEPIDE/GUI/res/pixiedust/* "/opt/conda/envs/python27/lib/python2.7/site-packages/pixiedust" && \
+#    cp -rf /tmp/JupyTEPIDE/GUI/res/pixiedust/* "/opt/conda/lib/python3.6/site-packages/pixiedust" && \
+#    cp -rf /tmp/JupyTEPIDE/GUI/res/pixiedust/* "/opt/conda/envs/python27/lib/python2.7/site-packages/pixiedust" && \
     cd JupyTEPIDE && \
     cp -R notebooks /home/jovyan/ && \
     cd GUI && \
@@ -44,6 +44,7 @@ RUN cd /tmp && \
     mkdir -p /home/jovyan/.jupytepide/conf/gui && \
     cp /tmp/JupyTEPIDE/GUI/jupytepide/code_snippets.json /home/jovyan/.jupytepide/conf/gui/code_snippets.json && \
     cp -R /tmp/JupyTEPIDE /opt/ && \
+    ls && \
     find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf
 #    fix-permissions /home/$NB_USER && \
 #    fix-permissions /opt

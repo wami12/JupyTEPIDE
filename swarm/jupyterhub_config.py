@@ -52,17 +52,6 @@ notebook_dir = os.environ.get('DOCKER_NOTEBOOK_DIR') or '/home/jovyan'
 c.SwarmSpawner.notebook_dir = notebook_dir
 
 
-# Explicitly set notebook directory because we'll be mounting a host volume to
-# it.  Most jupyter/docker-stacks *-notebook images run the Notebook server as
-# user `jovyan`, and set the notebook directory to `/home/jovyan/work`.
-# We follow the same convention.
-# notebook_dir = os.environ.get('DOCKER_NOTEBOOK_DIR') or '/home/jovyan/work'
-# c.SwarmSpawner.notebook_dir = notebook_dir
-
-# Mount the real user's Docker volume on the host to the notebook user's
-# notebook directory in the container
-# c.DockerSpawner.volumes = {'/opt/data/priv/jupyterhub-user-{username}': {'bind': '/home/jovyan/work', 'mode': 'ro'}, }
-
 def create_dir_hook(spawner):
     username = spawner.user.name  # get the username
     volume_path = os.path.join('/opt/data/priv', username)
@@ -77,6 +66,9 @@ def create_dir_hook(spawner):
                    {'type': 'bind',
                     'source': '/opt/data/priv/' + username,
                     'target': '/home/jovyan/work', },
+                   {'type': 'bind',
+                    'source': '/opt/data/priv/' + username + '/.jupytepide/conf',
+                    'target': '/home/jovyan/.jupytepide/conf', },
                    {'type': 'bind',
                     'source': '/eodata-jovyan',
                     'target': '/home/jovyan/eodata', },
@@ -99,8 +91,9 @@ c.Spawner.pre_spawn_hook = create_dir_hook
 #     'mounts': mounts
 # }
 
-c.Spawner.mem_limit = '7.5G'
-c.Spawner.cpu_limit = 1.5
+c.Spawner.mem_limit = '12.0G'
+c.Spawner.mem_guarantee = '4.0G'
+c.Spawner.cpu_limit = 2.5
 c.Spawner.cpu_guarantee = 0.5
 
 # shutdown the server after no activity for an hour
