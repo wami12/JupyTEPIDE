@@ -1,7 +1,7 @@
 version: '3'
 services:
   mapnik:
-    image: "jupytepide/mapnik-flask:1.2.2"
+    image: "jupytepide/mapnik-flask:1.2.3"
     build:
       context: .
       dockerfile: Dockerfile
