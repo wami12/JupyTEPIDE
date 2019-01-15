@@ -134,7 +134,7 @@ define([
         }
         catch(e){}
 
-    }
+    };
 
     var load_style = function () {
 
@@ -169,15 +169,15 @@ define([
             .attr('type', 'text/css');
 
         //OpenLayers style and scripts
-     //#   $('head').append($('<link/>', {
-     //#       href: 'https://openlayers.org/en/v4.4.2/css/ol.css',
-     //#       rel: 'stylesheet',
-     //#       type: 'text/css'
-     //#   }));
+        //#   $('head').append($('<link/>', {
+        //#       href: 'https://openlayers.org/en/v4.4.2/css/ol.css',
+        //#       rel: 'stylesheet',
+        //#       type: 'text/css'
+        //#   }));
         //       The script below is only needed for old environments like Internet Explorer and Android 4.x
-     //#   $('head').append($('<script/>', {
-     //#       src: 'https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL'
-     //#   }));
+        //#   $('head').append($('<script/>', {
+        //#       src: 'https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL'
+        //#   }));
         //OpenLayers script
         //   $('head').append($('<script/>',{
         //       src:'https://openlayers.org/en/v4.4.2/build/ol.js'

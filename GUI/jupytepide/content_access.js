@@ -204,8 +204,7 @@ define([
             base_url: base_url
         });
         return contents.delete2(fname);
-    };
-
+    }
     //** recursiveDelete ***
     function recursiveDelete(fname){
 
@@ -221,8 +220,7 @@ define([
             }
         }
         return deleteFile(dirname);
-    };
-
+    }
     //** recursiveDeleteSelected ***
     function recursiveDeleteSelected() {
         var i=0,count=0;
@@ -235,7 +233,7 @@ define([
                 var fname = $('.item_name')[i].attributes['path'].value; //read the "path" attribute value which is first in element (index 0)
                 console.log("fname: "+fname);
                 recursiveDelete(fname);
-                count++
+                count++;
 
                 if (fname.search("/")!=-1){
                     path_this=fname.slice(0,fname.lastIndexOf("/"));
@@ -258,8 +256,7 @@ define([
         if(count==0){
             alert("Nothing deleted, probably no items selected.");
         }
-    };
-
+    }
     //** readFile **
     function readFile(fname, option_fn) {
         var contents = new contents_service.Contents({
@@ -293,7 +290,7 @@ define([
         getFiles: getFiles,
         getFilesList: getFilesList,
         get_FilesListDir: get_FilesListDir,
-        get_NotebooksListDir:get_NotebooksListDir,
+        get_NotebooksListDir: get_NotebooksListDir,
         readJupytepideJSONFile:readJupytepideJSONFile,
         deleteFile:deleteFile,
         recursiveDelete:recursiveDelete,

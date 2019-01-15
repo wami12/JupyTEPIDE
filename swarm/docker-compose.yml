@@ -133,7 +133,7 @@ services:
         - node.role == manager
 
   pywps:
-    image: "jupytepide/pywps-flask:16.0.4-1.3.5"
+    image: "geocontainers/pywps-demo:latest"
     container_name: jupytepide-pywps
     networks:
     - jupyterhub-net
@@ -141,9 +141,9 @@ services:
     - "5000:5000"
     hostname: jupytepide-pywps
     volumes:
-      - /opt/data/pub/shared/pywps-demo/workdir:/pywps-flask/workdir
-      - /opt/data/pub/shared/pywps-demo/outputs:/pywps-flask/outputs
-      - /opt/data/pub/shared/pywps-demo/processes:/pywps-flask/processes
+      - /opt/data/pub/shared/pywps-demo/workdir:/pywps-demo/workdir
+      - /opt/data/pub/shared/pywps-demo/outputs:/pywps-demo/outputs
+      - /opt/data/pub/shared/pywps-demo/processes:/pywps-demo/processes
     deploy:
       replicas: 1
       restart_policy:

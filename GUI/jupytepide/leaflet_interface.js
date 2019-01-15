@@ -69,7 +69,9 @@ define([
         Jupytepide.leafletMap.on('pm:drawstart', function(e) {
             var layer = e.workingLayer;
             Jupytepide.leafletMap.tmpShapeVertexArray = [];
-            if(Jupytepide.marker){Jupytepide.marker.remove()};
+            if (Jupytepide.marker) {
+                Jupytepide.marker.remove()
+            }
             remove_tmp_shape();
             //console.log(e.latlng);
             toggle_map_action('mapAddPoly');
@@ -293,8 +295,7 @@ define([
             //collect (two) points to build rectangle shape (in WKT)
             Jupytepide.leafletMap.tmpShapeVertexArray.push(e.latlng)
         }
-    };
-
+    }
     //*** toggle_map_action ***
     //set action, which takes place on the map at the moment
     var toggle_map_action = function(action){
@@ -315,7 +316,7 @@ define([
         if(Jupytepide.leafletMap.tmpShapeWKT){
             if (Jupytepide.leafletMap._layers[Jupytepide.leafletMap.tmpShapeID]) {
                 Jupytepide.leafletMap._layers[Jupytepide.leafletMap.tmpShapeID].remove()
-            };
+            }
             //Jupytepide.leafletMap.pm.disableDraw();
             Jupytepide.leafletMap.tmpShapeID = -1;
             Jupytepide.leafletMap.tmpShapeVertexArray = [];

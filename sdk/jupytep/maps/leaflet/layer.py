@@ -1,8 +1,9 @@
 import json
 import os
 import re
-from IPython.display import HTML, display
 from shutil import copyfile
+
+from IPython.display import HTML, display
 
 
 class Base:

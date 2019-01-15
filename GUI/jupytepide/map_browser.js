@@ -41,13 +41,12 @@ define([
         map_panel.append(control_container);
 
         return map_panel;
-    };
-
+    }
     var leafletMap;
 
     function getLeafletMap() {
         return this.leafletMap;
-    };
+    }
 
     //this is for loading map in panel_browser.js
     function load_extension() {
@@ -87,8 +86,7 @@ define([
             visible = !visible;
         });
 
-    };
-
+    }
     // return public methods
     return {
         load_ipython_extension: load_extension,

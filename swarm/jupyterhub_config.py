@@ -52,17 +52,6 @@ notebook_dir = os.environ.get('DOCKER_NOTEBOOK_DIR') or '/home/jovyan'
 c.SwarmSpawner.notebook_dir = notebook_dir
 
 
-# Explicitly set notebook directory because we'll be mounting a host volume to
-# it.  Most jupyter/docker-stacks *-notebook images run the Notebook server as
-# user `jovyan`, and set the notebook directory to `/home/jovyan/work`.
-# We follow the same convention.
-# notebook_dir = os.environ.get('DOCKER_NOTEBOOK_DIR') or '/home/jovyan/work'
-# c.SwarmSpawner.notebook_dir = notebook_dir
-
-# Mount the real user's Docker volume on the host to the notebook user's
-# notebook directory in the container
-# c.DockerSpawner.volumes = {'/opt/data/priv/jupyterhub-user-{username}': {'bind': '/home/jovyan/work', 'mode': 'ro'}, }
-
 def create_dir_hook(spawner):
     username = spawner.user.name  # get the username
     volume_path = os.path.join('/opt/data/priv', username)

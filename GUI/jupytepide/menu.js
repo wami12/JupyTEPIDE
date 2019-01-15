@@ -100,7 +100,7 @@ define([
     // href_:string - URL string. When empty, use:"#"
     // appendToMenu: Jquery DOM object representing menu or submenu dropdown list, into which the menu item is added
     function add_menu_item(name, desc, href_, appendToMenu, onClickFn) {
-       return $('<li/>')
+        return $('<li/>')
             .attr('title', desc)
             .append(
                 $('<a href=' + href_ + '>')
@@ -115,16 +115,16 @@ define([
         $('<li/>')
             .attr('class', 'divider')
             .appendTo(appendToMenu);
-    };
+    }
 
     //*** create_menu ***
     //Adding  positions in maimn menu, actions assignment
     function create_menu() {
         //New Menu position named "Jupytepide"
-        jupytepide_menu = add_menu({name:'Jupytepide',menu_id:'jupytepide_menu'});
+        jupytepide_menu = add_menu({name: 'Jupytepide', menu_id: 'jupytepide_menu'});
 
         //Map
-        map_submenu = add_submenu('Map', '#jupytepide_menu',function(evt){
+        map_submenu = add_submenu('Map', '#jupytepide_menu', function (evt) {
             evt.preventDefault();
             $('a[href="#1karta"]').click();
         });
@@ -142,7 +142,7 @@ define([
         });
 
         //Snippets
-        snippets_submenu = add_submenu('Snippets', '#jupytepide_menu',function(evt){
+        snippets_submenu = add_submenu('Snippets', '#jupytepide_menu', function (evt) {
             evt.preventDefault();
             $('a[href="#2karta"]').click();
         });
@@ -180,7 +180,7 @@ define([
         add_divider(jupytepide_menu);
 
         //Panel browser
-        panel_browser_submenu = add_submenu('Panel browser', '#jupytepide_menu',function(evt){
+        panel_browser_submenu = add_submenu('Panel browser', '#jupytepide_menu', function (evt) {
             evt.preventDefault();
         });
 
@@ -189,7 +189,7 @@ define([
             evt.preventDefault();
             Jupyter.toolbar.actions.call('panel_browser:toggle-panel')
         });
-        toggle_menu_item.attr('data-jupyter-action','panel_browser:toggle-panel');
+        toggle_menu_item.attr('data-jupyter-action', 'panel_browser:toggle-panel');
 
         //Panel browser-->Maximize
         add_menu_item('Maximize', 'Maximize panel browser', '#', panel_browser_submenu, function (evt) {
