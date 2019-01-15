@@ -290,7 +290,7 @@ define([
         getFiles: getFiles,
         getFilesList: getFilesList,
         get_FilesListDir: get_FilesListDir,
-        get_NotebooksListDir: get_NotebooksListDir,
+        get_NotebooksListDir:get_NotebooksListDir,
         readJupytepideJSONFile:readJupytepideJSONFile,
         deleteFile:deleteFile,
         recursiveDelete:recursiveDelete,

@@ -1,8 +1,6 @@
 import json
-import subprocess
-
 import requests
-
+import subprocess
 from jupytep.excpt.exceptions import ApiError
 from jupytep.maps.geoserver.json_builder import get_json_workspace
 from jupytep.maps.geoserver.url import URL_REST

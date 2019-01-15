@@ -85,7 +85,6 @@ define([
                  }
         }
     }
-
     //*** checkDateRange ***
     function checkDateRange(startVal,endVal){
         var dFrom = new Date(startVal);
@@ -107,7 +106,6 @@ define([
         }
      return checkResult;
     }
-
     //*** build_side_panel ***
     function build_side_panel (main_panel, side_panel, min_rel_width, max_rel_width) {
         if (min_rel_width === undefined) min_rel_width = 0;
@@ -260,7 +258,7 @@ define([
         });
         map_toolbar.append(geojson_to_map_button);
 
-        //recursive_delete_button
+         //recursive_delete_button
          var recursive_delete_button = $('<button/>',{id:'recursiveDeleteBtn',class:"btn btn-danger fa fa-trash",title:"Recursively delete selected files and folders"});
          recursive_delete_button.click(function(){
 
@@ -681,9 +679,7 @@ define([
         var colDiv = $('<div/>').addClass('col-md-12');
         var itemType = row_item.type;
         var iconName = 'file_icon';
-        if (itemType === 'notebook') {
-            iconName = 'notebook_icon'
-        } else if (itemType === 'directory') {
+        if (itemType==='notebook'){iconName='notebook_icon'} else if (itemType === 'directory') {
             iconName = 'folder_icon'
         }
         var checkbox = $('<input>',
@@ -865,22 +861,22 @@ define([
         //loading snippets groups from JSON, making headers and empty content DOM elements
         //creating empty menu with groups headers
         if (menu_groupsList){
-            for (i = 0; i < menu_groupsList.length; i++) {
+          for (i=0;i<menu_groupsList.length;i++){
              var group_name = menu_groupsList[i].group_name;
              var group_id = menu_groupsList[i].group_id;
              menu_item = code_snippets.make_snippets_menu_group({group_name:group_name,id:group_id});
              menu_snippets.append(menu_item.header).append(menu_item.content);
              menu_item={};
-            }
+          }
             $('#2karta').append(menu_snippets);
-            //Load snippets from JSON
-            // loading menu snippets items content (snippets names) into appropriate groups
-            //creating menu with groups headers and grouped items
-            var snippetsList = [];
-            snippetsList = code_snippets.getSnippetsList1();
-            for (i = 0; i < snippetsList.length; i++) {
+          //Load snippets from JSON
+          // loading menu snippets items content (snippets names) into appropriate groups
+          //creating menu with groups headers and grouped items
+          var snippetsList = [];
+          snippetsList = code_snippets.getSnippetsList1();
+          for (i = 0; i < snippetsList.length; i++) {
             code_snippets.addSnippetToUI(snippetsList[i].group,snippetsList[i].name);
-            }
+           }
         }
         else {
             $('#2karta').append($('<div/>').html('Falied to load snippets. Check console log.'));

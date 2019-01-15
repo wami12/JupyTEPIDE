@@ -1,13 +1,11 @@
-import os
-import uuid
-from shutil import copyfile
-
 import gdal
 import numpy as np
+import os
+import uuid
 from IPython.display import Javascript
-
 from jupytep.config.urls import PUB_HOST
 from jupytep.maps.proj import reproject
+from shutil import copyfile
 
 
 class RenderMap:

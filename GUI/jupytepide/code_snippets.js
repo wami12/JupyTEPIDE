@@ -92,7 +92,6 @@ define([
         });
         return snippetsNames;
     }
-
     //*** Second version - get list of snippets names divided into groups
     function get_SnippetsList1(){
         $.ajaxSetup({
@@ -108,7 +107,6 @@ define([
 
         return snippetsNames;
     }
-
     //*** get only snippets groups from "groups" object
     function get_SnippetsGroups(){
         $.ajaxSetup({
@@ -162,7 +160,6 @@ define([
         var codeSnippet = createSnippet(e.group_id,e.snippet_name);
         addSnippet(codeSnippet);
     }
-
     //todo: protect from adding snippet into non existing group (group number) - not necessarily needed, because it can be controlled from the outside
 
     //*** addSnippet ***
@@ -201,7 +198,7 @@ define([
 
         delBtn
             .append($('<i/>').addClass('fa fa-trash'))
-            .bind('click', codeSnippet, showDeleteSnippetWindow);
+            .bind('click',codeSnippet,showDeleteSnippetWindow);
 
         snippet_item
             .append($('<a/>',{href:'#'})
@@ -483,9 +480,7 @@ define([
 
         if (toAdd) {
             //check max group ID, assign max+1 value to new group
-            maxGid = Math.max(...gids;
-        )
-            +1;
+            maxGid=Math.max(...gids;)+1;
             group.group_id=maxGid;
             JSONdata.groups.push(group);
             //Save to JSON file
@@ -558,9 +553,9 @@ define([
         getSnippetsGroups:get_SnippetsGroups,
         addSnippet:addSnippet,
         addGroup:addGroup,
-        getBaseUrl: getBaseUrl, //todo: remove it from public methods
-        getSnippetsUrl: getSnippetsUrl, //todo: remove it from public methods
-        getMaxGroupId: getMaxGroupId, //todo: remove it from public methods
+        getBaseUrl:getBaseUrl, //todo: remove it from public methods
+        getSnippetsUrl:getSnippetsUrl, //todo: remove it from public methods
+        getMaxGroupId:getMaxGroupId, //todo: remove it from public methods
         make_snippets_menu_group:make_snippets_menu_group,
         deleteSnippet:deleteSnippet,
         deleteGroup:deleteGroup,

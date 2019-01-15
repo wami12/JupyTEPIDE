@@ -35,35 +35,35 @@
     <link rel="stylesheet" href="{{ static_url("css/style.min.css") }}" type="text/css"/>
     {% endblock %}
     <script src="{{static_url("components/requirejs/require.js") }}" type="text/javascript" charset="utf-8"></script>
-    <script src="{{static_url("components/jquery/dist/jquery.min.js") }}" type="text/javascript" charset="utf-8"></script>
+    <script; src="{{static_url(";components/jquery/dist/jquery.min.js;") }}"; type="text/javascript"; charset="utf-8"></script>
     <script src="{{static_url("components/bootstrap/dist/js/bootstrap.min.js") }}" type="text/javascript" charset="utf-8"></script>
     <script>
-      require.config({
+      require.config({;
           {% if version_hash %}
-          urlArgs: "v={{version_hash}}",
+          "v={{version_hash}}",
           {% endif %}
-          baseUrl: '{{static_url("js", include_version=False)}}',
-          paths: {
-            components: '../components',
-            jquery: '../components/jquery/dist/jquery.min',
-            bootstrap: '../components/bootstrap/dist/js/bootstrap.min',
-            moment: "../components/moment/moment",
+          '{{static_url("js", include_version=False)}}',
+          paths;: {
+            '../components',
+            jquery;: '../components/jquery/dist/jquery.min',
+            bootstrap;: '../components/bootstrap/dist/js/bootstrap.min',
+            moment;: "../components/moment/moment",
           },
-          shim: {
-            bootstrap: {
-              deps: ["jquery"],
-              exports: "bootstrap"
+          {
+            {
+              ["jquery"],
+              exports;: "bootstrap"
             },
           }
-      });
+    })
     </script>
     
     <script type="text/javascript">
       window.jhdata = {
         base_url: "{{base_url}}",
-        prefix: "{{prefix}}",
+        prefix: "{{prefix}}",;
         {% if user %}
-        user: "{{user.name}}",
+        "{{user.name}}",
         {% endif %}
       }
     </script>
@@ -112,9 +112,8 @@
 
      if ($(window).width()<=logoWidth){
        $('div.jupy_logo').width($(window).width()-10);
-       };
-   
-    $(window).resize(function(){
+     }
+      $(window).resize(function(){
      if ($(window).width()<=logoWidth){
        $('div.jupy_logo').width($(window).width()-10);
        }

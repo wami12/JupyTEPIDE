@@ -27,7 +27,7 @@ define([
     './content_access',
     './panel_browser',
     'require'
-], function ($, Jupyter, dialog, utils, configmod, leaflet_interface, code_snippets, keyboard, content_access, panel_browser, require) {
+], function ($, Jupyter, dialog, utils, configmod, leaflet_interface, code_snippets, keyboard, content_access, panel_browser,require) {
     "use strict";
 
     /**
@@ -167,7 +167,7 @@ define([
     // url='https://demo.boundlessgeo.com/geoserver/ows?', atrib={layers:'ne:ne'}, more options: http://leafletjs.com/reference-1.3.0.html#tilelayer-wms
     Jupytepide.map_addWmsLayer = function(url_,attrib,layer_name){
         if (Jupytepide.leafletMap.layers[layer_name]) {
-            alert('A layer named: "' + layer_name + '" is already loaded. Please change layer name.');
+            alert('A layer named: "'+layer_name+'" is already loaded. Please change layer name.');
             return
         }
         //Adds new "property" (object) named "name" to leafletMap object
@@ -209,7 +209,7 @@ define([
         //Adds new "property" (object) named "name" to leafletMap object
         //this way new layer is related to leafletMap as an object
         if (Jupytepide.leafletMap.layers[layer_name]) {
-            alert('A layer named: "' + layer_name + '" is already loaded. Please change layer name.');
+            alert('A layer named: "'+layer_name+'" is already loaded. Please change layer name.');
             return
         }
 
@@ -266,7 +266,7 @@ define([
     Jupytepide.map_addGeoJsonLayer = function(data,layer_name,options){
         options == null ? {} : options;
         if (Jupytepide.leafletMap.layers[layer_name]) {
-            alert('A layer named: "' + layer_name + '" is already loaded. Please change layer name.');
+            alert('A layer named: "'+layer_name+'" is already loaded. Please change layer name.');
             return
         }
         //Creates new PANE for the layer - it makes that adding and deleting layer results in loading empty layer every next time (this appears with geojson only)
@@ -282,7 +282,7 @@ define([
         var browseClick = $('<a/>',{href:'#',
             id:'optLayer_'+layer_name,
             onclick:'Jupytepide.showLayerFeaturesData("'+layer_name+'")'
-        }).append($('<i/>', {class: "fa fa-table", title: 'Browse layer'}));
+        }).append($('<i/>',{class:"fa fa-table",title:'Browse layer'}));
 
         //remove layer click
         var removeClick = $('<a/>',{href:'#',
@@ -495,7 +495,7 @@ define([
     Jupytepide.map_addImageLayer = function(imageUrl,imageBounds,layer_name,options){
         options == null ? {} : options;
         if (Jupytepide.leafletMap.layers[layer_name]) {
-            alert('A layer named: "' + layer_name + '" is already loaded. Please change layer name.');
+            alert('A layer named: "'+layer_name+'" is already loaded. Please change layer name.');
             return
         }
 
@@ -506,22 +506,20 @@ define([
         //Jupytepide.leafletMap.control.addOverlay(Jupytepide.leafletMap.layers[layer_name],layer_name);
 
         //remove layer click
-        var removeClick = $('<a/>', {
-            href: '#',
-            id: 'optLayer_' + layer_name,
-            onclick: 'Jupytepide.map_removeLayerDlg("' + layer_name + '")'
-        }).append($('<i/>', {class: "fa fa-remove", title: 'Remove layer'}));
+        var removeClick = $('<a/>',{href:'#',
+            id:'optLayer_'+layer_name,
+            onclick:'Jupytepide.map_removeLayerDlg("'+layer_name+'")'
+        }).append($('<i/>',{class:"fa fa-remove",title:'Remove layer'}));
 
 
         //zoom (fit) to layer view click
-        var fitClick = $('<a/>', {
-            href: '#',
-            id: 'optLayer_' + layer_name,
-            onclick: 'Jupytepide.map_fitToLayer("' + layer_name + '")'
-        }).append($('<i/>', {class: "fa fa-arrows-alt", title: 'Fit to layer'}));
+        var fitClick = $('<a/>',{href:'#',
+            id:'optLayer_'+layer_name,
+            onclick:'Jupytepide.map_fitToLayer("'+layer_name+'")'
+        }).append($('<i/>',{class:"fa fa-arrows-alt",title:'Fit to layer'}));
 
-        var displayedLayerName = layer_name + " " + removeClick[0].outerHTML + fitClick[0].outerHTML;
-        Jupytepide.leafletMap.control.addOverlay(Jupytepide.leafletMap.layers[layer_name], displayedLayerName);
+        var displayedLayerName = layer_name+" "+removeClick[0].outerHTML+fitClick[0].outerHTML;
+        Jupytepide.leafletMap.control.addOverlay(Jupytepide.leafletMap.layers[layer_name],displayedLayerName);
     };
 
     /**

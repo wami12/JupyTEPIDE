@@ -91,9 +91,10 @@ c.Spawner.pre_spawn_hook = create_dir_hook
 #     'mounts': mounts
 # }
 
-c.Spawner.mem_limit = '8.0G'
+c.Spawner.mem_limit = '12.0G'
+c.Spawner.mem_guarantee = '4.0G'
 c.Spawner.cpu_limit = 2.5
-c.Spawner.cpu_guarantee = 1.0
+c.Spawner.cpu_guarantee = 0.5
 
 # shutdown the server after no activity for an hour
 # c.NotebookApp.shutdown_no_activity_timeout = 60 * 60

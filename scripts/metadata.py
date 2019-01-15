@@ -1,9 +1,8 @@
 #!/opt/anaconda/anaconda3/envs/python34/bin/python
 
+import pandas as pd
 import sys
 from collections import OrderedDict
-
-import pandas as pd
 
 
 class N1Metadata:

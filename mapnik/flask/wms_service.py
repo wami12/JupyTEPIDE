@@ -1,10 +1,8 @@
+import mapnik
 import os
-
 from flask import Flask
 from flask import make_response
 from flask import request
-
-import mapnik
 
 os.chdir('/var/www/mydomain/')
 app = Flask(__name__)
@@ -35,7 +33,7 @@ def three_collor_style(min_val, max_val, nodata_val, color1, color2, color3):
     mono_symb = mapnik.RasterSymbolizer()
     mono_colorizer = mapnik.RasterColorizer()
     mono_colorizer.add_stop(min_val, mapnik.Color(color1))
-    mono_colorizer.add_stop(((max_val - min_val) / 2.), mapnik.Color(color2))
+    mono_colorizer.add_stop(((max_val-min_val)/2.), mapnik.Color(color2))
     mono_colorizer.add_stop(max_val, mapnik.Color(color3))
     mono_colorizer.add_stop(nodata_val, mapnik.Color("transparent"))
     mono_symb.colorizer = mono_colorizer

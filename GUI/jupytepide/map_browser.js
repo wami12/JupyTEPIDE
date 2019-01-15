@@ -47,7 +47,6 @@ define([
     function getLeafletMap() {
         return this.leafletMap;
     }
-
     //this is for loading map in panel_browser.js
     function load_extension() {
         var map_panel = build_map_panel();
