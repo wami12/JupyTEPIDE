@@ -16,10 +16,9 @@
 import base64
 import inspect
 import sys
+from IPython.utils.io import capture_output
 from collections import OrderedDict, namedtuple
 from functools import partial
-
-from IPython.utils.io import capture_output
 from jinja2 import Template
 from pixiedust.display.display import *
 from pixiedust.utils import Logger

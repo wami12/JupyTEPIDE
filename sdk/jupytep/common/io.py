@@ -7,4 +7,3 @@ def get_work_dir():
 
 def get_curr_dir():
     return os.getcwd()
-

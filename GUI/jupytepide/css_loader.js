@@ -1,12 +1,11 @@
-// File jupytepide/css_loader.js
+// File source_UI/css_loader.js
 // Edited by: Michał Bednarczyk
-// Copyright (C) 2017-2019 .....
+// Copyright (C) 2017 .....
 //
 //  Distributed under the terms of the BSD License.
-// ---------------------------------------------------------------------------
-// To see where are all extensions loaded use in terminal:
+// To see where are all extensions loaded use:
 // 'jupyter notebook list'
-// look also into (sample dir):
+// look also (example dir):
 // '/home/michal/.local/share/jupyter/nbextensions/'
 // ---------------------------------------------------------------------------
 // CSS loading
@@ -169,27 +168,38 @@ define([
             .attr('type', 'text/css');
 
         //OpenLayers style and scripts
-        //#   $('head').append($('<link/>', {
-        //#       href: 'https://openlayers.org/en/v4.4.2/css/ol.css',
-        //#       rel: 'stylesheet',
-        //#       type: 'text/css'
-        //#   }));
+        $('head').append($('<link/>', {
+            href: 'https://openlayers.org/en/v4.4.2/css/ol.css',
+            rel: 'stylesheet',
+            type: 'text/css'
+        }));
         //       The script below is only needed for old environments like Internet Explorer and Android 4.x
-        //#   $('head').append($('<script/>', {
-        //#       src: 'https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL'
-        //#   }));
+        $('head').append($('<script/>', {
+            src: 'https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL'
+        }));
         //OpenLayers script
         //   $('head').append($('<script/>',{
         //       src:'https://openlayers.org/en/v4.4.2/build/ol.js'
         //   }));
 
-        //Logo
+        ///drag-arrange.min.js script
+        //rozszerzenie jquery do przesuwania elementów drag/drop - do wykorzystania - patrz przykład w /jquery_arrange_plugin/
+        $('body').append($('<script/>', {
+            src: require.toUrl('./drag-arrange.min.js')
+        }));
+
+
+        //new combobox in bootstrap style
+        //$('select').appendTo('<div/>');
+
+        //logo
         $('#ipython_notebook img').attr('src', require.toUrl('./img/logo_jupytepide.png')).attr('alt', 'JupyTEP IDE');
 
         //Leaflet map JS library style
         $('head').append($('<link/>').attr('href', require.toUrl('./css/' + 'leaflet' + '.css'))
             .attr('rel', 'stylesheet')
             .attr('type', 'text/css'));
+
 
         //Leaflet drawing and editing tools plugin
         $('body').append($('<script/>',{
@@ -226,16 +236,19 @@ define([
         };
         var action_made = Jupyter.actions.register(action, action_name, prefix);
         return action_made;
+
     }
+
+    //***
 
     //*** load_ipython_extension ***
     // Extension loader
     function load_ipython_extension() {
-        //create action for loading theme
         var action_load_style = make_action('komunikat3', 'my_ext2', 'fa-css3', 'Zmien styl', 'to jest komunikat3', load_style);
 
-        //Add button with action to UI
+        //Load button to UI
         Jupyter.toolbar.add_buttons_group([action_load_style]);
+
     }
 
     return {

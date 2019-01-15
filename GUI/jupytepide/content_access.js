@@ -1,6 +1,6 @@
-// File jupytepide/content_access.js
+// file source_UI/content_access.js
 // Edited by: Michał Bednarczyk
-// Copyright (C) 2017-2019 .....
+// Copyright (C) 2017 .....
 //
 //  Distributed under the terms of the BSD License.
 // ---------------------------------------------------------------------------
@@ -16,11 +16,17 @@ define([
     var base_url = utils.get_body_data("baseUrl");
 
     //*** createFile ***
-    //Create file: untitled.txt
+    //tworzenie pliku tekstowego o nazwie untitled.txt
     function createFile() {
+        // var contents = new contents_service.Contents({
+        //     base_url: common_options.base_url,
+        //     common_config: common_config
+        // });
+
         var contents = new contents_service.Contents({
             base_url: base_url
         });
+
         contents.new_untitled('', {type: 'file', ext: '.txt'});
     }
 
@@ -33,25 +39,26 @@ define([
 
     //*** save2 ***
     //Additional method added to Contents.prototype class contained in Jupyter's "content.js" module
-    //PUT (HTTP) method is not supported well by all webbrowsers - it can be, that user will not be able to save snippets - think of PHP usage
-    //AJAX requires to download the file, update and then upload. To manipulate the snippets list it might be better to use database.
-
+    //UWAGA:PUT (HTTP) nie jest obsługiwany przez wszystkie przeglądarki - może być, że nie zapiszemy snippetów - pomyśleć o PHP - ale najpierw testować
+    //trzeba zrobić tak: każde dodanie snippeta wymaga pobrania całej zawartości pliku, modyfikacji i ponownego zapisu, z tego jak działa AJAX inaczej się nie da, chyba, że będziemy używać bazy danych...
     contents_service.Contents.prototype.save2 = function (path, model) {
+
         var settings = {
             processData: false,
             type: "PUT",
             dataType: "json",
             data: JSON.stringify(model),
-            contentType: 'application/json'
+            contentType: 'application/json',
         };
         var url = this.api_url(path);
         //the below is similar to $.ajax():
         //alert(url);
         return utils.promising_ajax(url, settings);
+
     };
 
-    //*** read2 ***
     contents_service.Contents.prototype.read2 = function (path) {
+//todo: zrobić tak z Contents.get(), żeby czytać zawartość katalogu
         var settings = {
             processData: false,
             type: "GET",
@@ -160,25 +167,17 @@ define([
                         filteredFilesList.push(returnFilesList[i]);
                     }
                 }
+
             }
             return filteredFilesList;
         }
         else return returnFilesList;
     }
 
-    //*** get_NotebooksListDir ***
-    function get_NotebooksListDir(path) {
-        $.ajaxSetup({
-            async: false
-        });
-
-        var NotebooksList = getFilesList(path, {filter: "directory;notebook"});
-        return NotebooksList;
-    }
-
-    //*** get_FilesListDir ***
-    // Function to use in file browser tab "Files" - to load content
+    //Function to use in file browser tab "Files" - to load content
     function get_FilesListDir(path) {
+        //to wyłącza działanie asynchroniczne funkcji $getJSON i mozna wtedy poza nią przekazać wartość zmiennej
+
         $.ajaxSetup({
             async: false
         });
@@ -205,12 +204,18 @@ define([
         });
         return contents.delete2(fname);
     }
+
+    function deleteFolderContent(fname) {
+
+    }
     //** recursiveDelete ***
     function recursiveDelete(fname){
 
         var dirname = fname;
         var filesList = getFilesList(fname,{});
+        //var paths=[];
         for (var i=0;i<filesList.length;i++){
+            //paths.push(filesList[i].path);
             if (filesList[i].type=='file'||filesList[i].type=='notebook') deleteFile(filesList[i].path);
             if (filesList[i].type=='directory') {
                 var fname1 = fname+'/'+filesList[i].name;
@@ -220,6 +225,7 @@ define([
             }
         }
         return deleteFile(dirname);
+
     }
     //** recursiveDeleteSelected ***
     function recursiveDeleteSelected() {
@@ -256,12 +262,23 @@ define([
         if(count==0){
             alert("Nothing deleted, probably no items selected.");
         }
+
     }
     //** readFile **
     function readFile(fname, option_fn) {
         var contents = new contents_service.Contents({
             base_url: base_url
         });
+        //contents.api_url('code_snippets.json');
+
+        //var promise1 = contents.read2(fname);
+        //var returned_data="";
+        //promise1.then(function(value){returned_data = value});
+        //return returned_data;
+
+        //$.ajaxSetup({
+        //    async: false
+        //});
 
         try {
             var a = contents.read2(fname);
@@ -273,13 +290,25 @@ define([
             console.log(err);
             //throw 'Unable to read file';
             return false;
+
         }
+
     }
 
     //** readJupytepideJSONFile **
     //this is to read json file from direstory where Jupytepide extension is installed (Jupytepide local dir)
     function readJupytepideJSONFile(fName) {
+        //to wyłącza działanie asynchroniczne funkcji $getJSON i mozna wtedy poza nią przekazać wartość zmiennej
+        //$.ajaxSetup({
+        //    async: false
+        //});
         var file_url = fName;//require.toUrl('./'+fName);
+        //  $.getJSON(file_url, function (data) {
+        //      $.each(data['positions'], function (key, position) {
+        //          //snippetsNames.push(snippet['name']);
+        //          //snippetsNames.push([{name:'Example 1',link:'#',time:'yesterday',snippet_name:'Example1',on_click:insert_cell1}]);
+        //      });
+        //  });
         return $.getJSON(file_url).responseJSON;
     }
 
@@ -290,7 +319,6 @@ define([
         getFiles: getFiles,
         getFilesList: getFilesList,
         get_FilesListDir: get_FilesListDir,
-        get_NotebooksListDir: get_NotebooksListDir,
         readJupytepideJSONFile:readJupytepideJSONFile,
         deleteFile:deleteFile,
         recursiveDelete:recursiveDelete,

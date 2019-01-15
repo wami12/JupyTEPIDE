@@ -1,7 +1,6 @@
 #!/opt/anaconda/anaconda3/envs/python34/bin/python
-import sys
-
 import snappy
+import sys
 
 
 def main(x):

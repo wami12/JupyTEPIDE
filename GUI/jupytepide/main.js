@@ -8,7 +8,8 @@
 // ---------------------------------------------------------------------------
 //Extension for User Interface JupytepIDE
 //Main file
-//TODO: place text messages and other resources in shared JS file (resources)
+//TODO: przeniesc komunikaty i inne zasoby do wspolnego pliku (resources)
+
 
 define([
         './jupytepide', //main Jupytepide object
@@ -17,7 +18,10 @@ define([
         './panel_browser',
         './map_browser',
         './css_loader',
-        './code_snippets'
+        './code_snippets',
+        'jquery',
+        'require',
+        './leaflet_interface'
     ],
     function (jupy,
               menu,
@@ -25,12 +29,21 @@ define([
               panel_browser,
               map_browser,
               css_loader,
-              code_snippets
-    ) {
+              code_snippets,
+              $,
+              require,
+              leaflet_interface) {
         css_loader.load_jupytepide_theme();
-        //css_loader.load_ipython_extension(); //this can be used to add button for loading style manually
         menu.load_ipython_extension();
+        //map_browser.load_ipython_extension(); //ładowanie przeniesione do panel_browser
         code_snippets.load_ipython_extension();
+        //css_loader.load_ipython_extension();
+
         toolbar_items.load_ipython_extension();
         panel_browser.load_ipython_extension();
+        //$( document ).ready(function() {
+        //leaflet_interface.map_invalidateSize();
+        //Jupytepide.leafletMap.invalidateSize();
+        //});
+
     });

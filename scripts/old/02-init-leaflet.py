@@ -1,9 +1,8 @@
 import json
 import os
 import re
-from shutil import copyfile
-
 from IPython.display import HTML, display
+from shutil import copyfile
 
 
 class Leaflet():

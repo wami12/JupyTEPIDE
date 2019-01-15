@@ -1,8 +1,8 @@
+import mapnik
+import os
 from flask import Flask
 from flask import make_response
 from flask import request
-import mapnik
-import os
 
 os.chdir('/var/www/mydomain/')
 app = Flask(__name__)
