@@ -20,7 +20,6 @@
         a[0] in c || !c.execScript || c.execScript("var " + a[0]);
         for (var d; a.length && (d = a.shift());) a.length || void 0 === b ? c[d] && c[d] !== Object.prototype[d] ? c = c[d] : c = c[d] = {} : c[d] = b
     }
-
     var ba, da;
     function ea(a, b) {
         return a > b ? 1 : a < b ? -1 : 0
@@ -383,7 +382,6 @@
         e = Math.max.apply(null, e);
         return Ya(b, a, d, e, c)
     }
-
     var tb = "function" === typeof Object.assign ? Object.assign : function (a, b) {
         if (!a || null === a) throw new TypeError("Cannot convert undefined or null to object");
         for (var c = Object(a), d = 1, e = arguments.length; d < e; ++d) {
@@ -536,7 +534,6 @@
         }
         return c * b * b / 2
     }
-
     var Eb = {};
     Eb.degrees = 12741994 * Math.PI / 360;
     Eb.ft = .3048;
@@ -661,7 +658,6 @@
         a in Tb && b in Tb[a] && (c = Tb[a][b]);
         return c
     }
-
     var Wb = new xb(6371008.8);
     function Yb(a, b, c, d) {
         a = Zb(a);
@@ -1335,7 +1331,6 @@
         }
         return null
     }
-
     var id, jd = "undefined" !== typeof navigator ? navigator.userAgent.toLowerCase() : "",
         kd = -1 !== jd.indexOf("firefox"), ld = -1 !== jd.indexOf("safari") && -1 == jd.indexOf("chrom"),
         nd = -1 !== jd.indexOf("webkit") && -1 == jd.indexOf("edge"), od = -1 !== jd.indexOf("macintosh"),
@@ -2181,7 +2176,6 @@
         g && h.length != l && (h.length = l);
         return h
     }
-
     var Te = Array(6);
     function Ue() {
         return [1, 0, 0, 1, 0, 0]
@@ -4864,7 +4858,6 @@
     function Mh(a, b, c, d) {
         0 !== b && (a.translate(c, d), a.rotate(b), a.translate(-c, -d))
     }
-
     var Nh = /^#(?:[0-9a-f]{3}){1,2}$/i, Oh = /^([a-z]*)$/i;
     function Ph(a) {
         return Array.isArray(a) ? a : Qh(a)
@@ -6419,7 +6412,6 @@
         }
         void 0 === e || c.Rd == e && c.Ld == f && ma(c.Md, g) && c.Nd == h && c.Od == l && c.Pd == m && c.Qd == n || (a.a.push([11, e, m * a.pixelRatio, f, l, n, Qi(a, g), h * a.pixelRatio]), c.Rd = e, c.Ld = f, c.Md = g, c.Nd = h, c.Od = l, c.Pd = m, c.Qd = n)
     }
-
     var dj = "Polygon Circle LineString Image Text Default".split(" "), ej = {
         left: 0,
         end: 0,
@@ -8384,7 +8376,6 @@
         }
         return b
     }
-
     var Mk = document.implementation.createDocument("", "", null);
     function Nk(a, b) {
         return Mk.createElementNS(a, b)
@@ -14210,7 +14201,6 @@
         a.ta = b;
         a.u()
     }
-
     Op.ge = function () {
     };
     (function (a) {
@@ -16216,7 +16206,6 @@
     function zu(a, b, c, d) {
         a.drawElements(4, d - c, b.g ? 5125 : 5123, c * (b.g ? 4 : 2))
     }
-
     var Au = [0, 0, 0, 1], Bu = [], Cu = [0, 0, 0, 1];
     function Du(a, b, c, d, e, f) {
         a = (c - a) * (f - b) - (e - a) * (d - b);

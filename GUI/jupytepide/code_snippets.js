@@ -1,6 +1,6 @@
-// file source_UI/code_snippets.js
+// File jupytepide/code_snippets.js
 // Edited by: Michał Bednarczyk
-// Copyright (C) 2017 .....
+// Copyright (C) 2017-2019 .....
 //
 //  Distributed under the terms of the BSD License.
 // ---------------------------------------------------------------------------
@@ -25,22 +25,9 @@ define([
     var CODE_SNIPPETS_FN = 'code_snippets.json';
     var CODE_SNIPPETS_PATH = 'tree'; //'tree/.jupytepide/conf/gui';
     var parent = utils.url_path_split(Jupyter.notebook.notebook_path)[0];
-//    var snippets_url = utils.url_path_join(
-//        Jupyter.notebook.base_url, 'tree',
-//        utils.encode_uri_components(parent), CODE_SNIPPETS_FN); //katalog domowy
 
     var snippets_url = utils.url_path_join(
-        Jupyter.notebook.base_url, CODE_SNIPPETS_PATH, CODE_SNIPPETS_FN); //katalog domowy
-
-
-    //alert(snippets_url);
-    ///tree/code_snippets.json
-
-    //alert(contents.api_url('code_snippets.json'));
-    //snippets_url = contents.api_url('code_snippets.json');
-
-    //alert(snippets_url);
-    ///api/contents/code_snippets.json
+        Jupyter.notebook.base_url, CODE_SNIPPETS_PATH, CODE_SNIPPETS_FN); //Home folder
 
     function getBaseUrl(){
         return base_url;
@@ -49,55 +36,14 @@ define([
         return snippets_url;
     }
 
-    //combobox do ładowania snippetów - nie używany, można dostosować, nie usuwać na razie
-    // config.loaded.then(function () {
-    //     var dropdown = $("<select></select>").attr("id", "snippet_picker")
-    //         .css("margin-left", "0.75em")
-    //         .attr("class", "form-control select-xs")
-    //         .change(insert_cell);
-    //     Jupyter.toolbar.element.append(dropdown);
-    // });
-
-    // will be called when the nbextension is loaded
+    // called when the nbextension is loaded
     function load_extension() {
         config.load(); // trigger loading config parameters
-
-        //katalog z plikami json
-        //var cfgPath = utils.url_path_join(Jupyter.notebook.base_url, 'tree/cfg');
-        //konkretny plik json
-        //var jsonFileName = "/code_snippets.json";
-
-        //Ładowanie do comboboxa na pasku - można dostosować, nie usuwać na razie
-        // $.getJSON(snippets_url, function (data) {
-        //     // Add the header as the top option, does nothing on click
-        //     var option = $("<option></option>")
-        //         .attr("id", "snippet_header")
-        //         .text("Snippets");
-        //     $("select#snippet_picker").append(option);
-        //
-        //     // Add options for each code snippet in the snippets.json file
-        //     $.each(data['code_snippets'], function (key, snippet) {
-        //         var option = $("<option></option>")
-        //             .attr("value", snippet['name'])
-        //             .text(snippet['name'])
-        //             .attr("code", snippet['code'].join('\n'));
-        //         $("select#snippet_picker").append(option);
-        //     });
-        // })
-        //     .error(function (jqXHR, textStatus, errorThrown) {
-        //         // Add an error message if the JSON fails to load
-        //         var option = $("<option></option>")
-        //             .attr("value", 'ERROR')
-        //             .text('Error: failed to load snippets!')
-        //             .attr("code", "");
-        //         $("select#snippet_picker").append(option);
-        //     });
-
     }
 
 
     //***
-    //nieuzywane
+    //unused, but may be useful
     function insert_cell() {
         var selected_snippet = $("select#snippet_picker").find(":selected");
 
@@ -111,27 +57,11 @@ define([
         }
     }
 
-    //*** czytanie z pliku JSON po podanej nazwie snippeta
-    //wstwianie celki o podanej nazwie
+    //*** reading from JSON file on the basis of the snippet name parameter
+    //insert cell of given name
     function insert_cell1(name) {
         //handle function passed IN parameter
         var snippet_name = name.data.snippet_name;
-
-        //czytanie jsona "/nbextensions/jupytepide/code_snippets.json"
-
-        // $.getJSON(snippets_url, function (data) {
-        //     // Insert snippet from JSON file named "snippet_name"
-        //     $.each(data['code_snippets'], function (key, snippet) {
-        //         if (snippet['name'] == snippet_name) {
-        //             var new_cell = Jupyter.notebook.insert_cell_above('');
-        //             new_cell.set_text(snippet['code'].join('\n'));
-        //             new_cell.code_mirror.setOption('theme', 'mbo');
-        //             new_cell.focus_cell();
-        //
-        //         };
-        //
-        //     });
-        // });
 
         var snippets_data = content_access.readFile(CODE_SNIPPETS_PATH_HIDDEN);
         $.each(snippets_data['code_snippets'],function(key,snippet){
@@ -140,43 +70,30 @@ define([
                 new_cell.set_text(snippet['code'].join('\n'));
                 new_cell.code_mirror.setOption('theme', 'mbo');
                 new_cell.focus_cell();
-
             }
         });
     }
 
-    //*** zapis dowolnego tekstu jako snippeta **
-    function save_asSnippet(text) {
-
-    }
-
-    //*** daje listę nazw snippetów z pliku JSON
-    //nieuzywane, stara wersja
+    //*** get list of snippets names from JSON file
+    //unused, old version
     function get_SnippetsList() {
-        //to wyłącza działanie asynchroniczne funkcji $getJSON i mozna wtedy poza nią przekazać wartość zmiennej
-        // (w tym przypadku tablicy snippetNames)
+        //turn off asynchronous mode of $getJSON(), then the array snippetNames can be passed inside getJSON()
+        // outside of it's context
         $.ajaxSetup({
             async: false
         });
-
         var snippetsNames = [];
-        //czytanie jsona
+        //read json
         $.getJSON(snippets_url, function (data) {
             // Insert snippet from JSON file named "snippet_name"
             $.each(data['code_snippets'], function (key, snippet) {
                 snippetsNames.push(snippet['name']);
-                //snippetsNames.push([{name:'Example 1',link:'#',time:'yesterday',snippet_name:'Example1',on_click:insert_cell1}]);
-
             });
         });
-
         return snippetsNames;
     }
-
-    //*** Druga wersja - daje listę nazw snippetów w grupach
+    //*** Second version - get list of snippets names divided into groups
     function get_SnippetsList1(){
-        //to wyłącza działanie asynchroniczne funkcji $getJSON i mozna wtedy poza nią przekazać wartość zmiennej
-        // (w tym przypadku tablicy snippetNames)
         $.ajaxSetup({
             async: false
         });
@@ -188,46 +105,37 @@ define([
             snippetsNames.push({group:snippet['group'],name:snippet['name']});
         });
 
-
         return snippetsNames;
     }
-
-    //*** daje same grupy z obiektu "groups" JSON
+    //*** get only snippets groups from "groups" object
     function get_SnippetsGroups(){
-        //to wyłącza działanie asynchroniczne funkcji $getJSON i mozna wtedy poza nią przekazać wartość zmiennej
-        // (w tym przypadku tablicy snippetNames)
         $.ajaxSetup({
             async: false
         });
         var snippetsGroups = {};
-        //czytanie jsona
-
+        //read json
         var snippets_data;
-
         snippets_data = content_access.readFile(CODE_SNIPPETS_PATH_HIDDEN);
         if (snippets_data){
             snippetsGroups=snippets_data.groups;
         }
         else snippetsGroups = false;
 
-
         return snippetsGroups;
-
-
     }
     //*** get Web Map Browser
-    // zwraca tekst snippeta Web Map Browser
-    //Do wstawienia w ukrytej celce zawierającej Web Map Browser
+    // get Web Map Browser snippet
+    //This is for inserting into hidden cell, containing Web Map Browser
     function get_WebMapBrowserText() {
-        //to wyłącza działanie asynchroniczne funkcji $getJSON i mozna wtedy poza nią przekazać wartość zmiennej
-        // (w tym przypadku tablicy snippetNames)
+        //turn off asynchronous mode of $getJSON(), then the array snippetNames can be passed inside getJSON()
+        // outside of it's context
         $.ajaxSetup({
             async: false
         });
 
         var snippet_name = "Web Map Browser";
         var WMBText = "";
-        //czytanie jsona
+        //read json
         $.getJSON(snippets_url, function (data) {
             $.each(data['code_snippets'], function (key, snippet) {
                 if (snippet['name'] == snippet_name) {
@@ -235,9 +143,9 @@ define([
                 }
             });
         });
-        //WMBText = "12+99";
         return WMBText;
     }
+
     //*** createSnippet ***
     //Creates snippet from selected cell, returns an object codeSnippet - ready to save in file/add to UI
     function createSnippet(group_id_,snippet_name_){
@@ -247,22 +155,19 @@ define([
         return codeSnippet;
     }
     //*** addSnippetClick ***
-    //onclick funcion for adding snippets
+    //onclick function for adding snippets
     function addSnippetClick(e){
         var codeSnippet = createSnippet(e.group_id,e.snippet_name);
         addSnippet(codeSnippet);
     }
+    //todo: protect from adding snippet into non existing group (group number) - not necessarily needed, because it can be controlled from the outside
 
-    //todo: zabezpieczyć przed dodaniem snippeta do nieistniejącej grupy (numeru grupy) - niekoniecznie potrzebne, można to kontrolować z zewnątrz
     //*** addSnippet ***
     //Adds snippet to JSON file and to UI
     function addSnippet(codeSnippet){
-        //to wyłącza działanie asynchroniczne funkcji $getJSON i mozna wtedy poza nią przekazać wartość zmiennej
-        // (w tym przypadku tablicy snippetNames)
         $.ajaxSetup({
             async: false
         });
-
         var JSONdata = {};
         var toAdd = true;
 
@@ -274,7 +179,6 @@ define([
                 toAdd = false;
             }
         });
-
 
         if (toAdd) {
             JSONdata.code_snippets.push(codeSnippet);
@@ -294,7 +198,7 @@ define([
 
         delBtn
             .append($('<i/>').addClass('fa fa-trash'))
-            .bind('click', codeSnippet, showDeleteSnippetWindow); //todo:przypiąć funkcję otwierającą dialog
+            .bind('click',codeSnippet,showDeleteSnippetWindow);
 
         snippet_item
             .append($('<a/>',{href:'#'})
@@ -304,8 +208,8 @@ define([
 
         $('#'+id+'.menu_snippets_item_content').append(snippet_item);
     }
+
     //*** deleteSnippetFromUI
-    //$( "#1.menu_snippets_item_content .menu_snippets_item" ).each(function(index){console.log($(this).text())})
     function deleteSnippetFromUI(group_id,snippet_name){
         $( '#'+group_id+'.menu_snippets_item_content .menu_snippets_item' ).each(
             function(index){
@@ -317,8 +221,6 @@ define([
     //*** deleteSnippet ***
     //deletes snippet fom file and from UI
     function deleteSnippet(codeSnippet){
-        //to wyłącza działanie asynchroniczne funkcji $getJSON i mozna wtedy poza nią przekazać wartość zmiennej
-        // (w tym przypadku tablicy snippetNames)
         $.ajaxSetup({
             async: false
         });
@@ -336,20 +238,16 @@ define([
             }
         });
 
-
         //delete snippets from JSONdata
         for (i = 0; i < toDelete.length; i++){
             JSONdata.code_snippets.splice(JSONdata.code_snippets.indexOf(toDelete[i]),1);
             deleted=deleted+1;
         }
-        //alert("Delete snippet: "+codeSnippet.data.name+'?')
 
         //save to file and UI
         if (deleted!=0){
-            //JSONdata.code_snippets.push(codeSnippet);
             deleteSnippetFromUI(codeSnippet.data.group,codeSnippet.data.name);
             content_access.saveFile(CODE_SNIPPETS_PATH_HIDDEN,JSONdata);
-            //addSnippetToUI(codeSnippet.group,codeSnippet.name);
             return JSONdata;
         }
         if (deleted==0) {
@@ -361,10 +259,7 @@ define([
         }
     }
     //*** getMaxGroupId ***
-    //do usunięcia
     function getMaxGroupId(){
-        //to wyłącza działanie asynchroniczne funkcji $getJSON i mozna wtedy poza nią przekazać wartość zmiennej
-        // (w tym przypadku tablicy snippetNames)
         $.ajaxSetup({
             async: false
         });
@@ -374,13 +269,11 @@ define([
         $.each(snippets_data['groups'],function(key,groups){
             gids.push(groups['group_id']);
         });
-
-
         return Math.max(...gids;
     )
     }
     //*** showAddSnippetWindow ***
-    //wyświetla okno definiowania i dodawania snippeta
+    //Shows a window to define and add snippet
     //element = {group_name:"group name", id:3}
     function showAddSnippetWindow(element){
         //***
@@ -398,7 +291,7 @@ define([
             title: "Create Snippet in "+element.data.group_name,//+' '+element.data.id,
             body: dialog_body,
             notebook: options.notebook,
-            keyboard_manager: Jupyter.notebook.keyboard_manager,//jeżeli to jest nieprzypisane to nie da się nic wprowadzić z klawiatury
+            keyboard_manager: Jupyter.notebook.keyboard_manager,//if this is not set, keyboard input will be impossible
             default_button: "Cancel",
             buttons : {
                 "Cancel": {},
@@ -415,7 +308,8 @@ define([
                 /**
                  * Upon ENTER, click the OK button.
                  */
-                //Jeżeli nie podany jest keyboard_manager powyżej, to trzeba każde pole edycyjne potraktować tak:
+                //if keyboard_manager is not defined, each textbox (input[type="text"]) should has registered keyboard
+                // events like below:
                 //Jupyter.notebook.keyboard_manager.register_events(d.find('input[type="text"]'));
 
                 d.find('input[type="text"]').keydown(function (event) {
@@ -430,14 +324,7 @@ define([
         //***
     }
 
-    //*** showDeleteConfirmation ***
-    //Confirmation of deletion snippet or group
-    function showDeleteConfirmation() {
-        //TODO: dokończyć
-    }
     //*** showDeleteSnippetWindow ***
-    //wyświetla okno dodawania grupy
-    //element = {group_name:"group name", id:3}
     function showDeleteSnippetWindow(codeSnippet){
         //***
         var options = {};
@@ -449,7 +336,7 @@ define([
             title: "Delete snippet confirmation",//+' '+element.data.id,
             body: dialog_body,
             notebook: options.notebook,
-            keyboard_manager: Jupyter.notebook.keyboard_manager,//jeżeli to jest nieprzypisane to nie da się nic wprowadzić z klawiatury
+            keyboard_manager: Jupyter.notebook.keyboard_manager,//if this is not set, keyboard input will be impossible
             default_button: "Cancel",
             buttons : {
                 "Cancel": {},
@@ -457,9 +344,6 @@ define([
                     class: "btn-primary",
                     click: function () {
                         deleteSnippet(codeSnippet);
-                        //addGroup({ group_name: d.find('input[type="text"]').val()});
-                        //addSnippetClick({group_id:element.data.id,snippet_name:d.find('input[type="text"]').val()});
-
                         d.modal('hide');
                     }
                 }
@@ -468,7 +352,8 @@ define([
                 /**
                  * Upon ENTER, click the OK button.
                  */
-                //Jeżeli nie podany jest keyboard_manager powyżej, to trzeba każde pole edycyjne potraktować tak:
+                //if keyboard_manager is not defined, each textbox (input[type="text"]) should has registered keyboard
+                // events like below:
                 //Jupyter.notebook.keyboard_manager.register_events(d.find('input[type="text"]'));
 
                 d.find('input[type="text"]').keydown(function (event) {
@@ -482,9 +367,8 @@ define([
         });
         //***
     }
+
     //*** showAddGroupWindow ***
-    //wyświetla okno dodawania grupy
-    //element = {group_name:"group name", id:3}
     function showAddGroupWindow(){
         //***
         var options = {};
@@ -501,7 +385,7 @@ define([
             title: "Add New Group in Snippets Menu",//+' '+element.data.id,
             body: dialog_body,
             notebook: options.notebook,
-            keyboard_manager: Jupyter.notebook.keyboard_manager,//jeżeli to jest nieprzypisane to nie da się nic wprowadzić z klawiatury
+            keyboard_manager: Jupyter.notebook.keyboard_manager,//if this is not set, keyboard input will be impossible
             default_button: "Cancel",
             buttons : {
                 "Cancel": {},
@@ -509,8 +393,6 @@ define([
                     class: "btn-primary",
                     click: function () {
                         addGroup({ group_name: d.find('input[type="text"]').val()});
-                        //addSnippetClick({group_id:element.data.id,snippet_name:d.find('input[type="text"]').val()});
-
                         d.modal('hide');
                     }
                 }
@@ -519,7 +401,8 @@ define([
                 /**
                  * Upon ENTER, click the OK button.
                  */
-                //Jeżeli nie podany jest keyboard_manager powyżej, to trzeba każde pole edycyjne potraktować tak:
+                //if keyboard_manager is not defined, each textbox (input[type="text"]) should has registered keyboard
+                // events like below:
                 //Jupyter.notebook.keyboard_manager.register_events(d.find('input[type="text"]'));
 
                 d.find('input[type="text"]').keydown(function (event) {
@@ -533,6 +416,7 @@ define([
         });
         //***
     }
+
     //*** make_snippets_menu_group ***
     //Creates a menu group with header and empty content (empty snippets list)
     var make_snippets_menu_group = function(element){
@@ -544,12 +428,6 @@ define([
         addBtn.append($('<i/>').addClass('fa fa-plus'));
 
         addBtn.bind('click', element, showAddSnippetWindow) ;
-
-        //TODO: dodanie wyskakującego - popracować
-        //addBtn.popover({title: "", content: "Provide a snipppet name: <br> <input type='text' id='snippet_input' class='form-control' '>", html: true, placement: "left"});
-        //Jupyter.notebook.keyboard_manager.register_events($('#snippet_input'));
-
-        //TODO: w tym miejscu powinno być otwierane okienko, w którym podam nazwę snippeta i zatwierdzę (i wtedy addSnippetClick)
 
         var delBtn = $('<button/>',{title:'Delete group menu'}).addClass('btn btn-danger btn-xs pull-right');
         delBtn
@@ -571,11 +449,6 @@ define([
         return item;
     };
 
-    //***
-    //todo: stworzyć funkcję produkującą pozycję menu snippet item - patrz panel browser. Użyć jej także do dodawania nowego snippeta
-    //todo: zrobić usuwanie snippetów i grup
-    //todo: zrobić tworzenie snippetów z celki
-
     //*** addGroupToUI ***
     function addGroupToUI(gr_name,gr_id){
         var menu_snippets=$('.menu_snippets');
@@ -586,8 +459,6 @@ define([
     //Adds menu snippets group to JSON file and to UI
     //{ group_id: 1, group_name: "OTB", group_level: 0 }
     function addGroup(group){
-        //to wyłącza działanie asynchroniczne funkcji $getJSON i mozna wtedy poza nią przekazać wartość zmiennej
-        // (w tym przypadku tablicy snippetNames)
         $.ajaxSetup({
             async: false
         });
@@ -607,12 +478,9 @@ define([
             gids.push(groups['group_id']);
         });
 
-
         if (toAdd) {
             //check max group ID, assign max+1 value to new group
-            maxGid = Math.max(...gids;
-        )
-            +1;
+            maxGid=Math.max(...gids;)+1;
             group.group_id=maxGid;
             JSONdata.groups.push(group);
             //Save to JSON file
@@ -625,8 +493,6 @@ define([
     //*** deleteGroup ***
     //group={group_name:'name',group_id:2}
     function deleteGroup(group){
-        //to wyłącza działanie asynchroniczne funkcji $getJSON i mozna wtedy poza nią przekazać wartość zmiennej
-        // (w tym przypadku tablicy snippetNames)
         $.ajaxSetup({
             async: false
         });
@@ -662,10 +528,8 @@ define([
         }
         //save to file and UI
         if (deleted!=0){
-            //JSONdata.code_snippets.push(codeSnippet);
             deleteGroupFromUI(group.data.group_id);
             content_access.saveFile(CODE_SNIPPETS_PATH_HIDDEN,JSONdata);
-            //addSnippetToUI(codeSnippet.group,codeSnippet.name);
             return JSONdata;
         }
         if (deleted==0 && !containsSnippets) {
@@ -685,15 +549,13 @@ define([
     return {
         load_ipython_extension: load_extension,
         insert_snippet_cell: insert_cell1,
-        //getSnippetsList: get_SnippetsList,
         getSnippetsList1: get_SnippetsList1,
         getSnippetsGroups:get_SnippetsGroups,
-        //getWebMapBrowserText: get_WebMapBrowserText,
         addSnippet:addSnippet,
         addGroup:addGroup,
-        getBaseUrl: getBaseUrl, //do usunięcia
-        getSnippetsUrl: getSnippetsUrl, //do usunięcia
-        getMaxGroupId: getMaxGroupId, //do usuniecia
+        getBaseUrl:getBaseUrl, //todo: remove it from public methods
+        getSnippetsUrl:getSnippetsUrl, //todo: remove it from public methods
+        getMaxGroupId:getMaxGroupId, //todo: remove it from public methods
         make_snippets_menu_group:make_snippets_menu_group,
         deleteSnippet:deleteSnippet,
         deleteGroup:deleteGroup,
