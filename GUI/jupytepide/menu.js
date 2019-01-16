@@ -115,7 +115,8 @@ define([
         $('<li/>')
             .attr('class', 'divider')
             .appendTo(appendToMenu);
-    }
+    };
+
     //*** create_menu ***
     //Adding  positions in maimn menu, actions assignment
     function create_menu() {

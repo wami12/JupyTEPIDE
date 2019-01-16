@@ -405,7 +405,7 @@ define([
     Jupytepide.emptyLayerBrowser = function(){
         $('.data_browser_panel.data_layer_browser').empty();
         $('.data_browser_panel.data_layer_browser').html('No layer data do display.')
-    };
+    }
 
     /**
      * */
@@ -518,7 +518,7 @@ define([
      * @memberof: class:Jupytepide
      */
     Jupytepide.getLayerFeaturesData = function(layer_name){
-        var features = Jupytepide.leafletMap.layers[layer_name]._layers;
+        var features = Jupytepide.leafletMap.layers[layer_name]._layers
         var featuresData = [];
         var fData = {};
         for(var property_leaflet_id in features){
