@@ -92,6 +92,7 @@ def create_dir_hook(spawner):
         os.makedirs(gui_path, exist_ok=True)
         os.chmod(gui_path, 0o777)
         shutil.copy('/opt/var/JupyTEPIDE/GUI/jupytepide/code_snippets.json', gui_path)
+    os.chmod(os.path.join(gui_path, 'code_snippets.json'), 0o777)
 
 
 # attach the hook function to the spawner
