@@ -42,12 +42,11 @@ RUN cd /tmp && \
     mkdir -p /opt/jupytepide/scripts && \
     cp /tmp/JupyTEPIDE/scripts/metadata.py /opt/jupytepide/scripts/metadata.py && \
     mkdir -p /home/jovyan/.jupytepide/conf/gui && \
-    cp /tmp/JupyTEPIDE/GUI/jupytepide/code_snippets.json /home/jovyan/.jupytepide/conf/gui/code_snippets.json && \
+    # cp /tmp/JupyTEPIDE/GUI/jupytepide/code_snippets.json /home/jovyan/.jupytepide/conf/gui/code_snippets.json && \
     cp -R /tmp/JupyTEPIDE /opt/ && \
-    ls && \
-    find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf
-#    fix-permissions /home/$NB_USER && \
-#    fix-permissions /opt
+    find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
+    fix-permissions /home/$NB_USER && \
+    fix-permissions /opt
 
 
 COPY docker-entrypoint.sh /srv/docker-entrypoint.sh

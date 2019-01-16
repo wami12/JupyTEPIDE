@@ -1,5 +1,6 @@
 import logging
 import os
+import shutil
 
 c = get_config()
 
@@ -90,6 +91,7 @@ def create_dir_hook(spawner):
     if not os.path.exists(gui_path):
         os.makedirs(gui_path, exist_ok=True)
         os.chmod(gui_path, 0o777)
+        shutil.copy('/opt/var/JupyTEPIDE/GUI/jupytepide/code_snippets.json', gui_path)
 
 
 # attach the hook function to the spawner
