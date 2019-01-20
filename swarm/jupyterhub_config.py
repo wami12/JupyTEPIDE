@@ -1,5 +1,6 @@
 import logging
 import os
+import shutil
 
 c = get_config()
 
@@ -58,6 +59,10 @@ def create_dir_hook(spawner):
     if not os.path.exists(volume_path):
         os.mkdir(volume_path, 0o777)
         os.chmod(volume_path, 0o777)
+    conf_path = os.path.join(volume_path, '.jupytepide/conf')
+    if not os.path.exists(conf_path):
+        os.makedirs(conf_path, exist_ok=True)
+        os.chmod(conf_path, 0o777)
 
     os.environ['SPAWN_USER'] = str(username)
     mounts_user = [{'type': 'bind',
@@ -82,6 +87,12 @@ def create_dir_hook(spawner):
     spawner.extra_container_spec = {
         'mounts': mounts_user
     }
+    gui_path = os.path.join(conf_path, 'gui')
+    if not os.path.exists(gui_path):
+        os.makedirs(gui_path, exist_ok=True)
+        os.chmod(gui_path, 0o777)
+        shutil.copy('/opt/var/JupyTEPIDE/GUI/jupytepide/code_snippets.json', gui_path)
+    os.chmod(os.path.join(gui_path, 'code_snippets.json'), 0o777)
 
 
 # attach the hook function to the spawner
