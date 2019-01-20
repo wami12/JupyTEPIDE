@@ -11,11 +11,12 @@ USER $NB_UID
 # Install Python 3 packages
 # Remove pyqt and qt pulled in for matplotlib since we're only ever going to
 # use notebook-friendly backends in these images
-
 RUN conda install --quiet --yes -c conda-forge \
     'rasterio=1.0.9*' \
     'opencv=3.4.3*' \
-    'scikit-image=0.14.1*' && \
+    'scikit-image=0.14.1*' \
+    'octave_kernel*' \
+    'texinfo' && \
     pip install --upgrade pip &&\
     pip install -q --no-cache-dir --upgrade pixiedust && \
     /bin/bash -c "source activate python27 && pip install -q --no-cache-dir --upgrade pixiedust && source deactivate python27" && \
@@ -23,11 +24,30 @@ RUN conda install --quiet --yes -c conda-forge \
 # ------------------------- END TESTING ----------------------------------
 
 USER root
+
+RUN rm -rf /opt/scilab/scilab-6.0.1 && \
+    cd  /opt/scilab && \
+    wget -q http://www.scilab.org/download/5.5.2/scilab-5.5.2.bin.linux-x86_64.tar.gz && \
+    tar -xzf scilab-5.5.2.bin.linux-x86_64.tar.gz && \
+    rm -rf scilab-5.5.2.bin.linux-x86_64.tar.gz && \
+    cd scilab-5.5.2 && \
+    echo "PATH=$PATH:/opt/scilab/scilab-5.5.2/bin" >> ~/.bashrc && \
+    echo "PATH=$PATH:/opt/scilab/scilab-5.5.2/bin" >> ~/.profile && \
+    mkdir -p ~/.local/share/applications && \
+    sed -i 's/^Terminal=false$/Terminal=true/' /opt/scilab/scilab-5.5.2/share/applications/{scilab,scinotes,xcos}.desktop && \
+    cp -a /opt/scilab/scilab-5.5.2/share/{icons,applications,mime} ~/.local/share/ && \
+    update-mime-database ~/.local/share/mime/
+
+ENV SCILAB_EXECUTABLE /opt/scilab/scilab-5.5.2/bin/scilab-adv-cli
+
+RUN pip install --no-cache scilab_kernel
+
+
 RUN cd /tmp && \
     git clone -b dev --single-branch https://github.com/wasat/JupyTEPIDE.git && \
     cp -rf /tmp/JupyTEPIDE/GUI/res/jupyter/static/* "/opt/conda/lib/python3.6/site-packages/notebook/static" && \
-#    cp -rf /tmp/JupyTEPIDE/GUI/res/pixiedust/* "/opt/conda/lib/python3.6/site-packages/pixiedust" && \
-#    cp -rf /tmp/JupyTEPIDE/GUI/res/pixiedust/* "/opt/conda/envs/python27/lib/python2.7/site-packages/pixiedust" && \
+    cp -rf /tmp/JupyTEPIDE/GUI/res/pixiedust/* "/opt/conda/lib/python3.6/site-packages/pixiedust" && \
+    cp -rf /tmp/JupyTEPIDE/GUI/res/pixiedust/* "/opt/conda/envs/python27/lib/python2.7/site-packages/pixiedust" && \
     cd JupyTEPIDE && \
     cp -R notebooks /home/jovyan/ && \
     cd GUI && \
