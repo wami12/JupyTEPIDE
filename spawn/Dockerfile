@@ -5,6 +5,17 @@
 ARG DOCKER_NOTEBOOK_IMAGE
 FROM $DOCKER_NOTEBOOK_IMAGE
 
+USER root
+
+# apt-get installs
+RUN apt-get update -qq && \
+    apt-get install -qq -y --no-install-recommends octave octave-image gnuplot ghostscript&& \
+    apt-get autoremove -qq && \
+    apt-get clean -qq && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV OCTAVE_EXECUTABLE=/usr/bin/octave-cli
+
 # ------------------------- START TESTING --------------------------------
 USER $NB_UID
 
