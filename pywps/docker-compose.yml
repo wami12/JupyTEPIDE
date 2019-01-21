@@ -1,7 +1,7 @@
 version: "3"
 services:
   test-pywps-flask:
-    image: "jupytepide/pywps-flask:16.0.4-1.3.5"
+    image: "jupytepide/pywps-flask:16.0.4-1.3.6"
     container_name: test-pywps-flask
     networks:
       - jupyterhub-net
