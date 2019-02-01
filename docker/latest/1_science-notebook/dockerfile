@@ -16,7 +16,8 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 RUN apt-get update -qq && \
     apt-get install -y -qq --no-install-recommends software-properties-common apt-utils nano mc python-autopep8 \
     htop python3-lxml libapparmor1 libcurl4-gnutls-dev libxml2-dev libssl-dev gdebi-core \
-    libcairo2-dev libxt-dev git-core libmagick++-dev && \
+    libcairo2-dev libxt-dev git-core libmagick++-dev octave octave-image gnuplot ghostscript && \
+    apt-get autoremove -qq && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -57,6 +58,7 @@ RUN if [ ! -f /tmp/resources/jai-1_1_3-lib-linux-amd64.tar.gz ]; then \
 
 ENV PATH="/opt/conda/bin:${PATH}"
 
+
 # Conda installs
 RUN conda install --quiet --yes -c anaconda \
     'numpy=1.12.1*'  \
@@ -70,16 +72,24 @@ RUN conda install --quiet --yes -c anaconda \
     'ipyparallel=6.2*' \
     'jupyter_contrib_nbextensions=0.5*' \
     'jupyter_nbextensions_configurator=0.4.0*' \
+    'jupyter_latex_envs=1.4.4*' \
+    'autopep8=1.3.2*' \
     'nb_conda=2.2.1*' \
     'nb_conda_kernels=2.1.0*' \
     'mpi4py=3.0.0' \
-    'rpy2=2.8*' && \
-    pip install -q --no-cache-dir --upgrade autopep8 &&\
+    'rpy2=2.8*' \
+    'opencv=3.4.3*' \
+    'scikit-image=0.14.1*' \
+    'octave_kernel*' \
+    'texinfo' && \
     jupyter nbextension enable code_prettify/autopep8 --user &&\
     jupyter nbextension enable --py latex_envs --user &&\
     jupyter nbextension enable table_beautifier/main --user &&\
     conda clean -tipsy && \
     fix-permissions $CONDA_DIR
+
+ENV OCTAVE_EXECUTABLE=/usr/bin/octave-cli
+
 
 # Create a Python 2.x environment using conda including at least the ipython kernel
 # and the kernda utility. Add any additional packages you want available for use
@@ -96,30 +106,16 @@ RUN pip install --upgrade pip &&\
     pip install -q --no-cache-dir --upgrade pixiedust && \
     /bin/bash -c "source activate python27 && pip install -q --no-cache-dir --upgrade pixiedust requests Jinja2 pandas && source deactivate python27"
 
-RUN mkdir /opt/scilab  && \
-    cd  /opt/scilab && \
-    wget --quiet http://www.scilab.org/download/6.0.1/scilab-6.0.1.bin.linux-x86_64.tar.gz && \
-    tar -xzf scilab-6.0.1.bin.linux-x86_64.tar.gz && \
-    rm -rf scilab-6.0.1.bin.linux-x86_64.tar.gz && \
-    cd scilab-6.0.1 && \
-    echo "PATH=$PATH:/opt/scilab/scilab-6.0.1/bin" >> ~/.bashrc && \
-    echo "PATH=$PATH:/opt/scilab/scilab-6.0.1/bin" >> ~/.profile && \
-    mkdir -p ~/.local/share/applications && \
-    sed -i 's/^Terminal=false$/Terminal=true/' /opt/scilab/scilab-6.0.1/share/applications/{scilab,scinotes,xcos}.desktop && \
-    cp -a /opt/scilab/scilab-6.0.1/share/{icons,applications,mime} ~/.local/share/ && \
-    update-mime-database ~/.local/share/mime/
-
-ENV SCILAB_EXECUTABLE /opt/scilab/scilab-6.0.1/bin/scilab-adv-cli
-
-RUN pip install --no-cache scilab_kernel
+WORKDIR /
+RUN mkdir /tmp/jupyteo
+COPY ./ ./tmp/jupyteo/
 
 # Install JupyTEP IDE UI layout and enable it
 RUN cd /tmp && \
-    git clone -b dev --single-branch https://github.com/wasat/JupyTEPIDE.git && \
-    cp -rf /tmp/JupyTEPIDE/GUI/res/jupyter/static/* "/opt/conda/lib/python3.6/site-packages/notebook/static" && \
-    cp -rf /tmp/JupyTEPIDE/GUI/res/pixiedust/* "/opt/conda/lib/python3.6/site-packages/pixiedust" && \
-    cp -rf /tmp/JupyTEPIDE/GUI/res/pixiedust/* "/opt/conda/envs/python27/lib/python2.7/site-packages/pixiedust" && \
-    cd JupyTEPIDE && \
+    cp -rf /tmp/jupyteo/GUI/res/jupyter/static/* "/opt/conda/lib/python3.6/site-packages/notebook/static" && \
+    cp -rf /tmp/jupyteo/GUI/res/pixiedust/* "/opt/conda/lib/python3.6/site-packages/pixiedust" && \
+    cp -rf /tmp/jupyteo/GUI/res/pixiedust/* "/opt/conda/envs/python27/lib/python2.7/site-packages/pixiedust" && \
+    cd jupyteo && \
     cp -R notebooks /home/jovyan/ && \
     cd GUI && \
     jupyter nbextension install jupytepide --user && \
@@ -129,13 +125,13 @@ RUN cd /tmp && \
     jupyter serverextension enable --sys-prefix --py ipyparallel  && \
     mkdir -p /home/jovyan/.ipython/profile_default/startup && \
     find "/home/jovyan/.ipython/profile_default/startup" -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
-    cp -a /tmp/JupyTEPIDE/scripts/startup/. /home/jovyan/.ipython/profile_default/startup/ && \
-    mkdir -p /opt/jupytepide/scripts && \
-    cp /tmp/JupyTEPIDE/scripts/metadata.py /opt/jupytepide/scripts/metadata.py && \
+    cp -a /tmp/jupyteo/scripts/startup/. /home/jovyan/.ipython/profile_default/startup/ && \
+    mkdir -p /opt/jupyteo/scripts && \
+    cp /tmp/jupyteo/scripts/metadata.py /opt/jupyteo/scripts/metadata.py && \
     mkdir -p /home/jovyan/.jupytepide/conf/gui && \
-    cp /tmp/JupyTEPIDE/GUI/jupytepide/code_snippets.json /home/jovyan/.jupytepide/conf/gui/code_snippets.json && \
-    cp -R /tmp/JupyTEPIDE /opt/ && \
+    cp -R /tmp/jupyteo/sdk /opt/jupyteo/sdk && \
     find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
+    rm -rf /opt/JupyTEPIDE /opt/jupytepide && \
     fix-permissions /home/$NB_USER && \
     fix-permissions /opt
 

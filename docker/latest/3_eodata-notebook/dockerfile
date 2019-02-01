@@ -23,12 +23,14 @@ RUN wget --quiet http://step.esa.int/downloads/6.0/installers/esa-snap_all_unix_
     chmod +x esa-snap_all_unix_6_0.sh && \
     /bin/bash "esa-snap_all_unix_6_0.sh" -q
 
+RUN mkdir /tmp/jupyteo
+COPY ./ /tmp/jupyteo/
+
 USER $NB_USER
 
 RUN mkdir .snap && \
-    mkdir .snap/snap-python && \
-    mkdir .snap/snap-python/snappy && \
-    wget --quiet https://github.com/wasat/JupyTEPIDE/raw/dev/libs/jpy-0.9.0-cp36-cp36m-linux_x86_64.whl -P "/home/jovyan/.snap/snap-python/snappy" && \
+    mkdir -p "/home/jovyan/.snap/snap-python/snappy" && \
+    cp -R /tmp/jupyteo/libs/jpy-0.9.0-cp36-cp36m-linux_x86_64.whl "/home/jovyan/.snap/snap-python/snappy" && \
     cd /opt/snap/bin && \
     ./snappy-conf /opt/conda/bin/python /home/jovyan/.snap/snap-python && \
     rm -rf /home/jovyan/.snap/snap-python/snappy/testdata && \
