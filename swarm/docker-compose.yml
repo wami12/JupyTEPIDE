@@ -55,8 +55,9 @@ services:
     environment:
       EMAIL: ${EMAIL}
       URL: ${URL}
-      SUBDOMAINS: cloud,demo,try,notebooks
+      SUBDOMAINS: reg,cloud,demo,try,notebooks
       ONLY_SUBDOMAINS: 'true'
+      EXTRA_DOMAINS: reg.jupyteo.ga
     deploy:
       replicas: 1
       restart_policy:
@@ -144,7 +145,6 @@ services:
     volumes:
       - /opt/data/pub/shared/pywps-demo/workdir:/pywps-demo/workdir
       - /opt/data/pub/shared/pywps-demo/outputs:/pywps-demo/outputs
-      - /opt/data/pub/shared/pywps-demo/processes:/pywps-demo/processes
     deploy:
       replicas: 1
       restart_policy:
