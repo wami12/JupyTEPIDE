@@ -6,10 +6,9 @@ docker run \
   -p 80:80 \
   --detach \
   -e EMAIL=jupytep@wasat.pl \
-# -e URL=jupytepide.ga \
-  -e URL=jupyteo.com \
-  -e SUBDOMAINS=cloud,demo,try,notebooks \
+  -e URL=jupyteo.ga \
+  -e SUBDOMAINS=reg,cloud,demo,try,notebooks,notebook,jupyter \
   -v nginx_volume:/config \
-  --network jupytepide-swarm-net \
-  --mount type=bind,src=/home/eouser/jupytep-dev/swarm/letsencrypt_container_nginx.conf,dst=/config/nginx/site-confs/default \
+  --network jupyteo-net \
+  --mount type=bind,src=/home/daniel/jupyteo-dev/swarm/letsencrypt_container_nginx.conf,dst=/config/nginx/site-confs/default \
   linuxserver/letsencrypt
