@@ -1,0 +1,28 @@
+version: "3"
+services:
+  registry:
+  restart: always
+  image: registry:2
+    container_name: jupyteo-reg
+    volumes:
+    - "/var/run/docker.sock:/var/run/docker.sock"
+    - ./jupyterhub_config.py:/tmp/jupyterhub_config.py
+    - ./run-from-compose.sh:/run-from-compose.sh
+    - /opt/data/priv/:/opt/data/priv/
+    - /opt/var/:/opt/var/
+    ports:
+    - "8000:8000"
+    environment:
+      DOCKER_NETWORK_NAME: ${DOCKER_NETWORK_NAME}
+      DOCKER_SPAWN_NOTEBOOK_IMAGE: ${DOCKER_SPAWN_NOTEBOOK_IMAGE}
+      # Notebook directory inside user image
+      DOCKER_NOTEBOOK_DIR: ${DOCKER_NOTEBOOK_DIR}
+      SPAWN_USER: ${SPAWN_USER}
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+        - node.role == manager
+    command: sh /run-from-compose.sh
