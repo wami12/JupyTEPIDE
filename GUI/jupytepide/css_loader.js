@@ -134,7 +134,7 @@ define([
         }
         catch(e){}
 
-    }
+    };
 
     var load_style = function () {
 

@@ -1,15 +1,15 @@
 version: "3"
 services:
-  jupytepide-hub:
+  jupyteo-hub:
     # build an image with SwarmSpawner and our jupyterhub_config.py
     env_file:
       - .env
       - secrets/oauth.env
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ../
+      dockerfile: ./swarm/Dockerfile
     image: "jupytepide/jupyterhub:0.9.2-1.3.6"
-    container_name: jupytepide-hub
+    container_name: jupyteo-hub
     # mount the docker socket
     volumes:
     - "/var/run/docker.sock:/var/run/docker.sock"
@@ -18,11 +18,11 @@ services:
     - /opt/data/priv/:/opt/data/priv/
     - /opt/var/:/opt/var/
     networks:
-    - jupyterhub-net
+      - jupyteo-net
     # This is necessary to prevent the singleton hub from using its service number as its hostname
     ports:
     - "8000:8000"
-    hostname: jupytepide-hub
+    hostname: jupyteo-hub
     environment:
       DOCKER_NETWORK_NAME: ${DOCKER_NETWORK_NAME}
       DOCKER_SPAWN_NOTEBOOK_IMAGE: ${DOCKER_SPAWN_NOTEBOOK_IMAGE}
@@ -41,23 +41,22 @@ services:
   nginx:
     env_file: .env
     image: linuxserver/letsencrypt
-    container_name: jupytepide-nginx
-    hostname: jupytepide-nginx
+    container_name: jupyteo-nginx
+    hostname: jupyteo-nginx
     networks:
-    - jupyterhub-net
+      - jupyteo-net
     # expose the proxy to the world
     ports:
     - "80:80"
     - "443:443"
     volumes:
     - "nginx_volume:/config"
-    - /home/eouser/jupytep-dev/swarm/letsencrypt_container_nginx.conf:/config/nginx/site-confs/default
+    - /home/daniel/jupyteo-dev/swarm/letsencrypt_container_nginx.conf:/config/nginx/site-confs/default
     environment:
       EMAIL: ${EMAIL}
       URL: ${URL}
-      SUBDOMAINS: reg,cloud,demo,try,notebooks
+      SUBDOMAINS: reg,cloud,demo,try,notebooks,notebook,jupyter
       ONLY_SUBDOMAINS: 'true'
-      EXTRA_DOMAINS: reg.jupyteo.ga
     deploy:
       replicas: 1
       restart_policy:
@@ -70,9 +69,9 @@ services:
 
   postgis:
     image: kartoza/postgis:9.6-2.4
-    container_name: jupytepide-postgis
+    container_name: jupyteo-postgis
     networks:
-    - jupyterhub-net
+      - jupyteo-net
     volumes:
     - postgis-db-data:/var/lib/postgresql
     ports:
@@ -91,15 +90,15 @@ services:
       test: "exit 0"
 
   geoserver:
-    image: jupytepide/geoserver:2.13.0-1.3.6
-    container_name: jupytepide-geoserver
+    image: jupytepide/geoserver:mvp-final
+    container_name: jupyteo-geoserver
     networks:
-    - jupyterhub-net
+      - jupyteo-net
     volumes:
     - geoserver-data:/opt/geoserver/data_dir
     ports:
     - "8090:8080"
-    hostname: jupytepide-geoserver
+    hostname: jupyteo-geoserver
     restart: on-failure
     env_file:
     - geoserver.env
@@ -117,13 +116,13 @@ services:
       retries: 3
 
   mapnik:
-    image: "jupytepide/mapnik-flask:1.2.3"
-    container_name: jupytepide-mapnik
+    image: "jupytepide/mapnik-flask:1.2.2"
+    container_name: jupyteo-mapnik
     networks:
-    - jupyterhub-net
+      - jupyteo-net
     ports:
     - "9443:80"
-    hostname: jupytepide-mapnik
+    hostname: jupyteo-mapnik
     volumes:
     - /opt/var/mapnik:/opt/var/mapnik
     deploy:
@@ -136,15 +135,16 @@ services:
 
   pywps:
     image: "geocontainers/pywps-demo:latest"
-    container_name: jupytepide-pywps
+    container_name: jupyteo-pywps
     networks:
-    - jupyterhub-net
+      - jupyteo-net
     ports:
     - "5000:5000"
-    hostname: jupytepide-pywps
+    hostname: jupyteo-pywps
     volumes:
       - /opt/data/pub/shared/pywps-demo/workdir:/pywps-demo/workdir
       - /opt/data/pub/shared/pywps-demo/outputs:/pywps-demo/outputs
+      - /opt/data/pub/shared/pywps-demo/processes:/pywps-demo/processes
     deploy:
       replicas: 1
       restart_policy:
@@ -155,10 +155,10 @@ services:
 
   portainer:
     image: portainer/portainer
-    container_name: jupytepide-portainer
+    container_name: jupyteo-portainer
     networks:
-      - jupyterhub-net
-    hostname: jupytepide-portainer
+      - jupyteo-net
+    hostname: jupyteo-portainer
     command: -H unix:///var/run/docker.sock
     restart: always
     ports:
@@ -168,9 +168,9 @@ services:
       - portainer-data:/data
 
 networks:
-  jupyterhub-net:
+  jupyteo-net:
     external:
-      name: jupytepide-swarm-net
+      name: jupyteo-net
 
 volumes:
   db:

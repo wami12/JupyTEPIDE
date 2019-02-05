@@ -269,7 +269,8 @@ define([
         $.each(snippets_data['groups'],function(key,groups){
             gids.push(groups['group_id']);
         });
-        return Math.max(...gids);
+        return Math.max(...gids;
+    )
     }
     //*** showAddSnippetWindow ***
     //Shows a window to define and add snippet
@@ -479,7 +480,9 @@ define([
 
         if (toAdd) {
             //check max group ID, assign max+1 value to new group
-            maxGid=Math.max(...gids)+1;
+            maxGid = Math.max(...gids;
+        )
+            +1;
             group.group_id=maxGid;
             JSONdata.groups.push(group);
             //Save to JSON file

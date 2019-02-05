@@ -84,8 +84,7 @@ define([
                  else if ($('.data_browser_panel .data_search').is(':hidden') & $('.data_browser_panel .data_layer_browser').is(':visible')){
                  }
         }
-    };
-
+    }
     //*** checkDateRange ***
     function checkDateRange(startVal,endVal){
         var dFrom = new Date(startVal);
@@ -106,8 +105,7 @@ define([
          checkResult='Invalid Start Date format.';
         }
      return checkResult;
-    };
-
+    }
     //*** build_side_panel ***
     function build_side_panel (main_panel, side_panel, min_rel_width, max_rel_width) {
         if (min_rel_width === undefined) min_rel_width = 0;
@@ -200,7 +198,7 @@ define([
                     toggle_button.addClass('fa-toggle-up');
                     toggle_button.removeClass('fa-toggle-down');
 
-                };
+                }
             });
         });
         map_toolbar.append(toggle_button);
@@ -614,8 +612,7 @@ define([
         //**** end of browser panel
 
         return side_panel;
-    };
-
+    }
     function slide_side_panel (main_panel, side_panel, desired_width) {
 
         var anim_opts = {
@@ -649,8 +646,7 @@ define([
 
 
         return visible;
-    };
-
+    }
     //makes only <a> element
     var make_tab_a = function (href_, text, expanded) {
         var tab_link = $('<a/>', {href: href_}).html(text);
@@ -683,9 +679,11 @@ define([
         var colDiv = $('<div/>').addClass('col-md-12');
         var itemType = row_item.type;
         var iconName = 'file_icon';
-        if (itemType==='notebook'){iconName='notebook_icon'}
-         else if(itemType==='directory'){iconName='folder_icon'};
-
+        if (itemType === 'notebook') {
+            iconName = 'notebook_icon'
+        } else if (itemType === 'directory') {
+            iconName = 'folder_icon'
+        }
         var checkbox = $('<input>',
             {
                 title: 'Click here to rename, delete, etc.',
@@ -694,9 +692,9 @@ define([
 
         if (row_item.name!='...'){
             colDiv.append(checkbox);
+        } else {
+            colDiv.append(checkbox.attr('style', 'visibility: hidden;'))
         }
-        else {colDiv.append(checkbox.attr('style','visibility: hidden;'))};
-
         colDiv.append(
 
             $('<i/>').addClass('item_icon ' + iconName +' icon-fixed-width')
@@ -740,14 +738,12 @@ define([
     function removeTabContent(options){
         //#karta - files, #3karta - notebooks
         $(options.DOMelement+' .list_item').remove();
-    };
-
+    }
     function readDir(options){
         removeTabContent(options);
         loadTabContent({path:options.path,contents:options.contents,DOMelement:options.DOMelement});
 
-    };
-
+    }
     //*** loadTabContent ***
     //Function for loading content into "Notebooks" and "Files" tabs
     //loadTabContent({contents:notebooks,DOMelement:'#3karta'})
@@ -873,8 +869,8 @@ define([
              menu_item = code_snippets.make_snippets_menu_group({group_name:group_name,id:group_id});
              menu_snippets.append(menu_item.header).append(menu_item.content);
              menu_item={};
-           };
-          $('#2karta').append(menu_snippets);
+          }
+            $('#2karta').append(menu_snippets);
           //Load snippets from JSON
           // loading menu snippets items content (snippets names) into appropriate groups
           //creating menu with groups headers and grouped items
@@ -906,8 +902,7 @@ define([
 
         var visible = slide_side_panel(main_panel, side_panel);
         return visible;
-    };
-
+    }
 //***
     //SHOWING DIALOGS
     function showAddGeojsonFromSelectedFilesDialog(){
@@ -951,8 +946,7 @@ define([
             }
         });
         //***
-    };
-
+    }
     function showRecursiveDeleteDialog(){
         //***
         var options = {};
@@ -994,8 +988,7 @@ define([
             }
         });
         //***
-    };
-
+    }
     function showRemoveAllLayersDialog(){
         //***
         var options = {};
@@ -1037,8 +1030,7 @@ define([
             }
         });
         //***
-    };
-
+    }
     function showRemoveLayerDialog(layer_name){
         //***
         var options = {};
@@ -1080,9 +1072,7 @@ define([
             }
         });
         //***
-    };
-
-
+    }
     function load_ipython_extension() {
 
         //link css for own panel
