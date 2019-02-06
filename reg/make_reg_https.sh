@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 docker service create \
-  --name registry \
+  --name jupyteo-reg \
   --mount type=bind,src=/reg/registry/data,dst=/var/lib/registry \
   --mount type=bind,src=/reg/registry/security,dst=/etc/security \
   -e REGISTRY_HTTP_ADDR=0.0.0.0:443 \

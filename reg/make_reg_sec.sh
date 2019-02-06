@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 docker run -d \
-  -p 443:443 \
+  -p 443:5000 \
   --name registry \
   -v /reg/registry/data:/var/lib/registry \
   -v /reg/registry/security:/etc/security \

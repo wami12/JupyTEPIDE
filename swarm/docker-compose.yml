@@ -57,7 +57,7 @@ services:
       URL: ${URL}
       SUBDOMAINS: reg,cloud,demo,try,notebooks,notebook,jupyter
       ONLY_SUBDOMAINS: 'true'
-      EXTRA_DOMAINS: reg.jupyteo.ga
+      EXTRA_DOMAINS: reg.jupyteo.com
     deploy:
       replicas: 1
       restart_policy:
@@ -117,8 +117,8 @@ services:
       retries: 3
 
   mapnik:
-    image: "jupytepide/mapnik-flask:1.2.3"
-    container_name: jupytepide-mapnik
+    image: "jupytepide/mapnik-flask:1.2.2"
+    container_name: jupyteo-mapnik
     networks:
       - jupyteo-net
     ports:

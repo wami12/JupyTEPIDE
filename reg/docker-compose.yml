@@ -1,28 +1,31 @@
 version: "3"
 services:
-  registry:
-  restart: always
-  image: registry:2
-    container_name: jupyteo-reg
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - ./jupyterhub_config.py:/tmp/jupyterhub_config.py
-      - ./run-from-compose.sh:/run-from-compose.sh
-      - /opt/data/priv/:/opt/data/priv/
-      - /opt/var/:/opt/var/
+  nginx:
+    # Note : Only nginx:alpine supports bcrypt.
+    # If you don't need to use bcrypt, you can use a different tag.
+    # Ref. https://github.com/nginxinc/docker-nginx/issues/29
+    image: "nginx:alpine"
+    container_name: reg-nginx
     ports:
-      - "8000:8000"
-    environment:
-      DOCKER_NETWORK_NAME: ${DOCKER_NETWORK_NAME}
-      DOCKER_SPAWN_NOTEBOOK_IMAGE: ${DOCKER_SPAWN_NOTEBOOK_IMAGE}
-      # Notebook directory inside user image
-      DOCKER_NOTEBOOK_DIR: ${DOCKER_NOTEBOOK_DIR}
-      SPAWN_USER: ${SPAWN_USER}
+      - 443:443
+    links:
+      - registry:registry
+    volumes:
+      - /reg/registry/security:/etc/nginx/conf.d
+      - ./auth/nginx.conf:/etc/nginx/nginx.conf:ro
+
+  registry:
+    image: registry:2
+    container_name: reg-registry
+    volumes:
+      - /reg/registry/data:/var/lib/registry
+      - /reg/registry/security:/etc/security
+    hostname: reg-registry
+    ports:
+      - "5000:5000"
     deploy:
-      replicas: 3
+      replicas: 1
       restart_policy:
         condition: on-failure
       placement:
-        constraints:
-          - node.role == manager
-    command: sh /run-from-compose.sh
+        constraints: [node.role == manager]

@@ -1,0 +1,30 @@
+version: "3"
+services:
+  registry:
+    image: registry:2
+    volumes:
+      - /reg/registry/data:/var/lib/registry
+      - /reg/registry/security:/etc/security
+    hostname: jupyteo-reg
+    networks:
+      - jupyteo-net
+    ports:
+      - "443:443"
+    environment:
+      REGISTRY_HTTP_ADDR: "0.0.0.0:443"
+      REGISTRY_HTTP_TLS_CERTIFICATE: /etc/security/fullchain1.pem
+      REGISTRY_HTTP_TLS_KEY: /etc/security/privkey1.pem
+      REGISTRY_AUTH: htpasswd
+      REGISTRY_AUTH_HTPASSWD_PATH: /etc/security/htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: "Registry Realm"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+
+networks:
+  jupyteo-net:
+    external:
+      name: jupyteo-net
