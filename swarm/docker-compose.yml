@@ -117,8 +117,8 @@ services:
       retries: 3
 
   mapnik:
-    image: "jupytepide/mapnik-flask:1.2.2"
-    container_name: jupyteo-mapnik
+    image: "jupytepide/mapnik-flask:1.2.3"
+    container_name: jupytepide-mapnik
     networks:
       - jupyteo-net
     ports:
