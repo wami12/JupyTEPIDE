@@ -52,6 +52,8 @@ services:
     volumes:
     - "nginx_volume:/config"
     - /home/daniel/jupyteo-dev/swarm/letsencrypt_container_nginx.conf:/config/nginx/site-confs/default
+    links:
+      - registry:registry
     environment:
       EMAIL: ${EMAIL}
       URL: ${URL}
@@ -166,6 +168,26 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer-data:/data
+
+  registry:
+    image: registry:2
+    container_name: reg-registry
+    volumes:
+      - /reg/registry/data:/var/lib/registry
+      - /reg/registry/security:/etc/security
+    hostname: reg-registry
+    ports:
+      - "5000:5000"
+    environment:
+      REGISTRY_AUTH: htpasswd
+      REGISTRY_AUTH_HTPASSWD_PATH: /etc/security/htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: "Registry Realm"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == manager]
 
 networks:
   jupyteo-net:

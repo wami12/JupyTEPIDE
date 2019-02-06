@@ -23,6 +23,10 @@ services:
     hostname: reg-registry
     ports:
       - "5000:5000"
+    environment:
+      REGISTRY_AUTH: htpasswd
+      REGISTRY_AUTH_HTPASSWD_PATH: /etc/security/htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: "Registry Realm"
     deploy:
       replicas: 1
       restart_policy:
