@@ -32,7 +32,7 @@ c.SwarmSpawner.extra_host_config = {'network_mode': network_name}
 # The public facing ip of the whole application (the proxy)
 c.JupyterHub.ip = '0.0.0.0'
 c.JupyterHub.hub_ip = '0.0.0.0'
-c.DockerSpawner.hub_ip_connect = 'jupytepide-hub'
+c.DockerSpawner.hub_ip_connect = 'jupyteo-hub'
 c.JupyterHub.port = 8000
 
 c.SwarmSpawner.start_timeout = 100
@@ -91,7 +91,7 @@ def create_dir_hook(spawner):
     if not os.path.exists(gui_path):
         os.makedirs(gui_path, exist_ok=True)
         os.chmod(gui_path, 0o777)
-        shutil.copy('/opt/var/JupyTEPIDE/GUI/jupytepide/code_snippets.json', gui_path)
+        shutil.copy('/opt/var/jupyteo/GUI/jupytepide/code_snippets.json', gui_path)
     os.chmod(os.path.join(gui_path, 'code_snippets.json'), 0o777)
 
 
@@ -102,9 +102,9 @@ c.Spawner.pre_spawn_hook = create_dir_hook
 #     'mounts': mounts
 # }
 
-c.Spawner.mem_limit = '12.0G'
-c.Spawner.mem_guarantee = '4.0G'
-c.Spawner.cpu_limit = 2.5
+c.Spawner.mem_limit = '3.0G'
+c.Spawner.mem_guarantee = '2.0G'
+c.Spawner.cpu_limit = 1.5
 c.Spawner.cpu_guarantee = 0.5
 
 # shutdown the server after no activity for an hour

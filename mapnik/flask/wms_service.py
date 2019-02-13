@@ -15,7 +15,8 @@ def rgb_style():
     rgb_style = mapnik.Style()
     rgb_style.rules.append(rgb_rule)
     return rgb_style
-    
+
+
 def two_collor_style(min_val, max_val, nodata_val, color1, color2):
     mono_symb = mapnik.RasterSymbolizer()
     mono_colorizer = mapnik.RasterColorizer()
@@ -29,11 +30,12 @@ def two_collor_style(min_val, max_val, nodata_val, color1, color2):
     mono_style.rules.append(mono_rule)
     return mono_style
 
+
 def three_collor_style(min_val, max_val, nodata_val, color1, color2, color3):
     mono_symb = mapnik.RasterSymbolizer()
     mono_colorizer = mapnik.RasterColorizer()
     mono_colorizer.add_stop(min_val, mapnik.Color(color1))
-    mono_colorizer.add_stop(((max_val-min_val)/2.), mapnik.Color(color2))
+    mono_colorizer.add_stop(((max_val - min_val) / 2.), mapnik.Color(color2))
     mono_colorizer.add_stop(max_val, mapnik.Color(color3))
     mono_colorizer.add_stop(nodata_val, mapnik.Color("transparent"))
     mono_symb.colorizer = mono_colorizer
@@ -47,53 +49,55 @@ def three_collor_style(min_val, max_val, nodata_val, color1, color2, color3):
 def red_blue_style(min_val, max_val, nodata_val):
     return two_collor_style(min_val, max_val, nodata_val, 'red', 'blue')
 
+
 def blue_red_style(min_val, max_val, nodata_val):
     return two_collor_style(min_val, max_val, nodata_val, 'blue', 'red')
-    
+
+
 def green_yellow_red_style(min_val, max_val, nodata_val):
     return three_collor_style(min_val, max_val, nodata_val, 'green', 'yellow', 'red')
 
 
 RGB_STYLE = rgb_style()
 
+
 @app.route('/')
 def get_map():
-
     if 'BBOX' in request.args:
-        req_bbox = request.args.get('BBOX')   
+        req_bbox = request.args.get('BBOX')
     elif 'bbox' in request.args:
         req_bbox = request.args.get('bbox')
     else:
         return "bbox is required"
-        
+
     if 'WIDTH' in request.args:
         req_width = request.args.get('WIDTH')
     elif 'width' in request.args:
         req_width = request.args.get('width')
     else:
         return "width is required"
-        
+
     if 'HEIGHT' in request.args:
         req_height = request.args.get('HEIGHT')
     elif 'height' in request.args:
         req_height = request.args.get('height')
     else:
         return "height is required"
-        
+
     if 'PATH' in request.args:
         req_path = request.args.get('PATH')
     elif 'path' in request.args:
         req_path = request.args.get('path')
     else:
         return "path is required"
-        
+
     if 'STYLE' in request.args:
         req_style = request.args.get('STYLE')
     elif 'style' in request.args:
         req_style = request.args.get('style')
     else:
         return "style is required"
-        
+
     if 'DELTA' in request.args:
         req_delta = request.args.get('DELTA')
     elif 'delta' in request.args:
@@ -109,8 +113,6 @@ def get_map():
     else:
         return "nodata is required."
 
-        
-
     ret_map = mapnik.Map(int(req_width), int(req_height))
     im = mapnik.Image(int(req_width), int(req_height))
     layer = mapnik.Layer("requested_lyr")
@@ -120,24 +122,24 @@ def get_map():
         layer.datasource = mapnik.Gdal(file=req_path)
         ret_map.append_style("requested_lyr", RGB_STYLE)
         ret_map.layers.append(layer)
-        
+
     elif req_style.lower() == "rb":
         layer.datasource = mapnik.Gdal(file=req_path, band=1)
         minval, maxval = [float(x) for x in req_delta.split('|')]
         ret_map.append_style("requested_lyr", red_blue_style(minval, maxval, float(req_nodata)))
         ret_map.layers.append(layer)
-        
+
     elif req_style.lower() == "gyr":
         layer.datasource = mapnik.Gdal(file=req_path, band=1)
         minval, maxval = [float(x) for x in req_delta.split('|')]
         ret_map.append_style("requested_lyr", green_yellow_red_style(minval, maxval, int(req_nodata)))
         ret_map.layers.append(layer)
-        
+
     else:
         return "syle error"
 
     bbox = (float(i) for i in req_bbox.split(","))
-    bbox = mapnik.Box2d(next(bbox),next(bbox),next(bbox),next(bbox))
+    bbox = mapnik.Box2d(next(bbox), next(bbox), next(bbox), next(bbox))
     ret_map.zoom_to_box(bbox)
 
     mapnik.render(ret_map, im)
