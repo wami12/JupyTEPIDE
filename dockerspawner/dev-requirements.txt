@@ -1,0 +1,6 @@
+codecov
+pytest>=2.8
+pytest-cov
+pytest-tornado
+pyflakes
+notebook
