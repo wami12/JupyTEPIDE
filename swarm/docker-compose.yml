@@ -26,7 +26,6 @@ services:
     environment:
       DOCKER_NETWORK_NAME: ${DOCKER_NETWORK_NAME}
       DOCKER_SPAWN_NOTEBOOK_IMAGE: ${DOCKER_SPAWN_NOTEBOOK_IMAGE}
-      # Notebook directory inside user image
       DOCKER_NOTEBOOK_DIR: ${DOCKER_NOTEBOOK_DIR}
       SPAWN_USER: ${SPAWN_USER}
     deploy:

@@ -25,11 +25,7 @@ c.JupyterHub.spawner_class = 'dockerspawner.SwarmSpawner'
 network_name = os.environ['DOCKER_NETWORK_NAME']
 c.SwarmSpawner.network_name = network_name
 c.SwarmSpawner.extra_host_config = {'network_mode': network_name}
-# c.SwarmSpawner.extra_start_kwargs = {'network_mode': network_name}
 
-# The Hub should listen on all interfaces,
-# so user servers can connect
-# The public facing ip of the whole application (the proxy)
 c.JupyterHub.ip = '0.0.0.0'
 c.JupyterHub.hub_ip = '0.0.0.0'
 c.DockerSpawner.hub_ip_connect = 'jupyteo-hub'
@@ -47,7 +43,15 @@ c.Spawner.debug = True
 # Enable debug-logging of the single-user server
 c.LocalProcessSpawner.debug = True
 
-c.SwarmSpawner.image = os.environ['DOCKER_SPAWN_NOTEBOOK_IMAGE']
+# c.SwarmSpawner.image = os.environ['DOCKER_SPAWN_NOTEBOOK_IMAGE']
+
+c.JupyterHub.services = [
+    {
+        'name': 'cull_idle',
+        'admin': True,
+        'command': 'python /srv/jupyterhub/cull_idle_servers.py --timeout=3600'.split(),
+    },
+]
 
 notebook_dir = os.environ.get('DOCKER_NOTEBOOK_DIR') or '/home/jovyan'
 c.SwarmSpawner.notebook_dir = notebook_dir
@@ -95,16 +99,12 @@ def create_dir_hook(spawner):
     os.chmod(os.path.join(gui_path, 'code_snippets.json'), 0o777)
 
 
-# attach the hook function to the spawner
 c.Spawner.pre_spawn_hook = create_dir_hook
-# c.SwarmSpawner.extra_container_spec = {
-#     # Replace mounts with [] to disable permanent storage
-#     'mounts': mounts
-# }
 
-# c.SwarmSpawner.image_whitelist = {
-#     'reg.jupyteo.com/user-spawn-notebook:dev ': 'reg.jupyteo.com/user-spawn-notebook:dev',
-#     'reg.jupyteo.com/geoserver:2.13-1.3.6': 'reg.jupyteo.com/geoserver:2.13-1.3.6'}
+c.SwarmSpawner.image_whitelist = {
+    'Jupyteo All-In-One': 'reg.jupyteo.com/user-spawn-notebook:dev',
+    'Jupyteo EO Processing': 'reg.jupyteo.com/eodata-notebook:1.3.6'
+}
 
 c.Spawner.mem_limit = '3.0G'
 c.Spawner.mem_guarantee = '2.0G'

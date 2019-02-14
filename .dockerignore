@@ -1,0 +1,5 @@
+/reg/auth/nginx.htpasswd
+/reg/auth/cert1.pem
+/reg/auth/fullchain1.pem
+/reg/auth/chain1.pem
+/reg/auth/privkey1.pem
