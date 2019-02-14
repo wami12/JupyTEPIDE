@@ -13,10 +13,10 @@ WORKDIR /tmp
 RUN mkdir /tmp/jupyteo
 COPY ./ /tmp/jupyteo/
 
-RUN cd /tmp && \
-    cp -rf /tmp/jupyteo/GUI/res/hub/* "/opt/conda/share/jupyterhub/" && \
-    cd /tmp/jupyteo/dockerspawner && \
-	pip install -q --prefix /opt/conda/ . && \
+RUN cd /tmp &&\
+    cp -rf /tmp/jupyteo/GUI/res/hub/* "/opt/conda/share/jupyterhub/" &&\
+    cd /tmp/jupyteo/dockerspawner  &&\
+    pip install -q --prefix /opt/conda/ .  &&\
     find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf
 
 # load example configuration

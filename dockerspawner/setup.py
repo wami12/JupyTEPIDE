@@ -11,13 +11,10 @@ from __future__ import print_function
 
 import os
 import sys
+
 # -----------------------------------------------------------------------------
 # Minimal Python version sanity check (from IPython/Jupyterhub)
 # -----------------------------------------------------------------------------
-from __future__ import print_function
-
-import os
-import sys
 
 v = sys.version_info
 if v[:2] < (3, 3):

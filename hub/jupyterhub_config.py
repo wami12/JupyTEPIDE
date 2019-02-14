@@ -21,6 +21,12 @@ c.GitHubOAuthenticator.oauth_callback_url = os.environ['OAUTH_CALLBACK_URL']
 c.JupyterHub.admin_access = True
 
 c.JupyterHub.spawner_class = 'dockerspawner.SwarmSpawner'
+# c.SwarmSpawner.image = os.environ['DOCKER_SPAWN_NOTEBOOK_IMAGE']
+c.SwarmSpawner.image = 'jupyter/minimal-notebook:77e10160c7ef'
+c.SwarmSpawner.image_whitelist = {
+    'Jupyteo All-In-One': 'reg.jupyteo.com/user-spawn-notebook:dev',
+    'Jupyteo EO Processing': 'reg.jupyteo.com/eodata-notebook:1.3.6'
+}
 
 network_name = os.environ['DOCKER_NETWORK_NAME']
 c.SwarmSpawner.network_name = network_name
@@ -42,8 +48,6 @@ c.JupyterHub.log_level = logging.DEBUG
 c.Spawner.debug = True
 # Enable debug-logging of the single-user server
 c.LocalProcessSpawner.debug = True
-
-# c.SwarmSpawner.image = os.environ['DOCKER_SPAWN_NOTEBOOK_IMAGE']
 
 c.JupyterHub.services = [
     {
@@ -100,11 +104,6 @@ def create_dir_hook(spawner):
 
 
 c.Spawner.pre_spawn_hook = create_dir_hook
-
-c.SwarmSpawner.image_whitelist = {
-    'Jupyteo All-In-One': 'reg.jupyteo.com/user-spawn-notebook:dev',
-    'Jupyteo EO Processing': 'reg.jupyteo.com/eodata-notebook:1.3.6'
-}
 
 c.Spawner.mem_limit = '3.0G'
 c.Spawner.mem_guarantee = '2.0G'
