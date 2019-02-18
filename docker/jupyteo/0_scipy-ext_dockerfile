@@ -1,0 +1,60 @@
+# Copyright (c) Jupyter Development Team.
+# Distributed under the terms of the Modified BSD License.
+ARG DOCKER_STACK_VER
+FROM jupyter/scipy-notebook:$DOCKER_STACK_VER
+
+LABEL maintainer="Jupyteo Project <jupyteo@wasat.pl>"
+
+WORKDIR /
+
+# Conda installs
+RUN conda remove --quiet --yes --force jupyterlab && \
+	conda install --quiet --yes -c conda-forge \
+    'ipyleaflet=0.9.2*' \
+    'ipyparallel=6.2*' \
+    'jupyter_contrib_nbextensions=0.5*' \
+    'jupyter_nbextensions_configurator=0.4.1*' \
+    'autopep8=1.4*' \
+    'nb_conda=2.2.1*' \
+    'nb_conda_kernels=2.2.0*' &&\
+    pip install -q --upgrade pip &&\
+    pip install -q --no-cache-dir pixiedust && \
+    jupyter nbextension install --sys-prefix --py ipyparallel && \
+    jupyter nbextension enable --sys-prefix --py ipyparallel && \
+    jupyter serverextension enable --sys-prefix --py ipyparallel  && \
+    jupyter nbextension enable code_prettify/autopep8 --user &&\
+    jupyter nbextension enable table_beautifier/main --user &&\
+    conda clean -tipsy && \
+    fix-permissions $CONDA_DIR
+
+USER root
+
+RUN mkdir /tmp/jupyteo
+COPY ./ ./tmp/jupyteo/
+
+# Install JupyTEP IDE UI layout and enable it
+RUN cd /tmp && \
+    cp -rf /tmp/jupyteo/GUI/res/jupyter/static/* "/opt/conda/lib/python3.6/site-packages/notebook/static" && \
+    cd jupyteo && \
+    cp -R notebooks /home/jovyan/ && \
+    cd GUI && \
+    jupyter nbextension install jupytepide --user && \
+    jupyter nbextension enable jupytepide/main --sys-prefix && \
+    mkdir -p /home/jovyan/.ipython/profile_default/startup && \
+    find "/home/jovyan/.ipython/profile_default/startup" -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
+    cp -a /tmp/jupyteo/scripts/startup/. /home/jovyan/.ipython/profile_default/startup/ && \
+    mkdir -p /opt/jupyteo/scripts && \
+    cp /tmp/jupyteo/scripts/metadata.py /opt/jupyteo/scripts/metadata.py && \
+    mkdir -p /home/jovyan/.jupytepide/conf/gui && \
+    cp -R /tmp/jupyteo/sdk /opt/jupyteo/sdk && \
+    find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
+    fix-permissions /home/$NB_USER && \
+    fix-permissions /opt
+
+COPY spawn/docker-entrypoint.sh /srv/docker-entrypoint.sh
+RUN chmod 777 /srv/docker-entrypoint.sh
+ENTRYPOINT ["tini", "--", "/srv/docker-entrypoint.sh"]
+CMD ["jupyterhub-singleuser"]
+
+WORKDIR /home/$NB_USER
+USER $NB_UID

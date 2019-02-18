@@ -2,7 +2,7 @@ version: "3"
 services:
   jupyteo-hub:
     env_file:
-      - .env
+      - hub.env
       - secrets/oauth.env
     build:
       context: ../
