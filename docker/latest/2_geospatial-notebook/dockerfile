@@ -44,6 +44,8 @@ RUN conda install --quiet --yes -c conda-forge \
     'geopy=1.11.0*' \
     'gridgeo=0.2.1*' \
     'owslib=0.16.0*' \
+    'opencv=3.4.3*' \
+    'numpy=1.12.1*' \
     'rasterio=1.0.14*' && \
      conda clean -tipsy
 

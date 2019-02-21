@@ -1,0 +1,55 @@
+# Copyright (c) JupyTEP IDE Development Team.
+# Distributed under the terms of the Modified BSD License.
+ARG DOCKER_VER
+FROM reg.jupyteo.com/eodata-notebook:$DOCKER_VER
+
+LABEL maintainer="Jupyteo Project <jupyteo@wasat.pl>"
+
+USER root
+
+# apt-get installs
+RUN apt-get update -qq && \
+    apt-get install -qqy --no-install-recommends libsqlite3-mod-spatialite python3-lxml && \
+    apt-get autoremove && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+USER $NB_UID
+
+RUN conda install --quiet --yes -c conda-forge \
+	'pillow=5.4.1*' \
+	# 'readline=8.0*' \
+	'mako=1.0.7' \
+	'mkl-service=1.1.2' && \
+    conda clean -tipsy && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+
+USER root
+
+RUN mkdir /tmp/jupyteo
+COPY ./ /tmp/jupyteo/
+WORKDIR /opt
+
+RUN unzip /tmp/jupyteo/stuff/snaphu-v1.4.2_linux.zip && \
+    mv snaphu-v1.4.2_linux snaphu &&\
+    chmod 755 snaphu/bin/snaphu &&\
+    rm -rf snaphu-v1.4.2_linux*
+
+ENV PATH="/opt/snaphu/bin:${PATH}"
+
+#RUN	pip install --upgrade -q --no-cache-dir pip &&\
+#	pip install -q --no-cache-dir git+https://github.com/johntruckenbrodt/pyroSAR.git &&\
+#	find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf
+
+RUN git clone https://github.com/birgander2/PyRAT && \
+	cd PyRAT && \
+	python setup.py build_ext --inplace
+
+COPY spawn/docker-entrypoint.sh /srv/docker-entrypoint.sh
+RUN chmod 777 /srv/docker-entrypoint.sh
+ENTRYPOINT ["tini", "--", "/srv/docker-entrypoint.sh"]
+CMD ["jupyterhub-singleuser"]
+
+WORKDIR /home/$NB_USER
+USER $NB_UID

@@ -1,0 +1,52 @@
+# Copyright (c) JupyTEP IDE Development Team.
+# Distributed under the terms of the Modified BSD License.
+ARG DOCKER_VER
+FROM reg.jupyteo.com/julia-notebook:$DOCKER_VER
+
+LABEL maintainer="Jupyteo Project <jupyteo@wasat.pl>"
+USER root
+
+# R pre-requisites
+RUN apt-get update -qq && \
+    apt-get install -y -qq --no-install-recommends \
+    libmagick++-dev octave octave-image gnuplot ghostscript \
+    python-pip libsqlite3-mod-spatialite && \
+    apt-get autoremove -qq && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+USER $NB_UID
+
+RUN conda install --quiet --yes -c conda-forge  \
+    'octave_kernel*' \
+    'texinfo' && \
+    conda clean -tipsy && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+
+ENV OCTAVE_EXECUTABLE=/usr/bin/octave-cli
+
+USER root
+
+RUN mkdir /tmp/jupyteo
+COPY ./ /tmp/jupyteo/
+WORKDIR /opt
+
+RUN unzip /tmp/jupyteo/stuff/snaphu-v1.4.2_linux.zip && \
+    mv snaphu-v1.4.2_linux snaphu &&\
+    chmod 755 snaphu/bin/snaphu &&\
+    rm -rf snaphu-v1.4.2_linux*
+
+ENV PATH="/opt/snaphu/bin:${PATH}"
+
+RUN	pip install --upgrade -q --no-cache-dir pip &&\
+	pip install --no-cache-dir -q git+https://github.com/johntruckenbrodt/pyroSAR.git &&\
+	find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf
+
+COPY spawn/docker-entrypoint.sh /srv/docker-entrypoint.sh
+RUN chmod 777 /srv/docker-entrypoint.sh
+ENTRYPOINT ["tini", "--", "/srv/docker-entrypoint.sh"]
+CMD ["jupyterhub-singleuser"]
+
+WORKDIR /home/$NB_USER
+USER $NB_UID

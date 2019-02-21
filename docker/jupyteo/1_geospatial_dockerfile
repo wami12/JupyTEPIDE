@@ -1,9 +1,9 @@
 # Copyright (c) JupyTEP IDE Development Team.
 # Distributed under the terms of the Modified BSD License.
 ARG DOCKER_VER
-FROM jupytepide/science-notebook:$DOCKER_VER
+FROM reg.jupyteo.com/scipy-ext-notebook:$DOCKER_VER
 
-LABEL maintainer="JupyTEP IDE Project <jupytep@wasat.pl>"
+LABEL maintainer="Jupyteo Project <jupyteo@wasat.pl>"
 
 USER root
 
@@ -54,5 +54,10 @@ RUN find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER
 
+COPY spawn/docker-entrypoint.sh /srv/docker-entrypoint.sh
+RUN chmod 777 /srv/docker-entrypoint.sh
+ENTRYPOINT ["tini", "--", "/srv/docker-entrypoint.sh"]
+CMD ["jupyterhub-singleuser"]
+
 WORKDIR /home/$NB_USER
-USER $NB_USER
+USER $NB_UID

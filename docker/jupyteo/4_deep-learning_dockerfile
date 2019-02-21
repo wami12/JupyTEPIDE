@@ -1,0 +1,25 @@
+# Copyright (c) JupyTEP IDE Development Team.
+# Distributed under the terms of the Modified BSD License.
+ARG DOCKER_VER
+FROM reg.jupyteo.com/eodata-notebook:$DOCKER_VER
+
+LABEL maintainer="Jupyteo Project <jupyteo@wasat.pl>"
+
+USER $NB_USER
+
+RUN conda install --quiet --yes -c conda-forge \
+    'tensorflow=1.12*' \
+    'keras=2.2*' && \
+    conda clean -tipsy && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+
+USER root
+
+COPY spawn/docker-entrypoint.sh /srv/docker-entrypoint.sh
+RUN chmod 777 /srv/docker-entrypoint.sh
+ENTRYPOINT ["tini", "--", "/srv/docker-entrypoint.sh"]
+CMD ["jupyterhub-singleuser"]
+
+WORKDIR /home/$NB_USER
+USER $NB_UID
