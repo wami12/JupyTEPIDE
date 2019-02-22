@@ -1,0 +1,23 @@
+# Copyright (c) JupyTEP IDE Development Team.
+# Distributed under the terms of the Modified BSD License.
+ARG DOCKER_VER
+FROM reg.jupyteo.com/geospatial-notebook:$DOCKER_VER
+
+LABEL maintainer="Jupyteo Project <jupyteo@wasat.pl>"
+
+USER root
+
+# apt-get installs
+RUN apt-get update -qq && \
+    apt-get install -qqy --no-install-recommends otb-bin python3-otb && \
+    apt-get autoremove && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY spawn/docker-entrypoint.sh /srv/docker-entrypoint.sh
+RUN chmod 777 /srv/docker-entrypoint.sh
+ENTRYPOINT ["tini", "--", "/srv/docker-entrypoint.sh"]
+CMD ["jupyterhub-singleuser"]
+
+WORKDIR /home/$NB_USER
+USER $NB_UID
