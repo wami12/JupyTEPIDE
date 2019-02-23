@@ -40,11 +40,13 @@ RUN unzip /tmp/jupyteo/stuff/snaphu-v1.4.2_linux.zip && \
 ENV PATH="/opt/snaphu/bin:${PATH}"
 
 RUN	pip install --upgrade -q --no-cache-dir pip &&\
-	pip install --no-cache-dir -q git+https://github.com/johntruckenbrodt/pyroSAR.git &&\
-	find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf
+	pip install --no-cache-dir -q git+https://github.com/johntruckenbrodt/pyroSAR.git && \
+    fix-permissions /opt && \
+    fix-permissions /home/$NB_USER
 
 COPY spawn/docker-entrypoint.sh /srv/docker-entrypoint.sh
-RUN chmod 777 /srv/docker-entrypoint.sh
+RUN chmod 777 /srv/docker-entrypoint.sh&& \
+    find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf
 ENTRYPOINT ["tini", "--", "/srv/docker-entrypoint.sh"]
 CMD ["jupyterhub-singleuser"]
 

@@ -17,7 +17,8 @@ RUN conda install --quiet --yes -c conda-forge \
 USER root
 
 COPY spawn/docker-entrypoint.sh /srv/docker-entrypoint.sh
-RUN chmod 777 /srv/docker-entrypoint.sh
+RUN chmod 777 /srv/docker-entrypoint.sh && \
+    find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf
 ENTRYPOINT ["tini", "--", "/srv/docker-entrypoint.sh"]
 CMD ["jupyterhub-singleuser"]
 

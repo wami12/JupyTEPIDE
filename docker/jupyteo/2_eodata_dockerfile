@@ -9,10 +9,12 @@ USER root
 
 # apt-get installs
 RUN apt-get update -qq && \
-    apt-get install -qqy --no-install-recommends --allow-unauthenticated file && \
+    apt-get install -qqy --no-install-recommends --allow-unauthenticated file otb-bin python3-otb && \
     apt-get autoremove && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+ENV PYTHONPATH=/usr/lib/otb/python3:$PYTHONPATH
 
 # Install JDK 8 Oracle
 RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections > /dev/null 2>&1 && \
@@ -65,28 +67,17 @@ RUN mkdir -p "/home/jovyan/.snap/snap-python/snappy" && \
     ./snappy-conf /opt/conda/bin/python /home/jovyan/.snap/snap-python && \
     rm -rf /home/jovyan/.snap/snap-python/snappy/testdata && \
     cp -R /home/jovyan/.snap/snap-python/snappy /opt/conda/lib/python3.6/site-packages/ && \
-    rm -rf /home/jovyan/.snap/snap-python
+    rm -rf /home/jovyan/.snap/snap-python && \
+    fix-permissions /home/$NB_USER && \
+    fix-permissions /opt
 
 ENV PATH="/opt/conda/bin:${PATH}"
 
 USER root
 
-# Download and install Orfeo toolbox OTB
-# Standalone install
-# COPY OTB-6.6.0-Linux64.run /opt/OTB-6.6.0-Linux64.run
-# RUN wget --quiet https://www.orfeo-toolbox.org/packages/OTB-6.6.1-Linux64.run && \
-WORKDIR /opt
-
-RUN chmod +x "/tmp/jupyteo/stuff/OTB-6.6.1-Linux64.run" && \
-    /bin/bash -c "/tmp/jupyteo/stuff/OTB-6.6.1-Linux64.run" -q &&\
-    find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
-    npm cache clean --force && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER && \
-    fix-permissions "/opt/OTB-6.6.1-Linux64"
-
 COPY spawn/docker-entrypoint.sh /srv/docker-entrypoint.sh
-RUN chmod 777 /srv/docker-entrypoint.sh
+RUN chmod 777 /srv/docker-entrypoint.sh && \
+    find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf
 ENTRYPOINT ["tini", "--", "/srv/docker-entrypoint.sh"]
 CMD ["jupyterhub-singleuser"]
 

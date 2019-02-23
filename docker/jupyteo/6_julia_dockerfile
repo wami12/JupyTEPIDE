@@ -45,12 +45,15 @@ RUN julia -e 'import Pkg; Pkg.update()' && \
     mv $HOME/.local/share/jupyter/kernels/julia* $CONDA_DIR/share/jupyter/kernels/ && \
     chmod -R go+rx $CONDA_DIR/share/jupyter && \
     rm -rf $HOME/.local && \
-    fix-permissions $JULIA_PKGDIR $CONDA_DIR/share/jupyter
+    fix-permissions $JULIA_PKGDIR $CONDA_DIR/share/jupyter && \
+    fix-permissions /opt && \
+    fix-permissions /home/$NB_USER
 
 USER root
 
 COPY spawn/docker-entrypoint.sh /srv/docker-entrypoint.sh
-RUN chmod 777 /srv/docker-entrypoint.sh
+RUN chmod 777 /srv/docker-entrypoint.sh&& \
+    find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf
 ENTRYPOINT ["tini", "--", "/srv/docker-entrypoint.sh"]
 CMD ["jupyterhub-singleuser"]
 
