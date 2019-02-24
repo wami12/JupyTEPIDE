@@ -57,7 +57,9 @@ COPY ./ /tmp/jupyteo/
 # Install and configure Snappy
 # COPY esa-snap_all_unix_6_0.sh /tmp/esa-snap_all_unix_6_0.sh
 RUN chmod +x /tmp/jupyteo/stuff/esa-snap_all_unix_6_0.sh && \
-    /bin/bash "/tmp/jupyteo/stuff/esa-snap_all_unix_6_0.sh" -q
+    /bin/bash "/tmp/jupyteo/stuff/esa-snap_all_unix_6_0.sh" -q && \
+    fix-permissions /home/$NB_USER && \
+    fix-permissions /opt
 
 USER $NB_USER
 
