@@ -71,11 +71,11 @@ echo "-------------- START BUILD DATA LAB DOCKER --------------------"
 docker build -t ${DOCKER_LAB_IMAGE}:${DOCKER_VER} \
 	--file docker/jupyteo/7_${DOCKER_LAB_NAME}_dockerfile \
 	--build-arg DOCKER_VER=${DOCKER_VER} \
-	. 2>&1 | tee docker/logs/${DOCKER_R_NAME}_${DOCKER_VER}.log
+	. 2>&1 | tee docker/logs/${DOCKER_LAB_NAME}_${DOCKER_VER}.log
 echo "------------- FINISHED BUILD DATA LAB DOCKER ------------------"
 }
 
-all(){
+all-in-one(){
 echo "-------------- START BUILD ALL-IN-ONE DOCKER ------------------"
 docker build -t ${DOCKER_ALL_IMAGE}:${DOCKER_VER} \
 	--file docker/jupyteo/8_${DOCKER_ALL_NAME}_dockerfile \
@@ -93,7 +93,7 @@ docker build -t ${DOCKER_TEST_IMAGE}:${DOCKER_VER} \
 echo "------------- FINISHED BUILD TEST DOCKER ----------------"
 }
 
-build_all(){
+all(){
 scipy
 geo
 eo
@@ -102,7 +102,7 @@ deep
 r
 julia
 lab
-all
+all-in-one
 }
 
 "$@"

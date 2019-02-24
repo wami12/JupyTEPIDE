@@ -1,18 +1,18 @@
 #!/bin/bash
 
-tag_all()
+all()
 {
 	VER_1=$1
 	VER_2=$2
 	scipy ${VER_1} ${VER_2}
-	geo  ${VER_1} ${VER_2}
-	eo  ${VER_1} ${VER_2}
-	sar  ${VER_1} ${VER_2}
-	deep  ${VER_1} ${VER_2}
-	r  ${VER_1} ${VER_2}
-	julia  ${VER_1} ${VER_2}
-	lab  ${VER_1} ${VER_2}
-	all  ${VER_1} ${VER_2}
+	geo ${VER_1} ${VER_2}
+	eo ${VER_1} ${VER_2}
+	sar ${VER_1} ${VER_2}
+	deep ${VER_1} ${VER_2}
+	r ${VER_1} ${VER_2}
+	julia ${VER_1} ${VER_2}
+	lab ${VER_1} ${VER_2}
+	all-in-one ${VER_1} ${VER_2}
 }
 
 scipy(){
@@ -87,7 +87,7 @@ lab(){
 	tag ${IMAGE_1} ${IMAGE_2}
 }
 
-all(){
+all-in-one(){
 	VER_1=$1
 	VER_2=$2
 	IMAGE_1=reg.jupyteo.com/all-in-one-notebook:${VER_1}

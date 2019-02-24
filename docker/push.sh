@@ -1,6 +1,6 @@
 #!/bin/bash
 
-push_all()
+all()
 {
 	VER=$1
 	scipy ${VER}
@@ -11,7 +11,7 @@ push_all()
 	r ${VER}
 	julia ${VER}
 	lab ${VER}
-	all ${VER}
+	all-in-one ${VER}
 }
 
 scipy(){
@@ -70,7 +70,7 @@ lab(){
 	push ${IMAGE}
 }
 
-all(){
+all-in-one(){
 	VER=$1
 	IMAGE=reg.jupyteo.com/all-in-one-notebook:${VER}
 	echo "START SEND TO ACTINA NODES: "${IMAGE}
