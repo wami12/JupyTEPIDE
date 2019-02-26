@@ -1,9 +1,12 @@
-// File jupytepide/code_snippets.js
+// File jupyteo/code_snippets.js
 // Edited by: Michał Bednarczyk
 // Copyright (C) 2017-2019 .....
 //
 //  Distributed under the terms of the BSD License.
 // ---------------------------------------------------------------------------
+// Snippets are stored in in a file in hidden dir:
+// .jupyteo/conf/gui/code_snippets.json
+// located in user's home dir.
 
 define([
     'jquery',
@@ -21,9 +24,9 @@ define([
     var base_url = utils.get_body_data("baseUrl");
     var config = new configmod.ConfigSection('notebook', {base_url: base_url});
     //var snippets_url = require.toUrl('./code_snippets.json'); //katalog w ktorym jest nasz extension
-    var CODE_SNIPPETS_PATH_HIDDEN = '.jupytepide/conf/gui/code_snippets.json';
+    var CODE_SNIPPETS_PATH_HIDDEN = '.jupyteo/conf/gui/code_snippets.json';
     var CODE_SNIPPETS_FN = 'code_snippets.json';
-    var CODE_SNIPPETS_PATH = 'tree'; //'tree/.jupytepide/conf/gui';
+    var CODE_SNIPPETS_PATH = 'tree';
     var parent = utils.url_path_split(Jupyter.notebook.notebook_path)[0];
 
     var snippets_url = utils.url_path_join(
