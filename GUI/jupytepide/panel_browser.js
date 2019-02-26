@@ -21,7 +21,7 @@ define([
     './map_browser',
     './leaflet_interface',
     './content_access',
-    './jupytepide',
+    './jupyteo',
     'base/js/keyboard',
     'base/js/dialog'
 ], function (require,
@@ -155,7 +155,7 @@ define([
                 side_panel_splitbar.show();
             }
             //for display improvement
-            Jupytepide.leafletMap.invalidateSize();
+            Jupyteo.leafletMap.invalidateSize();
         });
 
         // bind events for resizing side panel
@@ -174,7 +174,7 @@ define([
         });
         $(document).mouseup(function (mu_evt) {
             $(document).unbind('mousemove');
-            Jupytepide.leafletMap.invalidateSize(); //to resize leaflet map
+            Jupyteo.leafletMap.invalidateSize(); //to resize leaflet map
         });
 
         //** BUTTONS **
@@ -448,11 +448,11 @@ define([
             }
 
             var geometryStr='';
-            if (Jupytepide.leafletMap.tmpShapeWKT=='undefined'){
+            if (Jupyteo.leafletMap.tmpShapeWKT=='undefined'){
                 geometryStr='';
             }
             else{
-                geometryStr='&geometry='+Jupytepide.leafletMap.tmpShapeWKT;
+                geometryStr='&geometry='+Jupyteo.leafletMap.tmpShapeWKT;
             }
 
             var queryStr = 'https://finder.eocloud.eu/resto/api/collections/'
@@ -468,16 +468,16 @@ define([
             var geoJSON = leaflet_interface.getRestoGeoJSON(queryStr);
             console.log(queryStr);
 
-            Jupytepide.marker.remove();
+            Jupyteo.marker.remove();
             leaflet_interface.remove_tmp_shape();
             console.log(geoJSON);
 
             //todo: add more than one search layer, number search layers, add style attributes (now empty)
             layerName=layerName+'_'+geoJSON.features.length+'_of_'+geoJSON.properties.totalResults+'_total_results';
 
-            Jupytepide.leafletMap.ids = [];
+            Jupyteo.leafletMap.ids = [];
             //add layer, set options for layer (style, events, etc.)
-            Jupytepide.map_addGeoJsonLayer(geoJSON,layerName,{
+            Jupyteo.map_addGeoJsonLayer(geoJSON,layerName,{
                 color:'#161ce9',
                 onEachFeature: function(feature,layer){
                  layer.bindPopup(function(layer){
@@ -493,7 +493,7 @@ define([
                      var popup = "<b>Collection: </b>"+collection+" "+
                          "<br/>"+"<b>Platform:</b> "+platform+
                          "<br/><b>Product type:</b> "+productType+
-                         "<br/><b>Product identifier:</b><a href='#' onclick='Jupytepide.copyProductIDToCell("+layer._leaflet_id+")' style='text-decoration: none; background: #0b2283; border-radius: 4px; padding: 1px; color:white;margin-bottom:1px'>Copy</a><br/>" +
+                         "<br/><b>Product identifier:</b><a href='#' onclick='Jupyteo.copyProductIDToCell("+layer._leaflet_id+")' style='text-decoration: none; background: #0b2283; border-radius: 4px; padding: 1px; color:white;margin-bottom:1px'>Copy</a><br/>" +
                          "<div style='font-size:10px;box-shadow: 0px 0px 1px black;width:200px;height:60px;overflow-y: scroll;word-wrap:break-word;'>"+
                          productID+"</div><div style='margin-bottom:2px;margin-top:2px;'><b>Completion date: </b><br/>"+completionDate+"" +
                          "</div><img alt='No picture' src='"+thumbnail+"' style='width:200px;'></img>";
@@ -512,8 +512,8 @@ define([
                  })
                 }
             });
-            Jupytepide.showLayerFeaturesData(layerName);
-            Jupytepide.map_fitToLayer(layerName);
+            Jupyteo.showLayerFeaturesData(layerName);
+            Jupyteo.map_fitToLayer(layerName);
         });
 
         //search icon
@@ -574,9 +574,9 @@ define([
             .html('Copy WKT')
             .click(function(){
                 var cell = Jupyter.notebook.get_selected_cell();
-                if (Jupytepide.leafletMap.tmpShapeWKT!='undefined') {
-                        cell.set_text(cell.toJSON().source + Jupytepide.leafletMap.tmpShapeWKT+'\n');
-                    Jupytepide.insert_cell1()
+                if (Jupyteo.leafletMap.tmpShapeWKT!='undefined') {
+                        cell.set_text(cell.toJSON().source + Jupyteo.leafletMap.tmpShapeWKT+'\n');
+                    Jupyteo.insert_cell1()
                 }
             });
 
@@ -609,7 +609,7 @@ define([
 
         map_toolbar.append(data_browser);
         data_browser.hide();
-        Jupytepide.emptyLayerBrowser();
+        Jupyteo.emptyLayerBrowser();
 
         //**** end of browser panel
 
@@ -645,7 +645,7 @@ define([
             };
         }
 
-        side_panel.animate({width: desired_width + '%'}, anim_opts).promise().then(function(){Jupytepide.leafletMap.invalidateSize();});//invalidateSize odpali po zakończeniu animacji
+        side_panel.animate({width: desired_width + '%'}, anim_opts).promise().then(function(){Jupyteo.leafletMap.invalidateSize();});//invalidateSize odpali po zakończeniu animacji
 
 
         return visible;
@@ -781,7 +781,7 @@ define([
             name: '...',
             link:'#',
             type: 'directory',
-            onclick: 'Jupytepide.readDir({DOMelement:"'+options.DOMelement+'",path:"'+path_previous+'",contents:"'+options.contents+'"})'
+            onclick: 'Jupyteo.readDir({DOMelement:"'+options.DOMelement+'",path:"'+path_previous+'",contents:"'+options.contents+'"})'
         };
 
         for (i = 0; i < elementsList.length; i++) {
@@ -808,7 +808,7 @@ define([
              }
              if (rowItemArray[n].type==='directory'){
                  rowItemArray[n].link='#';
-                 rowItemArray[n].onclick='Jupytepide.readDir({DOMelement:"'+options.DOMelement+'",path:"'+elementsList[i].path+'",contents:"'+options.contents+'"})';
+                 rowItemArray[n].onclick='Jupyteo.readDir({DOMelement:"'+options.DOMelement+'",path:"'+elementsList[i].path+'",contents:"'+options.contents+'"})';
              }
              if (rowItemArray[n].type==='notebook'){
                 rowItemArray[n].link=utils.url_path_join(homePath, elementsList[i].path);
@@ -849,7 +849,7 @@ define([
         //**End of tabs in bootstrap
 
         //for Leaflet - map refresh
-        $('.nav-tabs a').on('shown.bs.tab', function(event){Jupytepide.leafletMap.invalidateSize()});
+        $('.nav-tabs a').on('shown.bs.tab', function(event){Jupyteo.leafletMap.invalidateSize()});
 
         var rowItemArray = [];
         var i;
@@ -928,7 +928,7 @@ define([
                 "Add": {
                     class: "btn-primary",
                     click: function () {
-                        Jupytepide.map_addGeoJsonFromSelectedFiles();
+                        Jupyteo.map_addGeoJsonFromSelectedFiles();
                         d.modal('hide');
                     }
                 }
@@ -971,7 +971,7 @@ define([
                 "Delete": {
                     class: "btn-primary",
                     click: function () {
-                        Jupytepide.recursiveDeleteSelected();
+                        Jupyteo.recursiveDeleteSelected();
                         d.modal('hide');
                     }
                 }
@@ -1014,7 +1014,7 @@ define([
                 "Remove": {
                     class: "btn-primary",
                     click: function () {
-                        Jupytepide.map_removeAllLayers();
+                        Jupyteo.map_removeAllLayers();
                         d.modal('hide');
                     }
                 }
@@ -1057,7 +1057,7 @@ define([
                 "Remove": {
                     class: "btn-primary",
                     click: function () {
-                        Jupytepide.map_removeLayer(layer_name);
+                        Jupyteo.map_removeLayer(layer_name);
                         d.modal('hide');
                     }
                 }

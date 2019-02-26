@@ -38,7 +38,7 @@ define([
     //testowanie Leafleta na WebMap browserze - odłączyć
     var testowanie_leaflet_handler = function () {
         //var leafletMap=map_browser.getLeafletMap();
-        var leafletMap = Jupytepide.leafletMap;
+        var leafletMap = Jupyteo.leafletMap;
         leaflet.polygon([
             [51.51368, -0.15776],
             [51.5219, -0.15724],

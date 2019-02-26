@@ -1,4 +1,4 @@
-// File jupytepide/content_access.js
+// File jupyteo/content_access.js
 // Edited by: Michał Bednarczyk
 // Copyright (C) 2017-2019 .....
 //
@@ -249,11 +249,11 @@ define([
 
         //Refresh tab contents
         if ($('li.active').text()=="Files"){
-            Jupytepide.readDir({DOMelement:"#4karta",path:path_this,contents:"files"});
+            Jupyteo.readDir({DOMelement:"#4karta",path:path_this,contents:"files"});
         }
 
         if($('li.active').text()=="Notebooks"){
-            Jupytepide.readDir({DOMelement:"#3karta",path:path_this,contents:"notebooks"});
+            Jupyteo.readDir({DOMelement:"#3karta",path:path_this,contents:"notebooks"});
         }
         if(count==0){
             alert("Nothing deleted, probably no items selected.");
@@ -280,7 +280,7 @@ define([
     }
 
     //** readJupytepideJSONFile **
-    //this is to read json file from direstory where Jupytepide extension is installed (Jupytepide local dir)
+    //this is to read json file from direstory where Jupyteo extension is installed (Jupyteo local dir)
     function readJupytepideJSONFile(fName) {
         var file_url = fName;//require.toUrl('./'+fName);
         return $.getJSON(file_url).responseJSON;

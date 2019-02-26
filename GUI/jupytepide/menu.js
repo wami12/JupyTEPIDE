@@ -8,7 +8,7 @@
 // look also (example dir):
 // '/home/michal/.local/share/jupyter/nbextensions/'
 // ---------------------------------------------------------------------------
-// Adding Jupytepide into Jupyter Main menu
+// Adding Jupyteo into Jupyter Main menu
 
 define([
     'base/js/namespace',
@@ -120,8 +120,8 @@ define([
     //*** create_menu ***
     //Adding  positions in maimn menu, actions assignment
     function create_menu() {
-        //New Menu position named "Jupytepide"
-        jupytepide_menu = add_menu({name:'Jupytepide',menu_id:'jupytepide_menu'});
+        //New Menu position named "Jupyteo"
+        jupytepide_menu = add_menu({name:'Jupyteo',menu_id:'jupytepide_menu'});
 
         //Map
         map_submenu = add_submenu('Map', '#jupytepide_menu',function(evt){
@@ -207,8 +207,8 @@ define([
             showHelpDialog();
         });
 
-        //About Jupytepide
-        add_menu_item('About Jupytepide', 'About Jupytepide', '#', jupytepide_menu, function (evt) {
+        //About Jupyteo
+        add_menu_item('About Jupyteo', 'About Jupyteo', '#', jupytepide_menu, function (evt) {
             evt.preventDefault();
             window.open('https://wasat.github.io/JupyTEPIDE/');
         });
@@ -218,8 +218,8 @@ define([
     function showHelpDialog(){
         var options = {};
         var dialog_body = $('<div/>');
-        var introStr = Jupytepide.getJupytepideHelpJSON().intro;
-        var positionsArr = Jupytepide.getJupytepideHelpJSON().positions;
+        var introStr = Jupyteo.getJupytepideHelpJSON().intro;
+        var positionsArr = Jupyteo.getJupytepideHelpJSON().positions;
 
         var intro = $('<div/>',{class:'well'}).html(introStr);
         var container = $('<div/>',{class:'container-fluid'});
@@ -253,7 +253,7 @@ define([
         dialog_body.append($('<div/>').append(container));
 
         var d = dialog.modal({
-            title: "Jupytepide Help",
+            title: "Jupyteo Help",
             body: dialog_body,
             notebook: options.notebook,
             keyboard_manager: Jupyter.notebook.keyboard_manager,
