@@ -84,13 +84,13 @@
 
 //define([
 //    'custom/css_loader'
-//], function (jupytepide) {
-    //jupytepide.load_jupytepide_theme();
+//], function (jupyteo) {
+    //jupyteo.load_jupyteo_theme();
 //});
 
 /*
 The below code is to have terminal well sized.
-There is also CSS rule for better performance in: ../custom/jupytepide.css:
+There is also CSS rule for better performance in: ../custom/jupyteo.css:
 #terminado-container {
  width:1300px;
 }
@@ -100,7 +100,7 @@ There is also CSS rule for better performance in: ../custom/jupytepide.css:
  	'jquery',
     'base/js/namespace',
     'base/js/events',
-    'nbextensions/jupytepide/jupytepide'
+    'nbextensions/jupyteo/jupyteo'
  ],function($,IPython,events,jupytepide){
 
 $(function() {

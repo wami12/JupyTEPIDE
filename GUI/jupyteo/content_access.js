@@ -1,5 +1,5 @@
 // File jupyteo/content_access.js
-// Edited by: Michał Bednarczyk
+// By: Michał Bednarczyk
 // Copyright (C) 2017-2019 .....
 //
 //  Distributed under the terms of the BSD License.
@@ -279,9 +279,9 @@ define([
         }
     }
 
-    //** readJupytepideJSONFile **
+    //** readJupyteoJSONFile **
     //this is to read json file from direstory where Jupyteo extension is installed (Jupyteo local dir)
-    function readJupytepideJSONFile(fName) {
+    function readJupyteoJSONFile(fName) {
         var file_url = fName;//require.toUrl('./'+fName);
         return $.getJSON(file_url).responseJSON;
     }
@@ -294,7 +294,7 @@ define([
         getFilesList: getFilesList,
         get_FilesListDir: get_FilesListDir,
         get_NotebooksListDir:get_NotebooksListDir,
-        readJupytepideJSONFile:readJupytepideJSONFile,
+        readJupyteoJSONFile:readJupyteoJSONFile,
         deleteFile:deleteFile,
         recursiveDelete:recursiveDelete,
         recursiveDeleteSelected:recursiveDeleteSelected

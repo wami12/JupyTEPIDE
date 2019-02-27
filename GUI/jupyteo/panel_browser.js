@@ -1,5 +1,5 @@
-// File jupytepide/panel_browser.js
-// Edited by: Michał Bednarczyk
+// File jupyteo/panel_browser.js
+// By: Michał Bednarczyk
 // Copyright (C) 2017-2019 .....
 //
 //  Distributed under the terms of the BSD License.
@@ -21,7 +21,6 @@ define([
     './map_browser',
     './leaflet_interface',
     './content_access',
-    './jupyteo',
     'base/js/keyboard',
     'base/js/dialog'
 ], function (require,
@@ -38,7 +37,6 @@ define([
              map_browser,
              leaflet_interface,
              content_access,
-             jupytepideModule,
              keyboard,
              dialog
 ) {

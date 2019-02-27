@@ -1,5 +1,5 @@
-// /** Module file jupytepide/jupytepide.js
-//  * Edited by: Michał Bednarczyk
+// /** Module file jupyteo/jupytepide.js
+//  * By: Michał Bednarczyk
 //  * Copyright (C) 2017-2019 .....
 //  * Distributed under the terms of the BSD License.
 //  * ---------------------------------------------------------------------------
@@ -542,10 +542,10 @@ define([
      * Adds an image raster layer into the map.
      * It won't work with geotif. For geotif use "map_addTileLayer" method.
      * @example
-     * //imageUrl = '/nbextensions/jupytepide/img/raster-1.jpg',
+     * //imageUrl = '/nbextensions/jupyteo/img/raster-1.jpg',
      * //imageBounds = [[51.712216, 17.22655], [51.773941, 17.12544]];
      * Jupyteo.map_addImageLayer(
-     * 		'/nbextensions/jupytepide/img/raster-1.jpg',
+     * 		'/nbextensions/jupyteo/img/raster-1.jpg',
      * 		[[51.712216, 17.22655], [51.773941, 17.12544]];
      * 		{opacity: 0.5});
      * @param imageUrl - URL of raster image.
@@ -689,9 +689,9 @@ define([
         leaflet_interface.load_image();
     };
 
-    Jupyteo.getJupytepideHelpJSON = function() {
+    Jupyteo.getJupyteoHelpJSON = function() {
         var fName = require.toUrl('./help.json');
-        return content_access.readJupytepideJSONFile(fName);
+        return content_access.readJupyteoJSONFile(fName);
     };
 
     /**

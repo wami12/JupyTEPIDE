@@ -1,5 +1,5 @@
 // File jupyteo/css_loader.js
-// Edited by: Michał Bednarczyk
+// By: Michał Bednarczyk
 // Copyright (C) 2017-2019 .....
 //
 //  Distributed under the terms of the BSD License.
@@ -184,7 +184,7 @@ define([
         //   }));
 
         //Logo
-        $('#ipython_notebook img').attr('src', require.toUrl('./img/logo_jupytepide.png')).attr('alt', 'JupyTEP IDE');
+        $('#ipython_notebook img').attr('src', require.toUrl('./img/logo_jupyteo.png')).attr('alt', 'JupyTEP IDE');
 
         //Leaflet map JS library style
         $('head').append($('<link/>').attr('href', require.toUrl('./css/' + 'leaflet' + '.css'))

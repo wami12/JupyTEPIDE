@@ -1,5 +1,5 @@
 // File jupyteo/code_snippets.js
-// Edited by: Michał Bednarczyk
+// By: Michał Bednarczyk
 // Copyright (C) 2017-2019 .....
 //
 //  Distributed under the terms of the BSD License.

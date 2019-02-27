@@ -1,5 +1,5 @@
-// file source_UI/menu.js
-// Edited by: Michał Bednarczyk
+// file jupyteo/menu.js
+// By: Michał Bednarczyk
 // Copyright (C) 2017-2019 .....
 //
 //  Distributed under the terms of the BSD License.
@@ -121,10 +121,10 @@ define([
     //Adding  positions in maimn menu, actions assignment
     function create_menu() {
         //New Menu position named "Jupyteo"
-        jupytepide_menu = add_menu({name:'Jupyteo',menu_id:'jupytepide_menu'});
+        jupyteo_menu = add_menu({name:'Jupyteo',menu_id:'jupyteo_menu'});
 
         //Map
-        map_submenu = add_submenu('Map', '#jupytepide_menu',function(evt){
+        map_submenu = add_submenu('Map', '#jupyteo_menu',function(evt){
             evt.preventDefault();
             $('a[href="#1karta"]').click();
         });
@@ -142,7 +142,7 @@ define([
         });
 
         //Snippets
-        snippets_submenu = add_submenu('Snippets', '#jupytepide_menu',function(evt){
+        snippets_submenu = add_submenu('Snippets', '#jupyteo_menu',function(evt){
             evt.preventDefault();
             $('a[href="#2karta"]').click();
         });
@@ -155,32 +155,32 @@ define([
         });
 
         //Notebooks
-        add_menu_item('Notebooks', 'Choose notebooks', '#', jupytepide_menu, function (evt) {
+        add_menu_item('Notebooks', 'Choose notebooks', '#', jupyteo_menu, function (evt) {
             evt.preventDefault();
             $('a[href="#3karta"]').click();
         });
 
         //Files
-        add_menu_item('Files', 'Choose files', '#', jupytepide_menu, function (evt) {
+        add_menu_item('Files', 'Choose files', '#', jupyteo_menu, function (evt) {
             evt.preventDefault();
             $('a[href="#4karta"]').click();
         });
 
         //---
-        add_divider(jupytepide_menu);
+        add_divider(jupyteo_menu);
 
         //Search EO data
-        add_menu_item('Search EO data', 'Search for  Earth Observation data', '#', jupytepide_menu, function (evt) {
+        add_menu_item('Search EO data', 'Search for  Earth Observation data', '#', jupyteo_menu, function (evt) {
             evt.preventDefault();
             $('a[href="#1karta"]').click();
             $('button[title="Search for EO data"]').click();
         });
 
         //---
-        add_divider(jupytepide_menu);
+        add_divider(jupyteo_menu);
 
         //Panel browser
-        panel_browser_submenu = add_submenu('Panel browser', '#jupytepide_menu',function(evt){
+        panel_browser_submenu = add_submenu('Panel browser', '#jupyteo_menu',function(evt){
             evt.preventDefault();
         });
 
@@ -199,16 +199,17 @@ define([
         });
 
         //---
-        add_divider(jupytepide_menu);
+        add_divider(jupyteo_menu);
 
         //Help
-        add_menu_item('Help', 'Show help in modal', '#', jupytepide_menu, function (evt) {
+        add_menu_item('Help', 'Show help in modal', '#', jupyteo_menu, function (evt) {
             evt.preventDefault();
             showHelpDialog();
         });
 
         //About Jupyteo
-        add_menu_item('About Jupyteo', 'About Jupyteo', '#', jupytepide_menu, function (evt) {
+        //TODO: change project site URL
+        add_menu_item('About Jupyteo', 'About Jupyteo', '#', jupyteo_menu, function (evt) {
             evt.preventDefault();
             window.open('https://wasat.github.io/JupyTEPIDE/');
         });
@@ -218,8 +219,8 @@ define([
     function showHelpDialog(){
         var options = {};
         var dialog_body = $('<div/>');
-        var introStr = Jupyteo.getJupytepideHelpJSON().intro;
-        var positionsArr = Jupyteo.getJupytepideHelpJSON().positions;
+        var introStr = Jupyteo.getJupyteoHelpJSON().intro;
+        var positionsArr = Jupyteo.getJupyteoHelpJSON().positions;
 
         var intro = $('<div/>',{class:'well'}).html(introStr);
         var container = $('<div/>',{class:'container-fluid'});

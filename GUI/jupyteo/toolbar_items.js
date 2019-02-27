@@ -1,6 +1,6 @@
-// file source_UI/toolbar_items.js
-// Edited by: Michał Bednarczyk
-// Copyright (C) 2017 .....
+// file jupyteo/toolbar_items.js
+// By: Michał Bednarczyk
+// Copyright (C) 2017-2019 .....
 //
 //  Distributed under the terms of the BSD License.
 // To see where are all extensions loaded use:

@@ -1,12 +1,10 @@
-//import {load_leaflet} from '/nbextensions/source_UI/leaflet_interface.js';
-
-// file jupytepide/main.js
-// Edited by: Michał Bednarczyk
-// Copyright (C) 2017 .....
+// file jupyteo/main.js
+// By: Michał Bednarczyk
+// Copyright (C) 2017-2019 .....
 //
 //  Distributed under the terms of the BSD License.
 // ---------------------------------------------------------------------------
-//Extension for User Interface JupytepIDE
+// Jupyteo Jupyter Extension main file.
 //Main file
 //TODO: place text messages and other resources in shared JS file (resources)
 
