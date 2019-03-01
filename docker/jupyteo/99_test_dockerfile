@@ -24,7 +24,7 @@ RUN cd /tmp && \
     cp -a /tmp/jupyteo/scripts/startup/. /home/jovyan/.ipython/profile_default/startup/ && \
     mkdir -p /opt/jupyteo/scripts && \
     cp /tmp/jupyteo/scripts/metadata.py /opt/jupyteo/scripts/metadata.py && \
-    mkdir -p /home/jovyan/.jupytepide/conf/gui && \
+    mkdir -p /home/jovyan/.jupyteo/conf/gui && \
     cp -R /tmp/jupyteo/sdk /opt/jupyteo/sdk && \
     find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
     fix-permissions /home/$NB_USER && \

@@ -6,8 +6,8 @@ import gdal
 import numpy as np
 from IPython.display import Javascript
 
-from jupytep.config.urls import PUB_HOST
-from jupytep.maps.proj import reproject
+from jupyteo.config.urls import PUB_HOST
+from jupyteo.maps.proj import reproject
 
 
 class RenderMap:

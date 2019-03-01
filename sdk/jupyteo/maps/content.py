@@ -1,5 +1,5 @@
-from jupytep.maps.leaflet.layer import WMSLayer
-from jupytep.maps.wms.parse import get_wms_base_url, get_layer_name
+from jupyteo.maps.leaflet.layer import WMSLayer
+from jupyteo.maps.wms.parse import get_wms_base_url, get_layer_name
 
 
 def show_on_map(geotiff_path):

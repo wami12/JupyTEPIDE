@@ -1,9 +1,9 @@
-from jupytep.config.urls import PUB_HOST, URL_GEOSERVER_LOCAL
+from jupyteo.config.urls import PUB_HOST, URL_GEOSERVER_LOCAL
 
 
 def replace_pub_host(url):
-    if "jupytepide-geoserver:8080" in url:
-        url = url.replace('http://jupytepide-geoserver:8080', PUB_HOST)
+    if "jupyteo-geoserver:8080" in url:
+        url = url.replace('http://jupyteo-geoserver:8080', PUB_HOST)
     return url
 
 

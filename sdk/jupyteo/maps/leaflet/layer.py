@@ -1,8 +1,9 @@
 import json
 import os
 import re
-from IPython.display import HTML, display
 from shutil import copyfile
+
+from IPython.display import HTML, display
 
 
 class Base:
@@ -51,7 +52,7 @@ class Base:
         return s
 
     def set_view(self, B, L, zoom):
-        htm = '''<script type="text/javascript">Jupytepide.map_setView([%f,%f],%f);</script>''' % (B, L, zoom)
+        htm = '''<script type="text/javascript">Jupyteo.map_setView([%f,%f],%f);</script>''' % (B, L, zoom)
         display(HTML(htm))
 
     def add_raster_layer(self):  # TODO: dorobic rastra
@@ -64,18 +65,18 @@ class Base:
         else:
             j = geojson
 
-        htm = '''<script type="text/javascript">Jupytepide.map_addGeoJsonLayer(%s,"%s");</script>''' % (j, name)
+        htm = '''<script type="text/javascript">Jupyteo.map_addGeoJsonLayer(%s,"%s");</script>''' % (j, name)
         display(HTML(htm))
 
     def add_circle(self, x, y, r, popup='', params=-1):
         if params == -1:
             params = self.params
-        htm = '''<script type="text/javascript">Jupytepide.map_addCircle([%f,%f],%f,%s,{%s});</script>''' % (
+        htm = '''<script type="text/javascript">Jupyteo.map_addCircle([%f,%f],%f,%s,{%s});</script>''' % (
             x, y, r, popup, params)
         display(HTML(htm))
 
     def add_marker(self, x, y, popup='{title:\'Marker\', text:\'Marker\'}'):
-        htm = '''<script type="text/javascript">Jupytepide.map_addMarker([%f,%f],%s);</script>''' % (x, y, popup)
+        htm = '''<script type="text/javascript">Jupyteo.map_addMarker([%f,%f],%s);</script>''' % (x, y, popup)
         display(HTML(htm))
 
     def add_polygon(self, x, y, popup=''):
@@ -92,7 +93,7 @@ class Base:
             lista.append('[%f,%f]' % (i[0], i[1]))
         s += ",".join(lista)
         s += ']'
-        htm = '''<script type="text/javascript">Jupytepide.map_polygon(%s,%s);</script>''' % (s, popup)
+        htm = '''<script type="text/javascript">Jupyteo.map_polygon(%s,%s);</script>''' % (s, popup)
         display(HTML(htm))
 
     def add_polygon(self, tupleXY, popup):
@@ -107,7 +108,7 @@ class Base:
             t_list.append('[%f,%f]' % (i[0], i[1]))
         s += ",".join(t_list)
         s += ']'
-        htm = '''<script type="text/javascript">Jupytepide.map_polygon(%s,%s);</script>''' % (s, popup)
+        htm = '''<script type="text/javascript">Jupyteo.map_polygon(%s,%s);</script>''' % (s, popup)
         display(HTML(htm))
 
     def add_wms_layer(self, url, name, attrib=-1):
@@ -118,7 +119,7 @@ class Base:
         else:
             attrib = self._dict2string(attrib)
 
-        htm = '''<script type="text/javascript">Jupytepide.map_addWmsLayer(%s,{%s},"%s");</script>''' % (
+        htm = '''<script type="text/javascript">Jupyteo.map_addWmsLayer(%s,{%s},"%s");</script>''' % (
             url, attrib, name)
         display(HTML(htm))
 
@@ -129,7 +130,7 @@ class Base:
             pass
         else:
             attrib = self._dict2string(attrib)
-        htm = '''<script type="text/javascript">Jupytepide.map_addTileLayer('%s',{%s},"%s");</script>''' % (
+        htm = '''<script type="text/javascript">Jupyteo.map_addTileLayer('%s',{%s},"%s");</script>''' % (
             url, attrib, name)
         display(HTML(htm))
 
@@ -162,12 +163,12 @@ class WMSLayer:
         self.url = url
 
     def show_layer(self):
-        self.htm = '''<script type="text/javascript">Jupytepide.map_addWmsLayer("%s",{%s},"%s");</script>''' % (
+        self.htm = '''<script type="text/javascript">Jupyteo.map_addWmsLayer("%s",{%s},"%s");</script>''' % (
             self.url, self.attributes2string(), self.name)
         display(HTML(self.htm))
 
     def remove_layer(self):
-        htm = '''<script type = "text/javascript"> Jupytepide.map_removeLayer("%s"); < / script > ''' % self.name
+        htm = '''<script type = "text/javascript"> Jupyteo.map_removeLayer("%s"); < / script > ''' % self.name
         display(HTML(htm))
 
     def change_attributes(self, name, value):
@@ -345,12 +346,12 @@ class ImageLayer():
         self.bounds = bounds
 
     def show_layer(self):
-        self.htm = '''<script type="text/javascript">Jupytepide.map_addImageLayer("%s",%s,'%s',{%s});</script>''' \
+        self.htm = '''<script type="text/javascript">Jupyteo.map_addImageLayer("%s",%s,'%s',{%s});</script>''' \
                    % (self.url, self.bounds, self.name, self.attributes2string())
         display(HTML(self.htm))
 
     def remove_layer(self):
-        htm = '''<script type="text/javascript">Jupytepide.map_removeLayer("%s");</script>''' % self.name
+        htm = '''<script type="text/javascript">Jupyteo.map_removeLayer("%s");</script>''' % self.name
         display(HTML(htm))
 
     def change_attributes(self, name, value):

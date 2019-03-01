@@ -49,14 +49,14 @@ RUN cd /tmp && \
     cd jupyteo && \
     cp -R notebooks /home/jovyan/ && \
     cd GUI && \
-    jupyter nbextension install jupytepide --user && \
-    jupyter nbextension enable jupytepide/main --sys-prefix && \
+    jupyter nbextension install jupyteo --user && \
+    jupyter nbextension enable jupyteo/main --sys-prefix && \
     mkdir -p /home/jovyan/.ipython/profile_default/startup && \
     find "/home/jovyan/.ipython/profile_default/startup" -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
     cp -a /tmp/jupyteo/scripts/startup/. /home/jovyan/.ipython/profile_default/startup/ && \
     mkdir -p /opt/jupyteo/scripts && \
     cp /tmp/jupyteo/scripts/metadata.py /opt/jupyteo/scripts/metadata.py && \
-    mkdir -p /home/jovyan/.jupytepide/conf/gui && \
+    mkdir -p /home/jovyan/.jupyteo/conf/gui && \
     cp -R /tmp/jupyteo/sdk /opt/jupyteo/sdk && \
     find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
     fix-permissions /home/$NB_USER && \

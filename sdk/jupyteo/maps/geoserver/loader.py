@@ -1,4 +1,4 @@
-from jupytep.maps.geoserver.rest import *
+from jupyteo.maps.geoserver.rest import *
 
 
 def load_geotif(geotiff_name):

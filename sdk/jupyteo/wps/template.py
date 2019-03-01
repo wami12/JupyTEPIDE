@@ -1,7 +1,4 @@
-from pywps import Process, LiteralInput, ComplexOutput, ComplexInput, Format
-from pywps.app.Common import Metadata
-from pywps.inout.formats import FORMATS
-from pywps.validator.mode import MODE
+from pywps import Process, ComplexOutput, ComplexInput, Format
 
 
 class MyProcess(Process):

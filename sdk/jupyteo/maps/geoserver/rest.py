@@ -1,9 +1,11 @@
 import json
-import requests
 import subprocess
-from jupytep.excpt.exceptions import ApiError
-from jupytep.maps.geoserver.json_builder import get_json_workspace
-from jupytep.maps.geoserver.url import URL_REST
+
+import requests
+
+from jupyteo.excpt.exceptions import ApiError
+from jupyteo.maps.geoserver.json_builder import get_json_workspace
+from jupyteo.maps.geoserver.url import URL_REST
 
 
 def _url(params):

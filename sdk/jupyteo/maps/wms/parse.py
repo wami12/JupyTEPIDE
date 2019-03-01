@@ -1,6 +1,8 @@
-from jupytep.maps.geoserver.url import URL_WMS, replace_pub_host
-from owslib.wms import WebMapService
 from pathlib import PurePosixPath
+
+from owslib.wms import WebMapService
+
+from jupyteo.maps.geoserver.url import URL_WMS, replace_pub_host
 
 
 def get_bbox(layer_name):

@@ -1,4 +1,4 @@
-from jupytep.config.env import get_login_username
+from jupyteo.config.env import get_login_username
 
 PUB_HOST = "https://try.jupyteo.com"
 # Local urls
