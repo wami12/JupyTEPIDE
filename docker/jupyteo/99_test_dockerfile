@@ -6,18 +6,33 @@ FROM reg.jupyteo.com/geospatial-notebook:$DOCKER_VER
 LABEL maintainer="Jupyteo Project <jupyteo@wasat.pl>"
 
 USER root
+WORKDIR /
 
-# apt-get installs
-RUN apt-get update -qq && \
-    apt-get install -qqy --no-install-recommends otb-bin python3-otb && \
-    apt-get autoremove && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN mkdir /tmp/jupyteo
+COPY ./ /tmp/jupyteo/
 
-ENV PYTHONPATH=/usr/lib/otb/python3:$PYTHONPATH
+# Install JupyTEP IDE UI layout and enable it
+RUN cd /tmp && \
+    cp -rf /tmp/jupyteo/GUI/res/jupyter/static/* "/opt/conda/lib/python3.6/site-packages/notebook/static" && \
+    cd jupyteo && \
+    cp -R notebooks /home/jovyan/ && \
+    cd GUI && \
+    jupyter nbextension install jupytepide --user && \
+    jupyter nbextension enable jupytepide/main --sys-prefix && \
+    mkdir -p /home/jovyan/.ipython/profile_default/startup && \
+    find "/home/jovyan/.ipython/profile_default/startup" -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
+    cp -a /tmp/jupyteo/scripts/startup/. /home/jovyan/.ipython/profile_default/startup/ && \
+    mkdir -p /opt/jupyteo/scripts && \
+    cp /tmp/jupyteo/scripts/metadata.py /opt/jupyteo/scripts/metadata.py && \
+    mkdir -p /home/jovyan/.jupytepide/conf/gui && \
+    cp -R /tmp/jupyteo/sdk /opt/jupyteo/sdk && \
+    find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
+    fix-permissions /home/$NB_USER && \
+    fix-permissions /opt
 
 COPY spawn/docker-entrypoint.sh /srv/docker-entrypoint.sh
-RUN chmod 777 /srv/docker-entrypoint.sh
+RUN chmod 777 /srv/docker-entrypoint.sh && \
+    find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf
 ENTRYPOINT ["tini", "--", "/srv/docker-entrypoint.sh"]
 CMD ["jupyterhub-singleuser"]
 
