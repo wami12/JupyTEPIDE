@@ -1,0 +1,6 @@
+Type: IPython Notebook Extension
+Compatibility: 4.x, 5.x
+Name: jupyteo
+Main: main.js
+Description: Jupyteo Jupyter extension - an IDE for spatial data processing.
+Link: README.md

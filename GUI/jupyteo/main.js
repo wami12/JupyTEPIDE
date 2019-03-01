@@ -1,17 +1,15 @@
-//import {load_leaflet} from '/nbextensions/source_UI/leaflet_interface.js';
-
-// file jupytepide/main.js
-// Edited by: Michał Bednarczyk
-// Copyright (C) 2017 .....
+// file jupyteo/main.js
+// By: Michał Bednarczyk
+// Copyright (C) 2017-2019 .....
 //
 //  Distributed under the terms of the BSD License.
 // ---------------------------------------------------------------------------
-//Extension for User Interface JupytepIDE
+// Jupyteo Jupyter Extension main file.
 //Main file
 //TODO: place text messages and other resources in shared JS file (resources)
 
 define([
-        './jupytepide', //main Jupytepide object
+        './jupyteo', //main Jupyteo object
         './menu',
         './toolbar_items',
         './panel_browser',
@@ -27,7 +25,7 @@ define([
               css_loader,
               code_snippets
     ) {
-        css_loader.load_jupytepide_theme();
+        css_loader.load_jupyteo_theme();
         //css_loader.load_ipython_extension(); //this can be used to add button for loading style manually
         menu.load_ipython_extension();
         code_snippets.load_ipython_extension();

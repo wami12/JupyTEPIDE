@@ -1,19 +1,19 @@
-// /** Module file jupytepide/jupytepide.js
-//  * Edited by: Michał Bednarczyk
+// /** Module file jupyteo/jupytepide.js
+//  * By: Michał Bednarczyk
 //  * Copyright (C) 2017-2019 .....
 //  * Distributed under the terms of the BSD License.
 //  * ---------------------------------------------------------------------------
-//  * Jupytepide main object
+//  * Jupyteo main object
 //  * /
 
-//Documentation generating:  jsdoc -d=doc jupytepide.js
+//Documentation generating:  jsdoc -d=doc jupyteo.js
 
 
 /**
- * Jupytepide main object.
- * @class Jupytepide
+ * Jupyteo main object.
+ * @class Jupyteo
  */
-var Jupytepide = {version:'0.1.alpha'};
+var Jupyteo = {version:'0.1.alpha'};
 
 define([
     'jquery',
@@ -34,46 +34,46 @@ define([
      * Sets the map view at provided center point with defined zoom.
      * @example
      * // center=[51,17], zoom=9
-     * Jupytepide.map_setView([51,17],9)
+     * Jupyteo.map_setView([51,17],9)
      * @method map_setView
      * @param center - An array of two [lat,lon] values.
      * @param zoom - Zoom ratio integer value.
-     * @memberof: class:Jupytepide
+     * @memberof: class:Jupyteo
      */
 
-    Jupytepide.map_setView = function(center,zoom){
+    Jupyteo.map_setView = function(center, zoom){
         leaflet_interface.set_view(center,zoom);
     };
 
     /**
      * Fit the map view to given layer's extent.
      * @example
-     * Jupytepide.map_fitToLayer('Roads');
+     * Jupyteo.map_fitToLayer('Roads');
      * @method map_fitToLayer
      * @param layer_name - string with layer name.
-     * @memberof: class:Jupytepide
+     * @memberof: class:Jupyteo
      */
-    Jupytepide.map_fitToLayer = function(layer_name){
-        var bounds = Jupytepide.leafletMap.layers[layer_name].getBounds();
-        Jupytepide.leafletMap.fitBounds(bounds);
+    Jupyteo.map_fitToLayer = function(layer_name){
+        var bounds = Jupyteo.leafletMap.layers[layer_name].getBounds();
+        Jupyteo.leafletMap.fitBounds(bounds);
     };
 
     /**
      * Adds a marker into the map.
      * @example
      * // center=[51.11134, 17.0343], popup_={title: 'Wrocław',text:'Miasto w Polsce'}
-     * Jupytepide.map_addMarker([51.11134, 17.0343],{title: "Wrocław",text:"Miasto w Polsce"});
+     * Jupyteo.map_addMarker([51.11134, 17.0343],{title: "Wrocław",text:"Miasto w Polsce"});
      * @param center - An array of two [lat,lon] values.
      * @param popup_ - Content of the popup.
-     * @memberof: class:Jupytepide
+     * @memberof: class:Jupyteo
      */
 
-    Jupytepide.map_addMarker = function(center,popup_){
+    Jupyteo.map_addMarker = function(center, popup_){
         //todo: zrobić numerowanie markerów (innych elementów też, żeby je można było usuwać
         var layer_name = 'tmpMarker';
         //Adds new "property" (object) named "name" to leafletMap object
         //this way new layer is related to leafletMap as an object
-        Jupytepide.leafletMap.layers[layer_name] = leaflet_interface.add_marker(center,popup_);
+        Jupyteo.leafletMap.layers[layer_name] = leaflet_interface.add_marker(center,popup_);
     };
 
     /**
@@ -83,21 +83,21 @@ define([
      * @example
      * //center=[52.407, 21.33], radius=500, popup_="Some text",
      * //parameters_={color: 'red', fillColor: '#f03', fillOpacity: 0.5}
-     * Jupytepide.map_addCircle([52.407, 21.33],500,"Some text",
+     * Jupyteo.map_addCircle([52.407, 21.33],500,"Some text",
      *          {color: 'red', fillColor: '#f03', fillOpacity: 0.5});
      * @param center - An array of two [lat,lon] values.
      * @param radius - Circle radius.
      * @param popup_ - Content of the popup.
      * @param parameters_ - Display parameters.
-     * @memberof: class:Jupytepide
+     * @memberof: class:Jupyteo
      */
     //sample values
     //center=[52.407, 21.33], radius=500, popup_="Some text", parameters_={color: 'red', fillColor: '#f03', fillOpacity: 0.5}
-    Jupytepide.map_addCircle = function(center,radius,popup_,parameters_){
+    Jupyteo.map_addCircle = function(center, radius, popup_, parameters_){
         var layer_name = 'tmpCircle';
         //Adds new "property" (object) named "name" to leafletMap object
         //this way new layer is related to leafletMap as an object
-        Jupytepide.leafletMap.layers[layer_name] = leaflet_interface.add_circle(center,radius,popup_,parameters_);
+        Jupyteo.leafletMap.layers[layer_name] = leaflet_interface.add_circle(center,radius,popup_,parameters_);
 
     };
 
@@ -109,19 +109,19 @@ define([
      * //points=[[51.1092, 17.06108],[51.10734, 17.06698],[51.10697, 17.06587]],
      * //popup="Some text", parameters_={color: 'red',
      * //                           fillColor: '#f03', fillOpacity: 0.5}
-     * Jupytepide.map_addPolygon([[51.1092, 17.06108],[51.10734, 17.06698],[51.10697, 17.06587]],
+     * Jupyteo.map_addPolygon([[51.1092, 17.06108],[51.10734, 17.06698],[51.10697, 17.06587]],
      *      "tekst",{color: 'red', fillColor: '#f03', fillOpacity: 0.5});
      * @param points - An array of vertex's [lat,lon] coordinates.
      * @param popup_ - Content of the popup.
      * @param parameters_ - Display parameters.
-     * @memberof: class:Jupytepide
+     * @memberof: class:Jupyteo
      */
 
-    Jupytepide.map_addPolygon = function(points,popup_,parameters_){
+    Jupyteo.map_addPolygon = function(points, popup_, parameters_){
         var layer_name = 'tmpPolygon';
         //Adds new "property" (object) named "name" to leafletMap object
         //this way new layer is related to leafletMap as an object
-        Jupytepide.leafletMap.layers[layer_name] = leaflet_interface.add_polygon(points,popup_,parameters_);
+        Jupyteo.leafletMap.layers[layer_name] = leaflet_interface.add_polygon(points,popup_,parameters_);
 
     };
 
@@ -130,18 +130,18 @@ define([
      * The layer name, into which polygon is added is set as "tmpPolygon" by default and is not shown in layers list.
      * Refer to this name when you want to delete a polygon from map.
      * @example
-     * Jupytepide.map_addPolygonWKT('POLYGON((14.24 54.58,14.24 49.96,22.68 48.24,25.23 50.47,24.97 54.68,14.24 54.58))',
+     * Jupyteo.map_addPolygonWKT('POLYGON((14.24 54.58,14.24 49.96,22.68 48.24,25.23 50.47,24.97 54.68,14.24 54.58))',
      *      "tekst",{color: 'red', fillColor: '#f03', fillOpacity: 0.5});
      * @param WKTPolygon - Polygon shape in WKT format.
      * @param popup_ - Content of the popup.
      * @param parameters_ - Display parameters.
-     * @memberof: class:Jupytepide
+     * @memberof: class:Jupyteo
      */
 
-    Jupytepide.map_addTmpPolygonWKT = function(WKTPolygon,popup_,parameters_){
+    Jupyteo.map_addTmpPolygonWKT = function(WKTPolygon, popup_, parameters_){
         var layer_name = 'tmpPolygon';
-        if (Jupytepide.leafletMap.layers.tmpPolygon){
-            Jupytepide.map_removeLayer(layer_name);
+        if (Jupyteo.leafletMap.layers.tmpPolygon){
+            Jupyteo.map_removeLayer(layer_name);
         }
 
         //convert WKT to array of points
@@ -163,7 +163,7 @@ define([
 
         //Adds new "property" (object) named "name" to leafletMap object
         //this way new layer is related to leafletMap as an object
-        Jupytepide.leafletMap.layers[layer_name] = leaflet_interface.add_polygon(points,popup_,parameters_);
+        Jupyteo.leafletMap.layers[layer_name] = leaflet_interface.add_polygon(points,popup_,parameters_);
 
     };
 
@@ -172,19 +172,19 @@ define([
      * The layer name, into which polygon is added is set as "tmpPolygon" by default and is not shown in layers list.
      * Refer to this name when you want to delete a polygon from map.
      * @example
-     * Jupytepide.addSearchPolygonWKT('POLYGON((14.24 54.58,14.24 49.96,22.68 48.24,25.23 50.47,24.97 54.68,14.24 54.58))');
+     * Jupyteo.addSearchPolygonWKT('POLYGON((14.24 54.58,14.24 49.96,22.68 48.24,25.23 50.47,24.97 54.68,14.24 54.58))');
      * @param WKTPolygon - Polygon shape in WKT format.
-     * @memberof: class:Jupytepide
+     * @memberof: class:Jupyteo
      */
-    Jupytepide.addSearchPolygonWKT = function(WKTPolygon){
+    Jupyteo.addSearchPolygonWKT = function(WKTPolygon){
         var popup = 'Search temporary shape';
         var parameters = {
             color: 'red',
             fillColor: '#f03',
             fillOpacity: 0.5
         };
-        Jupytepide.map_addTmpPolygonWKT(WKTPolygon,popup,parameters);
-        Jupytepide.leafletMap.tmpShapeWKT=WKTPolygon;
+        Jupyteo.map_addTmpPolygonWKT(WKTPolygon,popup,parameters);
+        Jupyteo.leafletMap.tmpShapeWKT=WKTPolygon;
     };
 
     /**
@@ -193,99 +193,99 @@ define([
      * Refer to this name when you want to delete a polyline from map.
      * @example
      * //latlngs=[[17.06101,51.1093],[17.06691,51.10739],[17.06581,51.10691]], options={color:'red'}, popup='linijka'
-     * Jupytepide.map_addPolyline([ [17.06101,51.1093],[17.06691,51.10739],[17.06581,51.10691] ],{color:'red'},'linijka');
+     * Jupyteo.map_addPolyline([ [17.06101,51.1093],[17.06691,51.10739],[17.06581,51.10691] ],{color:'red'},'linijka');
      * @param latlngs - An array of vertex'es [lat,lon] coordinates.
      * @param options - Display parameters.
      * @param popup_ - Content of the popup.
-     * @memberof: class:Jupytepide
+     * @memberof: class:Jupyteo
      */
     //The layer's name into which polyline is added is "tmpPolyline". It is fixed and this name should be used while removing the layer.
-    Jupytepide.map_addPolyline = function(latlngs,options,popup_){
+    Jupyteo.map_addPolyline = function(latlngs, options, popup_){
         var layer_name='tmpPolyline';
         //Adds new "property" (object) named "name" to leafletMap object
         //this way new layer is related to leafletMap as an object
-        Jupytepide.leafletMap.layers[layer_name] = leaflet_interface.add_polyline(latlngs,options,popup_);
+        Jupyteo.leafletMap.layers[layer_name] = leaflet_interface.add_polyline(latlngs,options,popup_);
 
     };
 
     /**
      * Adds a WMS layer into the map.
      * @example
-     * Jupytepide.map_addWmsLayer(
+     * Jupyteo.map_addWmsLayer(
      *   'http://mapy.geoportal.gov.pl/wss/service/img/guest/Administracyjna/MapServer/WMSServer',
      *   {layers:'Administracyjna', opacity:1},'Administracyjna');
      * @example
-     * Jupytepide.map_addWmsLayer(
+     * Jupyteo.map_addWmsLayer(
      *  'http://mapy.geoportal.gov.pl/wss/service/pub/guest/kompozycjaG2_VMAPL2_WMS/MapServer/WMSServer',
      *  {layers:'Jezdnia_dr_gl_L,Jezdnia_dr_zb_L,Jezdnia_drogi_eksp_L',
      *   opacity:1, transparent:'true',format:'image/png'},'drogi');
      * @param url_ - URL of WMS service.
      * @param attrib - WMS attributes.
-     * @param layer_name - Jupytepide (not WMS) layer name, which will appear on the layers list after loading.
-     * @memberof: class:Jupytepide
+     * @param layer_name - Jupyteo (not WMS) layer name, which will appear on the layers list after loading.
+     * @memberof: class:Jupyteo
      */
 
     //example:
     // url='https://demo.boundlessgeo.com/geoserver/ows?', atrib={layers:'ne:ne'}, more options: http://leafletjs.com/reference-1.3.0.html#tilelayer-wms
-    Jupytepide.map_addWmsLayer = function(url_,attrib,layer_name){
-        if (Jupytepide.leafletMap.layers[layer_name]) {
+    Jupyteo.map_addWmsLayer = function(url_, attrib, layer_name){
+        if (Jupyteo.leafletMap.layers[layer_name]) {
             alert('A layer named: "'+layer_name+'" is already loaded. Please change layer name.');
             return
         }
         //Adds new "property" (object) named "name" to leafletMap object
         //this way new layer is related to leafletMap as an object
-        Jupytepide.leafletMap.layers[layer_name] = leaflet_interface.load_wmsLayer(url_,attrib);
+        Jupyteo.leafletMap.layers[layer_name] = leaflet_interface.load_wmsLayer(url_,attrib);
         //Adds tocontrol.layers (menu with checkbox)
         //remove layer click
         var removeClick = $('<a/>',{href:'#',
             id:'optLayer_'+layer_name,
-            onclick:'Jupytepide.map_removeLayerDlg("'+layer_name+'")'
+            onclick:'Jupyteo.map_removeLayerDlg("'+layer_name+'")'
         }).append($('<i/>',{class:"fa fa-remove",title:'Remove layer'}));
 
         var displayedLayerName = layer_name+" "+removeClick[0].outerHTML;
 
-        Jupytepide.leafletMap.control.addOverlay(Jupytepide.leafletMap.layers[layer_name],displayedLayerName);
+        Jupyteo.leafletMap.control.addOverlay(Jupyteo.leafletMap.layers[layer_name],displayedLayerName);
     };
 
     /**
      * Adds a TMS (tiled) layer into the map.
      * @example
      * //url='/nbextensions/jupytepide/madrid/{z}/{x}/{y}.png'
-     * Jupytepide.map_addTileLayer('http://localhost:8888/tree/aa_notebooks/madrid/{z}/{x}/{y}.png',
+     * Jupyteo.map_addTileLayer('http://localhost:8888/tree/aa_notebooks/madrid/{z}/{x}/{y}.png',
      *   {maxZoom:20,attribution:"",tms:true},"madrid");
      * @param url_ - URL of TMS service od catalog.
      * @param attrib - TMS attributes.
-     * @param layer_name - Jupytepide (not TMS) layer name, which will appear on the layers list after loading.
-     * @memberof: class:Jupytepide
+     * @param layer_name - Jupyteo (not TMS) layer name, which will appear on the layers list after loading.
+     * @memberof: class:Jupyteo
      */
 
     //example:  url_='https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',
     //          attrib={maxZoom:18,attribution:"",id:'mapbox.streets'},
     //          layer_name="Layer name"
     //example2: url='/nbextensions/jupytepide/madrid/{z}/{x}/{y}.png' - own (local) tile layer
-    Jupytepide.map_addTileLayer = function(url_,attrib,layer_name){
+    Jupyteo.map_addTileLayer = function(url_, attrib, layer_name){
         //Creates new PANE for the layer
         //attrib.pane = layer_name; //when this attribute is set, layer will be added to this PANE instead of default one
-        //Jupytepide.leafletMap.createPane(attrib.pane);
+        //Jupyteo.leafletMap.createPane(attrib.pane);
 
         //Adds new "property" (object) named "name" to leafletMap object
         //this way new layer is related to leafletMap as an object
-        if (Jupytepide.leafletMap.layers[layer_name]) {
+        if (Jupyteo.leafletMap.layers[layer_name]) {
             alert('A layer named: "'+layer_name+'" is already loaded. Please change layer name.');
             return
         }
 
-        Jupytepide.leafletMap.layers[layer_name] = leaflet_interface.load_tileLayer(url_,attrib);
+        Jupyteo.leafletMap.layers[layer_name] = leaflet_interface.load_tileLayer(url_,attrib);
 
         //Adds to control.layers (menu with checkbox)
         //remove layer click
         var removeClick = $('<a/>',{href:'#',
             id:'optLayer_'+layer_name,
-            onclick:'Jupytepide.map_removeLayerDlg("'+layer_name+'")'
+            onclick:'Jupyteo.map_removeLayerDlg("'+layer_name+'")'
         }).append($('<i/>',{class:"fa fa-remove",title:'Remove layer'}));
 
         var displayedLayerName = layer_name+" "+removeClick[0].outerHTML;
-        Jupytepide.leafletMap.control.addOverlay(Jupytepide.leafletMap.layers[layer_name],displayedLayerName);
+        Jupyteo.leafletMap.control.addOverlay(Jupyteo.leafletMap.layers[layer_name],displayedLayerName);
 
         //mark element list with class name
         $( document ).ready(function() {
@@ -295,7 +295,7 @@ define([
     /**
      * Adds a GEOJSON vector layer into the map.
      * The simple example is provided here, but there are much more possibilities of usage.
-     * Jupytepide leaflet-based map uses [lat,lon] while GEOJSON uses [lon,lat] coordinates.
+     * Jupyteo leaflet-based map uses [lat,lon] while GEOJSON uses [lon,lat] coordinates.
      * More at: <a href="http://leafletjs.com/examples/geojson/">http://leafletjs.com/examples/geojson/</a>
      * The layer added with map_addGeoJsonLayer method has already binded a popup (to each feature), which
      * text is loaded from GEOJSON's feature.properties.description attribute.
@@ -314,67 +314,67 @@ define([
      * };
      *
      * //Then loading into map
-     * Jupytepide.map_addGeoJsonLayer(geojsonFeature,"GEOJSON")
+     * Jupyteo.map_addGeoJsonLayer(geojsonFeature,"GEOJSON")
      * @example
      * //Or, when one wants to set up some display parameters
      * var myStyle = {"color": "#ff7800", "weight": 5, "opacity": 0.65};
-     * Jupytepide.map_addGeoJsonLayer(geojsonFeature,"GEOJSON",{style: myStyle});
+     * Jupyteo.map_addGeoJsonLayer(geojsonFeature,"GEOJSON",{style: myStyle});
      * @param data - GEOJSON vector map data
-     * @param layer_name - Jupytepide (not GEOJSON) layer name, which will appear on the layers list after loading.
+     * @param layer_name - Jupyteo (not GEOJSON) layer name, which will appear on the layers list after loading.
      * @param options - Display options.
-     * @memberof: class:Jupytepide
+     * @memberof: class:Jupyteo
      */
 
-    Jupytepide.map_addGeoJsonLayer = function(data,layer_name,options){
+    Jupyteo.map_addGeoJsonLayer = function(data, layer_name, options){
         options == null ? {} : options;
-        if (Jupytepide.leafletMap.layers[layer_name]) {
+        if (Jupyteo.leafletMap.layers[layer_name]) {
             alert('A layer named: "'+layer_name+'" is already loaded. Please change layer name.');
             return
         }
         //Creates new PANE for the layer - it makes that adding and deleting layer results in loading empty layer every next time (this appears with geojson only)
         //options.pane = layer_name; //when this attribute is set, layer will be added to this PANE instead of default one
-        //Jupytepide.leafletMap.createPane(options.pane);
+        //Jupyteo.leafletMap.createPane(options.pane);
         //Adds new "property" (object) named "name" to leafletMap object
         //this way new layer is related to leafletMap as an object
-        Jupytepide.leafletMap.layers[layer_name] = leaflet_interface.load_geoJsonLayer(data,options);
+        Jupyteo.leafletMap.layers[layer_name] = leaflet_interface.load_geoJsonLayer(data,options);
 
         //Adds to control.layers (to menu with checkbox)
         //these are icons appearing in layers list (for every loaded layer)
         //Browse layer attributes click
         var browseClick = $('<a/>',{href:'#',
             id:'optLayer_'+layer_name,
-            onclick:'Jupytepide.showLayerFeaturesData("'+layer_name+'")'
+            onclick:'Jupyteo.showLayerFeaturesData("'+layer_name+'")'
         }).append($('<i/>',{class:"fa fa-table",title:'Browse layer'}));
 
         //remove layer click
         var removeClick = $('<a/>',{href:'#',
             id:'optLayer_'+layer_name,
-            onclick:'Jupytepide.map_removeLayerDlg("'+layer_name+'")'
+            onclick:'Jupyteo.map_removeLayerDlg("'+layer_name+'")'
         }).append($('<i/>',{class:"fa fa-remove",title:'Remove layer'}));
 
 
         //zoom (fit) to layer view click
         var fitClick = $('<a/>',{href:'#',
             id:'optLayer_'+layer_name,
-            onclick:'Jupytepide.map_fitToLayer("'+layer_name+'")'
+            onclick:'Jupyteo.map_fitToLayer("'+layer_name+'")'
         }).append($('<i/>',{class:"fa fa-arrows-alt",title:'Fit to layer'}));
 
         var displayedLayerName = layer_name+" "+browseClick[0].outerHTML+removeClick[0].outerHTML+fitClick[0].outerHTML;
-        Jupytepide.leafletMap.control.addOverlay(Jupytepide.leafletMap.layers[layer_name],displayedLayerName);
+        Jupyteo.leafletMap.control.addOverlay(Jupyteo.leafletMap.layers[layer_name],displayedLayerName);
 
     };
     /**
-     * Used by Jupytepide to load features data (bound to GeoJSON properties) from vector layer [layer_name] into UI.
+     * Used by Jupyteo to load features data (bound to GeoJSON properties) from vector layer [layer_name] into UI.
      * @example
      *
-     * @param layer_name - Jupytepide layer name, which appears on the layers list after loading.
-     * @memberof: class:Jupytepide
+     * @param layer_name - Jupyteo layer name, which appears on the layers list after loading.
+     * @memberof: class:Jupyteo
      */
-    Jupytepide.showLayerFeaturesData = function(layer_name){
-        var featuresData = Jupytepide.getLayerFeaturesData(layer_name);
+    Jupyteo.showLayerFeaturesData = function(layer_name){
+        var featuresData = Jupyteo.getLayerFeaturesData(layer_name);
         $('.data_browser_panel.data_layer_browser').empty();
         $('.data_browser_panel.data_layer_browser').append($('<div/>',{layerName:layer_name, style:'font-weight:bold;'}).html(layer_name)
-            .append($('<a/>',{href:'#',onclick:'Jupytepide.copyLayerProductsIDsToCell("'+layer_name+'")'}).html(' Copy all')));
+            .append($('<a/>',{href:'#',onclick:'Jupyteo.copyLayerProductsIDsToCell("'+layer_name+'")'}).html(' Copy all')));
         var featureTable = $('<table/>',{border:"1", cellpadding:"5", style:"text-align: center;"});
         for (var i=0;i<featuresData.length;i++){
             var row=$('<tr/>');
@@ -386,7 +386,7 @@ define([
             row.append(col);
             col=$('<td/>').append($('<a/>',{href:'#'}).html('info').bind('click',{fID:featuresData[i].leafletID},openFeaturePopup));
             row.append(col);
-            col=$('<td/>').append($('<a/>',{href:'#'}).html('copy').bind('click',{fID:featuresData[i].leafletID},Jupytepide.copyProductIDToCell));
+            col=$('<td/>').append($('<a/>',{href:'#'}).html('copy').bind('click',{fID:featuresData[i].leafletID},Jupyteo.copyProductIDToCell));
             row.append(col);
             col=$('<td/>').append($('<a/>',{href:'https://jsoneditoronline.org/?url='+featuresData[i].featureHref,target:'about:blank'}).html('more'));
             row.append(col);
@@ -402,15 +402,15 @@ define([
 
     /**
      * */
-    Jupytepide.emptyLayerBrowser = function(){
+    Jupyteo.emptyLayerBrowser = function(){
         $('.data_browser_panel.data_layer_browser').empty();
         $('.data_browser_panel.data_layer_browser').html('No layer data do display.')
-    };
+    }
 
     /**
      * */
-    Jupytepide.copyLayerProductsIDsToCell = function(layer_name){
-        var featuresData = Jupytepide.getLayerFeaturesData(layer_name);
+    Jupyteo.copyLayerProductsIDsToCell = function(layer_name){
+        var featuresData = Jupyteo.getLayerFeaturesData(layer_name);
         var new_cell = Jupyter.notebook.insert_cell_above('');
         var cellStr ='';
         var newLine = '';
@@ -425,13 +425,13 @@ define([
 
     /**
      * Adds GEOJSON layer from file *.geojson. It can be any gojsn file, simply created even in QGIS.
-     * Coordinates should be in WGS4. File should be selected (checked) in Jupytepide's filebrowser.
+     * Coordinates should be in WGS4. File should be selected (checked) in Jupyteo's filebrowser.
      * @example
      *
      * @param .
-     * @memberof: class:Jupytepide
+     * @memberof: class:Jupyteo
      */
-    Jupytepide.map_addGeoJsonFromSelectedFiles = function() {
+    Jupyteo.map_addGeoJsonFromSelectedFiles = function() {
         var i=0,count=0;
         var path_this="";
         //go through all elements on files (and folders) list
@@ -446,7 +446,7 @@ define([
                    console.log("fname: "+fname);
                    console.log("link: "+link);
                    var geoFile = $.getJSON(link).responseJSON;
-                   Jupytepide.map_addGeoJsonLayer(geoFile,fname,{/*style:myStyle*/});
+                   Jupyteo.map_addGeoJsonLayer(geoFile,fname,{/*style:myStyle*/});
                    count++;
 
                    if (fname.search("/")!=-1){
@@ -478,23 +478,23 @@ define([
     /**
      * */
     function setSelectedFeatureColor(fID){
-        Jupytepide.leafletMap._layers[fID.data.fID].setStyle({color:'red'});
-        Jupytepide.leafletMap._layers[fID.data.fID].bringToFront();
+        Jupyteo.leafletMap._layers[fID.data.fID].setStyle({color:'red'});
+        Jupyteo.leafletMap._layers[fID.data.fID].bringToFront();
     }
     /**
      * */
     function setUnselectedFeatureColor(fID){
-        Jupytepide.leafletMap._layers[fID.data.fID].setStyle({color:'blue'});
+        Jupyteo.leafletMap._layers[fID.data.fID].setStyle({color:'blue'});
     }
     /**
      * */
     function openFeaturePopup(fID){
-        Jupytepide.leafletMap._layers[fID.data.fID].openPopup();
+        Jupyteo.leafletMap._layers[fID.data.fID].openPopup();
     }
 
     /**
      * */
-    Jupytepide.copyProductIDToCell = function(fID){
+    Jupyteo.copyProductIDToCell = function(fID){
         var new_cell = Jupyter.notebook.insert_cell_above('');
         var featureID;
         if (typeof fID.data == 'undefined'){
@@ -503,7 +503,7 @@ define([
         else {
             featureID = fID.data.fID;
         }
-        var cellStr = Jupytepide.leafletMap._layers[featureID].feature.properties.productIdentifier;
+        var cellStr = Jupyteo.leafletMap._layers[featureID].feature.properties.productIdentifier;
         new_cell.set_text(cellStr);
         new_cell.code_mirror.setOption('theme', 'mbo');
         new_cell.focus_cell();
@@ -511,14 +511,14 @@ define([
     };
 
     /**
-     * Returns GeoJSON vector layer data (not all, but chosen). Jupytepide uses it for browsing layer data after making RESTO data search.
+     * Returns GeoJSON vector layer data (not all, but chosen). Jupyteo uses it for browsing layer data after making RESTO data search.
      * @example
      *
-     * @param layer_name - Jupytepide layer name, which appears on the layers list after loading.
-     * @memberof: class:Jupytepide
+     * @param layer_name - Jupyteo layer name, which appears on the layers list after loading.
+     * @memberof: class:Jupyteo
      */
-    Jupytepide.getLayerFeaturesData = function(layer_name){
-        var features = Jupytepide.leafletMap.layers[layer_name]._layers;
+    Jupyteo.getLayerFeaturesData = function(layer_name){
+        var features = Jupyteo.leafletMap.layers[layer_name]._layers
         var featuresData = [];
         var fData = {};
         for(var property_leaflet_id in features){
@@ -542,64 +542,64 @@ define([
      * Adds an image raster layer into the map.
      * It won't work with geotif. For geotif use "map_addTileLayer" method.
      * @example
-     * //imageUrl = '/nbextensions/jupytepide/img/raster-1.jpg',
+     * //imageUrl = '/nbextensions/jupyteo/img/raster-1.jpg',
      * //imageBounds = [[51.712216, 17.22655], [51.773941, 17.12544]];
-     * Jupytepide.map_addImageLayer(
-     * 		'/nbextensions/jupytepide/img/raster-1.jpg',
+     * Jupyteo.map_addImageLayer(
+     * 		'/nbextensions/jupyteo/img/raster-1.jpg',
      * 		[[51.712216, 17.22655], [51.773941, 17.12544]];
      * 		{opacity: 0.5});
      * @param imageUrl - URL of raster image.
      * @param imageBounds - Bounding coordinates of image in [lat,lon].
-     * @param layer_name - Jupytepide layer name, which will appear on the layers list after loading.
+     * @param layer_name - Jupyteo layer name, which will appear on the layers list after loading.
      * @param options - Display options.
-     * @memberof: class:Jupytepide
+     * @memberof: class:Jupyteo
      */
-    Jupytepide.map_addImageLayer = function(imageUrl,imageBounds,layer_name,options){
+    Jupyteo.map_addImageLayer = function(imageUrl, imageBounds, layer_name, options){
         options == null ? {} : options;
-        if (Jupytepide.leafletMap.layers[layer_name]) {
+        if (Jupyteo.leafletMap.layers[layer_name]) {
             alert('A layer named: "'+layer_name+'" is already loaded. Please change layer name.');
             return
         }
 
         //Adds new "property" (object) named "name" to leafletMap object
         //this way new layer is related to leafletMap as an object
-        Jupytepide.leafletMap.layers[layer_name] = leaflet_interface.load_imageLayer(imageUrl,imageBounds,options);
+        Jupyteo.leafletMap.layers[layer_name] = leaflet_interface.load_imageLayer(imageUrl,imageBounds,options);
         //adds into control.layers (to menu with checkbox)
-        //Jupytepide.leafletMap.control.addOverlay(Jupytepide.leafletMap.layers[layer_name],layer_name);
+        //Jupyteo.leafletMap.control.addOverlay(Jupyteo.leafletMap.layers[layer_name],layer_name);
 
         //remove layer click
         var removeClick = $('<a/>',{href:'#',
             id:'optLayer_'+layer_name,
-            onclick:'Jupytepide.map_removeLayerDlg("'+layer_name+'")'
+            onclick:'Jupyteo.map_removeLayerDlg("'+layer_name+'")'
         }).append($('<i/>',{class:"fa fa-remove",title:'Remove layer'}));
 
 
         //zoom (fit) to layer view click
         var fitClick = $('<a/>',{href:'#',
             id:'optLayer_'+layer_name,
-            onclick:'Jupytepide.map_fitToLayer("'+layer_name+'")'
+            onclick:'Jupyteo.map_fitToLayer("'+layer_name+'")'
         }).append($('<i/>',{class:"fa fa-arrows-alt",title:'Fit to layer'}));
 
         var displayedLayerName = layer_name+" "+removeClick[0].outerHTML+fitClick[0].outerHTML;
-        Jupytepide.leafletMap.control.addOverlay(Jupytepide.leafletMap.layers[layer_name],displayedLayerName);
+        Jupyteo.leafletMap.control.addOverlay(Jupyteo.leafletMap.layers[layer_name],displayedLayerName);
     };
 
     /**
      * Removes layer given by the "layer_name" from the map.
      * @example
      * //To remove layer named "tmpPolyline", call:
-     * Jupytepide.map_removeLayer('tmpPolyline');
+     * Jupyteo.map_removeLayer('tmpPolyline');
      * @param layer_name
-     * @memberof: class:Jupytepide
+     * @memberof: class:Jupyteo
      */
     //*** map_removeLayer ***
-    Jupytepide.map_removeLayer = function(layer_name){
+    Jupyteo.map_removeLayer = function(layer_name){
         //remove layer from leaflet component
-        if (Jupytepide.leafletMap.layers[layer_name]) Jupytepide.leafletMap.layers[layer_name].remove();
+        if (Jupyteo.leafletMap.layers[layer_name]) Jupyteo.leafletMap.layers[layer_name].remove();
         //remove layer from control.layers
-        Jupytepide.leafletMap.control.removeLayer(Jupytepide.leafletMap.layers[layer_name]);
-        //remove layer from Jupytepide
-        delete Jupytepide.leafletMap.layers[layer_name];
+        Jupyteo.leafletMap.control.removeLayer(Jupyteo.leafletMap.layers[layer_name]);
+        //remove layer from Jupyteo
+        delete Jupyteo.leafletMap.layers[layer_name];
 
         //remove pane created (in DOM) for that layer (if exists)
         if ($('.leaflet-'+layer_name+'-pane')) {
@@ -608,18 +608,18 @@ define([
 
         if ($('.data_browser_panel.data_layer_browser [layerName]').attr('layerName')==layer_name)
         {
-            Jupytepide.emptyLayerBrowser();
+            Jupyteo.emptyLayerBrowser();
         }
     };
 
     /**
      * Remove all layers (overlays) from the map, except the initial ones (base layers)
-     * @memberof: class:Jupytepide
+     * @memberof: class:Jupyteo
      *
      */
     //*** map_removeAllLayers
-    Jupytepide.map_removeAllLayers = function () {
-        var layers = Jupytepide.leafletMap.layers;
+    Jupyteo.map_removeAllLayers = function () {
+        var layers = Jupyteo.leafletMap.layers;
         var names = [];
         //get all layers names
         for (var property in layers) {
@@ -630,92 +630,92 @@ define([
         for (var i = 0; i < names.length; i++) {
             //check if layer is not base layer
             if (names[i] !== 'mapbox' && names[i] !== 'osm') {
-                Jupytepide.map_removeLayer(names[i]);
+                Jupyteo.map_removeLayer(names[i]);
             }
         }
     };
 
     /**
      * Removes layer given by the "layer_name" from the map.
-     * Shows confirmation dialog. This method is used by Jupytepide in UI.
+     * Shows confirmation dialog. This method is used by Jupyteo in UI.
      * @example
      * //To remove layer named "tmpPolyline", call:
-     * Jupytepide.map_removeLayerDlg('tmpPolyline');
+     * Jupyteo.map_removeLayerDlg('tmpPolyline');
      * @param layer_name
-     * @memberof: class:Jupytepide
+     * @memberof: class:Jupyteo
      */
-    Jupytepide.map_removeLayerDlg = function(layer_name){
+    Jupyteo.map_removeLayerDlg = function(layer_name){
         panel_browser.showRemoveLayerDialog(layer_name);
     };
 
     //*** map_layerMoveUp ***
-    Jupytepide.map_layerMoveUp = function(layer_name){
-        var zIndex = Jupytepide.leafletMap.layers[layer_name].options.zIndex;
+    Jupyteo.map_layerMoveUp = function(layer_name){
+        var zIndex = Jupyteo.leafletMap.layers[layer_name].options.zIndex;
         zIndex = zIndex+1;
-        Jupytepide.leafletMap.layers[layer_name].setZIndex(zIndex);
+        Jupyteo.leafletMap.layers[layer_name].setZIndex(zIndex);
 
         //todo: the above might not work with vector layers, then we can try grouping them and moving up/down as groups of layers
     };
 
     //*** map_layerMoveUp ***
-    Jupytepide.map_layerMoveDown = function(layer_name){
-        var zIndex = Jupytepide.leafletMap.layers[layer_name].options.zIndex;
+    Jupyteo.map_layerMoveDown = function(layer_name){
+        var zIndex = Jupyteo.leafletMap.layers[layer_name].options.zIndex;
         zIndex = zIndex-1;
-        Jupytepide.leafletMap.layers[layer_name].setZIndex(zIndex);
+        Jupyteo.leafletMap.layers[layer_name].setZIndex(zIndex);
 
         //todo: the above might not work with vector layers, then we can try grouping them and moving up/down as groups of layers
 
     };
 
-    Jupytepide.readDir = function (options) {
+    Jupyteo.readDir = function (options) {
         panel_browser.readDir(options);
     };
 
     //*** map_layerMoveDown ***
 
-    Jupytepide.map_addLayerControls = function(baseLayers,overlays){
-        Jupytepide.leafletMap.control = leaflet_interface.add_layerControls(baseLayers,overlays);
+    Jupyteo.map_addLayerControls = function(baseLayers, overlays){
+        Jupyteo.leafletMap.control = leaflet_interface.add_layerControls(baseLayers,overlays);
     };
 
-    Jupytepide.map_addControlBaseLayer = function(Layer,name){
-        //Jupytepide.leafletMap.control.addBaseLayer(Layer,name);
+    Jupyteo.map_addControlBaseLayer = function(Layer, name){
+        //Jupyteo.leafletMap.control.addBaseLayer(Layer,name);
     };
 
-    Jupytepide.map_addControlOverlayLayer = function(Layer,name){
-        //Jupytepide.leafletMap.control.addOverlay(Layer,name);
+    Jupyteo.map_addControlOverlayLayer = function(Layer, name){
+        //Jupyteo.leafletMap.control.addOverlay(Layer,name);
     };
 
-    Jupytepide.load_image = function(){
+    Jupyteo.load_image = function(){
         leaflet_interface.load_image();
     };
 
-    Jupytepide.getJupytepideHelpJSON = function() {
+    Jupyteo.getJupyteoHelpJSON = function() {
         var fName = require.toUrl('./help.json');
-        return content_access.readJupytepideJSONFile(fName);
+        return content_access.readJupyteoJSONFile(fName);
     };
 
     /**
      * Deletes selected files recursively.
-     * Shows confirmation dialog. This method is used by Jupytepide in UI.
+     * Shows confirmation dialog. This method is used by Jupyteo in UI.
      * @example
      * ;
      * @param
-     * @memberof: class:Jupytepide
+     * @memberof: class:Jupyteo
      */
-    Jupytepide.recursiveDeleteSelected = function(){
+    Jupyteo.recursiveDeleteSelected = function(){
         content_access.recursiveDeleteSelected();
     };
 
     //.:*** testing area ***:.
-    Jupytepide.getSnippetsList1 = function(){
+    Jupyteo.getSnippetsList1 = function(){
         return code_snippets.getSnippetsList1();
     };
 
-    Jupytepide.getSnippetsGroups = function(){
+    Jupyteo.getSnippetsGroups = function(){
         return code_snippets.getSnippetsGroups();
     };
 
-     Jupytepide.disableKeycodes = function(event){
+     Jupyteo.disableKeycodes = function(event){
 
          if (event.which === keyboard.keycodes.enter) {
              //d.find('.btn-primary').first().click();
@@ -725,88 +725,88 @@ define([
      };
 
     //methods for testing
-    Jupytepide.map_LoadPolygon = function(popupText){
+    Jupyteo.map_LoadPolygon = function(popupText){
         leaflet_interface.load_test_polygon(popupText);
     };
 
-    Jupytepide.getFiles = function (path, options) {
+    Jupyteo.getFiles = function (path, options) {
         return content_access.getFiles(path, options);
     };
 
-    Jupytepide.getFilesList = function (path, options) {
+    Jupyteo.getFilesList = function (path, options) {
         return content_access.getFilesList(path, options);
     };
 
-    Jupytepide.getNotebooks = function (path) {
+    Jupyteo.getNotebooks = function (path) {
         return content_access.get_NotebooksListDir(path);
     };
 
-    Jupytepide.saveFile = function(fname,data){
+    Jupyteo.saveFile = function(fname, data){
         content_access.saveFile(fname, data);
     };
 
-    Jupytepide.readFile = function(fname,options){
+    Jupyteo.readFile = function(fname, options){
         var a = content_access.readFile(fname, options);
         return a;
     };
 
-    Jupytepide.addSnippet = function(codeSnippet){
+    Jupyteo.addSnippet = function(codeSnippet){
         return code_snippets.addSnippet(codeSnippet);
     };
 
-    Jupytepide.addGroup = function(group){
+    Jupyteo.addGroup = function(group){
         return code_snippets.addGroup(group);
     };
 
-    Jupytepide.snippetsUrl = function(){
+    Jupyteo.snippetsUrl = function(){
         return code_snippets.getSnippetsUrl();
     };
 
-    Jupytepide.baseUrl = function(){
+    Jupyteo.baseUrl = function(){
         return code_snippets.getBaseUrl();
     };
 
-    Jupytepide.makeMenuItem = function(){
+    Jupyteo.makeMenuItem = function(){
         return code_snippets.make_snippets_menu_item({group_name:'NAZWA_GRUPY',id:12});
     };
 
-    Jupytepide.deleteSnippet = function(codeSnippet){
+    Jupyteo.deleteSnippet = function(codeSnippet){
         return code_snippets.deleteSnippet(codeSnippet);
     };
 
-    Jupytepide.deleteGroup = function(group){
+    Jupyteo.deleteGroup = function(group){
         return code_snippets.deleteGroup(group);
     };
 
-    Jupytepide.addSnippetClick = function(data){
+    Jupyteo.addSnippetClick = function(data){
         code_snippets.addSnippetClick(data);
     };
 
-    Jupytepide.showAddSnippetWindow = function(){
+    Jupyteo.showAddSnippetWindow = function(){
        code_snippets.showAddSnippetWindow();
      };
 
-    Jupytepide.deleteGroupFromUI = function(gid){
+    Jupyteo.deleteGroupFromUI = function(gid){
         code_snippets.deleteGroupFromUI(gid);
     };
 
-    Jupytepide.getRestoGeoJSON = function (url_) {
+    Jupyteo.getRestoGeoJSON = function (url_) {
         return leaflet_interface.getRestoGeoJSON(url_);
     };
 
-    Jupytepide.getSampleUrl = function(fname) {
+    Jupyteo.getSampleUrl = function(fname) {
         return require.toUrl('./'+fname);
     };
 
-    Jupytepide.delete = function(fname){
+    Jupyteo.delete = function(fname){
        return content_access.deleteFile(fname);
     };
 
-    Jupytepide.recursiveDelete = function(fname){
+    Jupyteo.recursiveDelete = function(fname){
         return content_access.recursiveDelete(fname);
     };
 
     // return public object
-    return Jupytepide
+    return Jupyteo
 
 });

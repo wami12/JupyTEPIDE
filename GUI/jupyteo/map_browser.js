@@ -1,5 +1,5 @@
-// File jupytepide/map_browser.js
-// Edited by: Michał Bednarczyk
+// File jupyteo/map_browser.js
+// By: Michał Bednarczyk
 // Copyright (C) 2017-2019 .....
 //
 //  Distributed under the terms of the BSD License.

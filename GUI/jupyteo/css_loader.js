@@ -1,5 +1,5 @@
-// File jupytepide/css_loader.js
-// Edited by: Michał Bednarczyk
+// File jupyteo/css_loader.js
+// By: Michał Bednarczyk
 // Copyright (C) 2017-2019 .....
 //
 //  Distributed under the terms of the BSD License.
@@ -22,7 +22,7 @@ define([
              require,
              actions) {
 
-    //CSS style loading for JupyTEPIDE theme
+    //CSS style loading for Jupyteo theme
     //all styles stored in ./css/ folder
 
     var overrideJupyterActions = function(themeName){
@@ -160,11 +160,11 @@ define([
         //   .attr('rel', 'stylesheet')
         //    .attr('type', 'text/css');
 
-        //jupyTEPIDE style
+        //jupyteo style
         var $jlink = $('<link/>');
         //$('head').append($jlink);
 
-        $jlink.attr('href', require.toUrl('./css/' + 'jupytepide' + '.css'))
+        $jlink.attr('href', require.toUrl('./css/' + 'jupyteo' + '.css'))
             .attr('rel', 'stylesheet')
             .attr('type', 'text/css');
 
@@ -184,7 +184,7 @@ define([
         //   }));
 
         //Logo
-        $('#ipython_notebook img').attr('src', require.toUrl('./img/logo_jupytepide.png')).attr('alt', 'JupyTEP IDE');
+        $('#ipython_notebook img').attr('src', require.toUrl('./img/logo_jupyteo.png')).attr('alt', 'JupyTEP IDE');
 
         //Leaflet map JS library style
         $('head').append($('<link/>').attr('href', require.toUrl('./css/' + 'leaflet' + '.css'))
@@ -202,7 +202,7 @@ define([
             .attr('type', 'text/css'));
 
 
-        // $('body').append($('<script/>')).text('Jupytepide.leafletMap.invalidateSize();');
+        // $('body').append($('<script/>')).text('Jupyteo.leafletMap.invalidateSize();');
     };
 
     //*** make_action ***
@@ -240,6 +240,6 @@ define([
 
     return {
         load_ipython_extension: load_ipython_extension,
-        load_jupytepide_theme: load_style
+        load_jupyteo_theme: load_style
     };
 });

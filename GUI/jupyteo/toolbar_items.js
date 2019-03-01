@@ -1,6 +1,6 @@
-// file source_UI/toolbar_items.js
-// Edited by: Michał Bednarczyk
-// Copyright (C) 2017 .....
+// file jupyteo/toolbar_items.js
+// By: Michał Bednarczyk
+// Copyright (C) 2017-2019 .....
 //
 //  Distributed under the terms of the BSD License.
 // To see where are all extensions loaded use:
@@ -38,7 +38,7 @@ define([
     //testowanie Leafleta na WebMap browserze - odłączyć
     var testowanie_leaflet_handler = function () {
         //var leafletMap=map_browser.getLeafletMap();
-        var leafletMap = Jupytepide.leafletMap;
+        var leafletMap = Jupyteo.leafletMap;
         leaflet.polygon([
             [51.51368, -0.15776],
             [51.5219, -0.15724],

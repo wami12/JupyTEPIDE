@@ -1,10 +1,10 @@
-# source_UI
-Extensions for JupytepIDE User Interface<br>
+# Jupyteo
+Jupyteo is an extension for Jupyter. It is an IDE for spatial data processing.<br>
 ----------------------------------------<br>
-It is a preliminary version.<br>
+<br>
 ## Instalation
 ### To install manually: <br>
-Place the "source_UI" directory into your server's extension dir. For example <local user>:<br>
+Place the "jupyteo" directory into your server's extension dir. For example <local user>:<br>
 /home/user/.local/share/jupyter/nbextensions<br>
 <br>
 To enable - in file: <br>
@@ -13,18 +13,18 @@ one should have:<br>
 ```
 {
   "load_extensions": {
-    "source_UI/main": true
+    "jupyteo/main": true
   }
 }
 ```
 
 ### Automatic installation<br>
 ```
-jupyter nbextension install source_UI/main --user
+jupyter nbextension install jupyteo/main --user
 ```
 then, enable it by:<br>
 ```
-jupyter nbextension enable source_UI/main --sys-prefix
+jupyter nbextension enable jupyteo/main --sys-prefix
 ```
 
 

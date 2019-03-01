@@ -1,6 +1,6 @@
-// File source_UI/jupytepide_notebooks.js
-// Edited by: Michał Bednarczyk
-// Copyright (C) 2017 .....
+// File jupyteo/jupyteo_notebooks.js
+// By: Michał Bednarczyk
+// Copyright (C) 2017-2019 .....
 //
 //  Distributed under the terms of the BSD License.
 // ---------------------------------------------------------------------------

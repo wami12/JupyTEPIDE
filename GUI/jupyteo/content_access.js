@@ -1,5 +1,5 @@
-// File jupytepide/content_access.js
-// Edited by: Michał Bednarczyk
+// File jupyteo/content_access.js
+// By: Michał Bednarczyk
 // Copyright (C) 2017-2019 .....
 //
 //  Distributed under the terms of the BSD License.
@@ -247,11 +247,11 @@ define([
 
         //Refresh tab contents
         if ($('li.active').text()=="Files"){
-            Jupytepide.readDir({DOMelement:"#4karta",path:path_this,contents:"files"});
+            Jupyteo.readDir({DOMelement:"#4karta",path:path_this,contents:"files"});
         }
 
         if($('li.active').text()=="Notebooks"){
-            Jupytepide.readDir({DOMelement:"#3karta",path:path_this,contents:"notebooks"});
+            Jupyteo.readDir({DOMelement:"#3karta",path:path_this,contents:"notebooks"});
         }
         if(count==0){
             alert("Nothing deleted, probably no items selected.");
@@ -276,9 +276,9 @@ define([
         }
     }
 
-    //** readJupytepideJSONFile **
-    //this is to read json file from direstory where Jupytepide extension is installed (Jupytepide local dir)
-    function readJupytepideJSONFile(fName) {
+    //** readJupyteoJSONFile **
+    //this is to read json file from direstory where Jupyteo extension is installed (Jupyteo local dir)
+    function readJupyteoJSONFile(fName) {
         var file_url = fName;//require.toUrl('./'+fName);
         return $.getJSON(file_url).responseJSON;
     }
@@ -291,7 +291,7 @@ define([
         getFilesList: getFilesList,
         get_FilesListDir: get_FilesListDir,
         get_NotebooksListDir:get_NotebooksListDir,
-        readJupytepideJSONFile:readJupytepideJSONFile,
+        readJupyteoJSONFile:readJupyteoJSONFile,
         deleteFile:deleteFile,
         recursiveDelete:recursiveDelete,
         recursiveDeleteSelected:recursiveDeleteSelected
