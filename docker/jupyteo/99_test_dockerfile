@@ -1,7 +1,7 @@
 # Copyright (c) JupyTEP IDE Development Team.
 # Distributed under the terms of the Modified BSD License.
 ARG DOCKER_VER
-FROM reg.jupyteo.com/geospatial-notebook:$DOCKER_VER
+FROM reg.jupyteo.com/eodata-notebook:$DOCKER_VER
 
 LABEL maintainer="Jupyteo Project <jupyteo@wasat.pl>"
 
@@ -17,8 +17,8 @@ RUN cd /tmp && \
     cd jupyteo && \
     cp -R notebooks /home/jovyan/ && \
     cd GUI && \
-    jupyter nbextension install jupytepide --user && \
-    jupyter nbextension enable jupytepide/main --sys-prefix && \
+    jupyter nbextension install jupyteo --user && \
+    jupyter nbextension enable jupyteo/main --sys-prefix && \
     mkdir -p /home/jovyan/.ipython/profile_default/startup && \
     find "/home/jovyan/.ipython/profile_default/startup" -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
     cp -a /tmp/jupyteo/scripts/startup/. /home/jovyan/.ipython/profile_default/startup/ && \

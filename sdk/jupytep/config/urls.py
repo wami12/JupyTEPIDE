@@ -2,7 +2,7 @@ from jupytep.config.env import get_login_username
 
 PUB_HOST = "https://try.jupyteo.com"
 # Local urls
-URL_GEOSERVER_LOCAL = 'http://jupytepide-geoserver:8080'
+URL_GEOSERVER_LOCAL = 'http://jupyteo-geoserver:8080'
 
 
 def get_file_url(file_path):

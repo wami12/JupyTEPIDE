@@ -1,6 +1,6 @@
 import sys
 
-sys.path.append("/opt/var/JupyTEPIDE/sdk")
+sys.path.append("/opt/var/jupyteo/sdk")
 # def add_paths():
 #     module_path = os.path.abspath(os.path.join('/opt/var/JupyTEPIDE/sdk'))
 #     if module_path not in sys.path:
