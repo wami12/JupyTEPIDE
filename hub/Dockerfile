@@ -1,7 +1,7 @@
 # base image: jupyterhub
 # this is built by docker-compose
 # from the root of this repo
-ARG JUPYTERHUB_VERSION=0.9.4
+ARG JUPYTERHUB_VERSION=0.9.2
 FROM jupyterhub/jupyterhub:${JUPYTERHUB_VERSION}
 # install dockerspawner dummyauthenticator
 RUN pip install -q --no-cache \

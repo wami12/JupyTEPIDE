@@ -2,12 +2,12 @@ version: "3"
 services:
   jupyteo-hub:
     env_file:
-      - hub.env
+      - .env
       - secrets/oauth.env
     build:
       context: ../
       dockerfile: "./hub/Dockerfile"
-    image: "reg.jupyteo.com/jupyterhub:0.9.4-2.0.0"
+    image: "reg.jupyteo.com/jupyterhub:0.9.2-2.0.0"
     container_name: jupyteo-hub
     # mount the docker socket
     volumes:
