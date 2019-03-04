@@ -2,23 +2,27 @@
 A Spawner for JupyterHub that runs each user's server in a separate docker container
 """
 
-import os
-import string
-import warnings
 from concurrent.futures import ThreadPoolExecutor
+from io import BytesIO
+import os
 from pprint import pformat
+import string
+from tarfile import TarFile, TarInfo
 from textwrap import dedent
 from urllib.parse import urlparse
+import warnings
 
 import docker
 from docker.errors import APIError
 from docker.utils import kwargs_from_env
+from tornado import gen, web
+
 from escapism import escape
 from jupyterhub.spawner import Spawner
-from tornado import gen, web
 from traitlets import (
     Any,
     Bool,
+    CaselessStrEnum,
     Dict,
     List,
     Int,
@@ -265,6 +269,20 @@ class DockerSpawner(Spawner):
             options['image'] = formdata['image'][0]
         return options
 
+    pull_policy = CaselessStrEnum(
+        ["always", "ifnotpresent", "never"],
+        default_value="ifnotpresent",
+        config=True,
+        help="""The policy for pulling the user docker image.
+
+        Choices:
+
+        - ifnotpresent: pull if the image is not already present (default)
+        - always: always pull the image to check for updates, even if it is present
+        - never: never perform a pull
+        """
+    )
+
     container_prefix = Unicode(config=True, help="DEPRECATED in 0.10. Use prefix")
 
     container_name_template = Unicode(
@@ -273,7 +291,7 @@ class DockerSpawner(Spawner):
 
     @observe("container_name_template", "container_prefix")
     def _deprecate_container_alias(self, change):
-        new_name = change.name[len("container_"):]
+        new_name = change.name[len("container_") :]
         setattr(self, new_name, change.new)
 
     prefix = Unicode(
@@ -293,6 +311,8 @@ class DockerSpawner(Spawner):
         help=dedent(
             """
             Name of the container or service: with {username}, {imagename}, {prefix} replacements.
+            {raw_username} can be used for the original, not escaped username
+            (may contain uppercase, special characters).
             The default name_template is <prefix>-<username> for backward compatibility.
             """
         ),
@@ -326,6 +346,87 @@ class DockerSpawner(Spawner):
         ),
     )
 
+    move_certs_image = Unicode(
+        "busybox:1.30.1",
+        config=True,
+        help="""The image used to stage internal SSL certificates.
+
+        Busybox is used because we just need an empty container
+        that waits while we stage files into the volume via .put_archive.
+        """
+    )
+
+    @gen.coroutine
+    def move_certs(self, paths):
+        self.log.info("Staging internal ssl certs for %s", self._log_name)
+        yield self.pull_image(self.move_certs_image)
+        # create the volume
+        volume_name = self.format_volume_name(self.certs_volume_name, self)
+        # create volume passes even if it already exists
+        self.log.info("Creating ssl volume %s for %s", volume_name, self._log_name)
+        yield self.docker('create_volume', volume_name)
+
+        # create a tar archive of the internal cert files
+        # docker.put_archive takes a tarfile and a running container
+        # and unpacks the archive into the container
+        nb_paths = {}
+        tar_buf = BytesIO()
+        archive = TarFile(fileobj=tar_buf, mode='w')
+        for key, hub_path in paths.items():
+            fname = os.path.basename(hub_path)
+            nb_paths[key] = '/certs/' + fname
+            with open(hub_path, 'rb') as f:
+                content = f.read()
+            tarinfo = TarInfo(name=fname)
+            tarinfo.size = len(content)
+            tarinfo.mtime = os.stat(hub_path).st_mtime
+            tarinfo.mode = 0o644
+            archive.addfile(tarinfo, BytesIO(content))
+        archive.close()
+        tar_buf.seek(0)
+
+        # run a container to stage the certs,
+        # mounting the volume at /certs/
+        host_config = self.client.create_host_config(
+            binds={
+                volume_name: {"bind": "/certs", "mode": "rw"},
+            },
+        )
+        container = yield self.docker('create_container',
+            self.move_certs_image,
+            volumes=["/certs"],
+            host_config=host_config,
+        )
+
+        container_id = container['Id']
+        self.log.debug(
+            "Container %s is creating ssl certs for %s",
+            container_id[:12], self._log_name,
+        )
+        # start the container
+        yield self.docker('start', container_id)
+        # stage the archive to the container
+        try:
+            yield self.docker(
+                'put_archive',
+                container=container_id,
+                path='/certs',
+                data=tar_buf,
+            )
+        finally:
+            yield self.docker('remove_container', container_id)
+        return nb_paths
+
+    certs_volume_name = Unicode(
+        "{prefix}ssl-{username}",
+        config=True,
+        help="""Volume name
+
+        The same string-templating applies to this
+        as other volume names.
+        """
+    )
+
     read_only_volumes = Dict(
         config=True,
         help=dedent(
@@ -348,9 +449,6 @@ class DockerSpawner(Spawner):
         Reusable implementations should go in dockerspawner.VolumeNamingStrategy, tests should go in ...
         """
     ).tag(config=True)
-
-    def default_format_volume_name(template, spawner):
-        return template.format(username=spawner.user.name)
 
     @default("format_volume_name")
     def _get_default_format_volume_name(self):
@@ -469,6 +567,27 @@ class DockerSpawner(Spawner):
         else:
             return False
 
+    use_internal_hostname = Bool(
+        False,
+        config=True,
+        help=dedent(
+            """
+            Use the docker hostname for connecting.
+
+            instead of an IP address.
+            This should work in general when using docker networks,
+            and must be used when internal_ssl is enabled.
+            It is enabled by default if internal_ssl is enabled.
+            """
+        ),
+    )
+
+    @default("use_internal_hostname")
+    def _default_use_hostname(self):
+        # FIXME: replace getattr with self.internal_ssl
+        # when minimum jupyterhub is 1.0
+        return getattr(self, 'internal_ssl', False)
+
     links = Dict(
         config=True,
         help=dedent(
@@ -532,7 +651,14 @@ class DockerSpawner(Spawner):
 
         """
         binds = self._volumes_to_binds(self.volumes, {})
-        return self._volumes_to_binds(self.read_only_volumes, binds, mode="ro")
+        read_only_volumes = {}
+        # FIXME: replace getattr with self.internal_ssl
+        # when minimum jupyterhub is 1.0
+        if getattr(self, 'internal_ssl', False):
+            # add SSL volume as read-only
+            read_only_volumes[self.certs_volume_name] = '/certs'
+        read_only_volumes.update(self.read_only_volumes)
+        return self._volumes_to_binds(read_only_volumes, binds, mode="ro")
 
     _escaped_name = None
 
@@ -540,27 +666,36 @@ class DockerSpawner(Spawner):
     def escaped_name(self):
         """Escape the username so it's safe for docker objects"""
         if self._escaped_name is None:
-            self._escaped_name = escape(
-                self.user.name,
-                safe=self._docker_safe_chars,
-                escape_char=self._docker_escape_char,
-            )
+            self._escaped_name = self._escape(self.user.name)
         return self._escaped_name
+
+    def _escape(self, s):
+        """Escape a string to docker-safe characters"""
+        return escape(
+            s,
+            safe=self._docker_safe_chars,
+            escape_char=self._docker_escape_char,
+        )
 
     object_id = Unicode(allow_none=True)
 
     @property
-    def object_name(self):
-        """Render the name of our container/service using name_template"""
+    def template_namespace(self):
         escaped_image = self.image.replace("/", "_")
         server_name = getattr(self, "name", "")
-        d = {
+        return {
             "username": self.escaped_name,
+            "safe_username": self.user.name,
+            "raw_username": self.user.name,
             "imagename": escaped_image,
             "servername": server_name,
             "prefix": self.prefix,
         }
-        return self.name_template.format(**d)
+
+    @property
+    def object_name(self):
+        """Render the name of our container/service using name_template"""
+        return self.name_template.format(**self.template_namespace)
 
     def load_state(self, state):
         super(DockerSpawner, self).load_state(state)
@@ -680,7 +815,13 @@ class DockerSpawner(Spawner):
     def remove_object(self):
         self.log.info("Removing %s %s", self.object_type, self.object_id)
         # remove the container, as well as any associated volumes
-        yield self.docker("remove_" + self.object_type, self.object_id, v=True)
+        try:
+            yield self.docker("remove_" + self.object_type, self.object_id, v=True)
+        except docker.errors.APIError as e:
+            if e.status_code == 409:
+                self.log.debug("Already removing %s: %s", self.object_type, self.object_id)
+            else:
+                raise
 
     @gen.coroutine
     def check_image_whitelist(self, image):
@@ -695,16 +836,13 @@ class DockerSpawner(Spawner):
         # resolve image alias to actual image name
         return image_whitelist[image]
 
+    @default('ssl_alt_names')
+    def _get_ssl_alt_names(self):
+        return ['DNS:' + self.internal_hostname]
+
     @gen.coroutine
     def create_object(self):
         """Create the container/service object"""
-        # image priority:
-        # 1. user options (from spawn options form)
-        # 2. self.image from config
-        image_option = self.user_options.get('image')
-        if image_option:
-            # save choice in self.image
-            self.image = yield self.check_image_whitelist(image_option)
 
         create_kwargs = dict(
             image=self.image,
@@ -752,11 +890,46 @@ class DockerSpawner(Spawner):
 
     @gen.coroutine
     def stop_object(self):
-        """Actually start the container/service
+        """Stop the container/service
 
-        e.g. calling `docker start`
+        e.g. calling `docker stop`. Does not remove the container.
         """
         return self.docker("stop", self.container_id)
+
+
+    @gen.coroutine
+    def pull_image(self, image):
+        """Pull the image, if needed
+
+        - pulls it unconditionally if pull_policy == 'always'
+        - otherwise, checks if it exists, and
+          - raises if pull_policy == 'never'
+          - pulls if pull_policy == 'ifnotpresent'
+        """
+        # docker wants to split repo:tag
+        if ':' in image:
+            repo, tag = image.split(':', 1)
+        else:
+            repo = image
+            tag = 'latest'
+
+        if self.pull_policy.lower() == 'always':
+            # always pull
+            self.log.info("pulling %s", image)
+            yield self.docker('pull', repo, tag)
+            # done
+            return
+        try:
+            # check if the image is present
+            yield self.docker('inspect_image', image)
+        except docker.errors.NotFound:
+            if self.pull_policy == "never":
+                # never pull, raise because there is no such image
+                raise
+            elif self.pull_policy == "ifnotpresent":
+                # not present, pull it for the first time
+                self.log.info("pulling image %s", image)
+                yield self.docker('pull', repo, tag)
 
     @gen.coroutine
     def start(self, image=None, extra_create_kwargs=None, extra_host_config=None):
@@ -764,6 +937,10 @@ class DockerSpawner(Spawner):
 
         Additional arguments to create/host config/etc. can be specified
         via .extra_create_kwargs and .extra_host_config attributes.
+
+        If the container exists and `c.DockerSpawner.remove` is true, then
+        the container is removed first. Otherwise, the existing containers
+        will be restarted.
         """
 
         if image:
@@ -780,7 +957,16 @@ class DockerSpawner(Spawner):
             )
             self.extra_host_config.update(extra_host_config)
 
+        # image priority:
+        # 1. user options (from spawn options form)
+        # 2. self.image from config
+        image_option = self.user_options.get('image')
+        if image_option:
+            # save choice in self.image
+            self.image = yield self.check_image_whitelist(image_option)
+
         image = self.image
+        yield self.pull_image(image)
 
         obj = yield self.get_object()
         if obj and self.remove:
@@ -839,6 +1025,14 @@ class DockerSpawner(Spawner):
         # jupyterhub 0.7 prefers returning ip, port:
         return (ip, port)
 
+    @property
+    def internal_hostname(self):
+        """Return our hostname
+
+        used with internal SSL
+        """
+        return self.container_name
+
     @gen.coroutine
     def get_ip_and_port(self):
         """Queries Docker daemon for container's IP and port.
@@ -854,7 +1048,15 @@ class DockerSpawner(Spawner):
         are correct, which depends on the route to the container
         and the port it opens.
         """
-        if self.use_internal_ip:
+        if self.use_internal_hostname:
+            # internal ssl uses hostnames,
+            # required for domain-name matching with internal SSL
+            # TODO: should we always do this?
+            # are there any cases where internal_ip works
+            # and internal_hostname doesn't?
+            ip = self.internal_hostname
+            port = self.port
+        elif self.use_internal_ip:
             resp = yield self.docker("inspect_container", self.container_id)
             network_settings = resp["NetworkSettings"]
             if "Networks" in network_settings:
@@ -895,7 +1097,9 @@ class DockerSpawner(Spawner):
     def stop(self, now=False):
         """Stop the container
 
-        Consider using pause/unpause when docker-py adds support
+        Will remove the container if `c.DockerSpawner.remove` is `True`.
+
+        Consider using pause/unpause when docker-py adds support.
         """
         self.log.info(
             "Stopping %s %s (id: %s)",

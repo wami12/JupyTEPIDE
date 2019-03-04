@@ -5,10 +5,10 @@ A Spawner for JupyterHub that runs each user's server in a separate docker servi
 from pprint import pformat
 from textwrap import dedent
 
-from docker.errors import APIError
 from docker.types import (
     ContainerSpec, TaskTemplate, Resources, EndpointSpec, Mount, DriverConfig, Placement
 )
+from docker.errors import APIError
 from tornado import gen
 from traitlets import Dict, Unicode, default
 
@@ -223,6 +223,10 @@ class SwarmSpawner(DockerSpawner):
 
         return (yield self.docker("create_service", **create_kwargs))
 
+    @property
+    def internal_hostname(self):
+        return self.service_name
+
     @gen.coroutine
     def remove_object(self):
         self.log.info("Removing %s %s", self.object_type, self.object_id)
@@ -231,11 +235,36 @@ class SwarmSpawner(DockerSpawner):
 
     @gen.coroutine
     def start_object(self):
-        """Nothing to do here
+        """Not actually starting anything
 
-        There is no separate start action for services
+        but use this to wait for the container to be running.
+
+        Spawner.start shouldn't return until the Spawner
+        believes a server is *running* somewhere,
+        not just requested.
         """
-        pass
+
+        dt = 1.0
+
+        while True:
+            service = yield self.get_task()
+            if not service:
+                raise RuntimeError("Service %s not found" % self.service_name)
+
+            status = service["Status"]
+            state = status["State"].lower()
+            self.log.debug("Service %s state: %s", self.service_id[:7], state)
+            if state in {"starting", "pending", "preparing"}:
+                # not ready yet, wait before checking again
+                yield gen.sleep(dt)
+                # exponential backoff
+                dt = min(dt * 1.5, 11)
+            else:
+                break
+        if state != "running":
+            raise RuntimeError(
+                "Service %s not running: %s" % (self.service_name, pformat(status))
+            )
 
     @gen.coroutine
     def stop_object(self):
@@ -260,7 +289,7 @@ class SwarmSpawner(DockerSpawner):
         are correct, which depends on the route to the service
         and the port it opens.
         """
-        if self.use_internal_ip:
+        if self.use_internal_hostname or self.use_internal_ip:
             ip = self.service_name
             port = self.port
         else:
