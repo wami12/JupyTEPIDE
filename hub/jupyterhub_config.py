@@ -21,13 +21,15 @@ c.GitHubOAuthenticator.oauth_callback_url = os.environ['OAUTH_CALLBACK_URL']
 c.JupyterHub.admin_access = True
 
 c.JupyterHub.spawner_class = 'dockerspawner.SwarmSpawner'
+# c.JupyterHub.spawner_class = 'docker-swarm'
 c.SwarmSpawner.image = os.environ['DOCKER_SPAWN_NOTEBOOK_IMAGE']
 # c.SwarmSpawner.image = 'reg.jupyteo.com/scipy-ext-notebook:2.0.0'
 # c.SwarmSpawner.image = 'jupyter/minimal-notebook:77e10160c7ef'
 # c.SwarmSpawner.image_whitelist = {
-#     'Jupyteo Sci-Py Extended': 'reg.jupyteo.com/scipy-ext-notebook:2.0.0',
-#     'Jupyteo All-In-One': 'reg.jupyteo.com/user-spawn-notebook:dev',
-#     'Jupyteo EO Processing': 'reg.jupyteo.com/eodata-notebook:1.3.6'
+#     'Docker Stack': 'jupyter/minimal-notebook:7f1482f5a136',
+#     'Jupyteo Sci-Py Extended': 'reg.jupyteo.com/scipy-ext-notebook:2.0.3-dev',
+#     'Jupyteo All-In-One': 'reg.jupyteo.com/all-in-one-notebook:2.0.1',
+#     'Jupyteo EO Processing': 'reg.jupyteo.com/eodata-notebook:2.0.1'
 # }
 
 network_name = os.environ['DOCKER_NETWORK_NAME']
