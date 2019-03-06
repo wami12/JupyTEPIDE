@@ -18,6 +18,9 @@ c = get_config()
 # OAuth with GitHub
 c.JupyterHub.authenticator_class = 'oauthenticator.GitHubOAuthenticator'
 c.GitHubOAuthenticator.oauth_callback_url = os.environ['OAUTH_CALLBACK_URL']
+
+c.Authenticator.whitelist = {'zi-dan', 'wami12', 'jacekrapinski', 'wasat', 'mzjan'}
+c.Authenticator.admin_users = {'zi-dan'}
 c.JupyterHub.admin_access = True
 
 c.JupyterHub.spawner_class = 'dockerspawner.SwarmSpawner'
@@ -43,15 +46,14 @@ c.JupyterHub.port = 8000
 
 c.SwarmSpawner.start_timeout = 100
 c.SwarmSpawner.http_timeout = 100
+c.SwarmSpawner.poll_interval = 30
 
 c.JupyterHub.cookie_secret_file = 'jupyterhub_cookie_secret'
 
 # debug-logging for testing
 c.JupyterHub.log_level = logging.DEBUG
 # Enable debug-logging of the single-user server
-c.Spawner.debug = True
-# Enable debug-logging of the single-user server
-c.LocalProcessSpawner.debug = True
+c.SwarmSpawner.debug = True
 
 c.JupyterHub.services = [
     {
