@@ -234,6 +234,11 @@ div.output_area img, div.output_area svg{
    background-color: white;
 }
 
+/*table from bootstrap*/
+table{
+    background-color: #8fb4ea;
+}
+
 /*wysokość całej apki zmniejszymy - jeżeli chcemy na dole dodać pasek (np. rozwijalny)
 #ipython-main-app {
     height:94%;
