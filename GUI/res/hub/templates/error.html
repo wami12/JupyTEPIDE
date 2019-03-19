@@ -11,7 +11,7 @@
 <div class="error">
   {% block h1_error %}
   <h1>
-    {{status_code}} : {{status_message}}
+   <!-- {{status_code}} : {{status_message}} --!>
   </h1>
   {% endblock h1_error %}
   {% block error_detail %}
@@ -32,8 +32,8 @@
   {% endif %}
   {% endblock error_detail %}
 <p id="my_error" style="color:white"></p>
-<p style="color:white">For support please contact:</p>
-<p style="color:white">jupyteo@wasat.pl</p>
+<p style="color:white">In case of troubles with getting access to Jupyteo platform please contact:</p>
+<p style="color:white"><a href="mailto:jupyteo@wasat.pl">jupyteo@wasat.pl</a></p>
 
 </div>
 </div>
@@ -72,7 +72,7 @@
 <script type="text/javascript">
 var code={{status_code | tojson | safe}};
 if (code==503){
-document.getElementById("my_error").innerHTML ="Maybe you mispelled your account name, or you haven't register your Jupyteo account yet.";
+document.getElementById("my_error").innerHTML ="Maybe you mispelled account name, or you haven't register your Jupyteo account yet.";
 }
 </script>
 {% endblock %}
