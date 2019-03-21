@@ -19,7 +19,7 @@ c = get_config()
 c.JupyterHub.authenticator_class = 'oauthenticator.GitHubOAuthenticator'
 c.GitHubOAuthenticator.oauth_callback_url = os.environ['OAUTH_CALLBACK_URL']
 
-c.Authenticator.whitelist = {'zi-dan', 'wami12', 'jacekrapinski', 'wasat', 'mzjan'}
+c.Authenticator.whitelist = {'zi-dan', 'wami12', 'jacekrapinski', 'mzjan'}
 c.Authenticator.admin_users = {'zi-dan'}
 c.JupyterHub.admin_access = True
 
