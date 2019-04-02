@@ -18,16 +18,21 @@ c = get_config()
 # OAuth with GitHub
 c.JupyterHub.authenticator_class = 'oauthenticator.GitHubOAuthenticator'
 c.GitHubOAuthenticator.oauth_callback_url = os.environ['OAUTH_CALLBACK_URL']
+
+c.Authenticator.whitelist = {'zi-dan', 'wami12', 'jacekrapinski', 'mzjan'}
+c.Authenticator.admin_users = {'zi-dan'}
 c.JupyterHub.admin_access = True
 
 c.JupyterHub.spawner_class = 'dockerspawner.SwarmSpawner'
+# c.JupyterHub.spawner_class = 'docker-swarm'
 c.SwarmSpawner.image = os.environ['DOCKER_SPAWN_NOTEBOOK_IMAGE']
 # c.SwarmSpawner.image = 'reg.jupyteo.com/scipy-ext-notebook:2.0.0'
 # c.SwarmSpawner.image = 'jupyter/minimal-notebook:77e10160c7ef'
 # c.SwarmSpawner.image_whitelist = {
-#     'Jupyteo Sci-Py Extended': 'reg.jupyteo.com/scipy-ext-notebook:2.0.0',
-#     'Jupyteo All-In-One': 'reg.jupyteo.com/user-spawn-notebook:dev',
-#     'Jupyteo EO Processing': 'reg.jupyteo.com/eodata-notebook:1.3.6'
+#     'Docker Stack': 'jupyter/minimal-notebook:7f1482f5a136',
+#     'Jupyteo Sci-Py Extended': 'reg.jupyteo.com/scipy-ext-notebook:2.0.3-dev',
+#     'Jupyteo All-In-One': 'reg.jupyteo.com/all-in-one-notebook:2.0.1',
+#     'Jupyteo EO Processing': 'reg.jupyteo.com/eodata-notebook:2.0.1'
 # }
 
 network_name = os.environ['DOCKER_NETWORK_NAME']
@@ -41,15 +46,14 @@ c.JupyterHub.port = 8000
 
 c.SwarmSpawner.start_timeout = 100
 c.SwarmSpawner.http_timeout = 100
+c.SwarmSpawner.poll_interval = 30
 
 c.JupyterHub.cookie_secret_file = 'jupyterhub_cookie_secret'
 
 # debug-logging for testing
 c.JupyterHub.log_level = logging.DEBUG
 # Enable debug-logging of the single-user server
-c.Spawner.debug = True
-# Enable debug-logging of the single-user server
-c.LocalProcessSpawner.debug = True
+c.SwarmSpawner.debug = True
 
 c.JupyterHub.services = [
     {
@@ -98,10 +102,11 @@ def create_dir_hook(spawner):
         'mounts': mounts_user
     }
     gui_path = os.path.join(conf_path, 'gui')
-    if not os.path.exists(gui_path):
+    conf_file = gui_path + '/code_snippets.json'
+    if not os.path.exists(conf_file):
         os.makedirs(gui_path, exist_ok=True)
         os.chmod(gui_path, 0o777)
-        shutil.copy('/opt/var/jupyteo/GUI/jupyteo/code_snippets.json', gui_path)
+        shutil.copy('/opt/var/jupyteo/GUI/jupyteo/code_snippets.json', conf_file)
     os.chmod(os.path.join(gui_path, 'code_snippets.json'), 0o777)
 
 

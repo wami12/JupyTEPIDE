@@ -1,6 +1,5 @@
-from textwrap import dedent
-
 from dockerspawner import DockerSpawner
+from textwrap import dedent
 from traitlets import (
     Integer,
     Unicode,
@@ -8,6 +7,7 @@ from traitlets import (
 
 
 class SystemUserSpawner(DockerSpawner):
+
     host_homedir_format_string = Unicode(
         "/home/{username}",
         config=True,
@@ -34,18 +34,18 @@ class SystemUserSpawner(DockerSpawner):
     )
 
     user_id = Integer(-1,
-                      help=dedent(
-                          """
-                          If system users are being used, then we need to know their user id
-                          in order to mount the home directory.
-              
-                          User IDs are looked up in two ways:
-              
-                          1. stored in the state dict (authenticator can write here)
-                          2. lookup via pwd
-                          """
-                      )
-                      )
+        help=dedent(
+            """
+            If system users are being used, then we need to know their user id
+            in order to mount the home directory.
+
+            User IDs are looked up in two ways:
+
+            1. stored in the state dict (authenticator can write here)
+            2. lookup via pwd
+            """
+        )
+    )
 
     @property
     def host_homedir(self):
@@ -97,9 +97,9 @@ class SystemUserSpawner(DockerSpawner):
         env = super(SystemUserSpawner, self).get_env()
         # relies on NB_USER and NB_UID handling in jupyter/docker-stacks
         env.update(dict(
-            USER=self.user.name,  # deprecated
+            USER=self.user.name, # deprecated
             NB_USER=self.user.name,
-            USER_ID=self.user_id,  # deprecated
+            USER_ID=self.user_id, # deprecated
             NB_UID=self.user_id,
             HOME=self.homedir,
         ))
@@ -128,7 +128,7 @@ class SystemUserSpawner(DockerSpawner):
         return state
 
     def start(self, *, image=None, extra_create_kwargs=None,
-              extra_host_config=None):
+        extra_host_config=None):
         """start the single-user server in a docker container"""
         if image:
             self.log.warning("Specifying image via .start args is deprecated")

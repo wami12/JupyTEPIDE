@@ -1,7 +1,7 @@
 # Copyright (c) JupyTEP IDE Development Team.
 # Distributed under the terms of the Modified BSD License.
 ARG DOCKER_VER
-FROM reg.jupyteo.com/eodata-notebook:$DOCKER_VER
+FROM reg.jupyteo.com/scipy-ext-notebook:$DOCKER_VER
 
 LABEL maintainer="Jupyteo Project <jupyteo@wasat.pl>"
 
@@ -12,7 +12,8 @@ RUN mkdir /tmp/jupyteo
 COPY ./ /tmp/jupyteo/
 
 # Install JupyTEP IDE UI layout and enable it
-RUN cd /tmp && \
+RUN ls -lah /tmp/jupyteo/ && \
+	cd /tmp && \
     cp -rf /tmp/jupyteo/GUI/res/jupyter/static/* "/opt/conda/lib/python3.6/site-packages/notebook/static" && \
     cd jupyteo && \
     cp -R notebooks /home/jovyan/ && \
@@ -22,10 +23,10 @@ RUN cd /tmp && \
     mkdir -p /home/jovyan/.ipython/profile_default/startup && \
     find "/home/jovyan/.ipython/profile_default/startup" -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
     cp -a /tmp/jupyteo/scripts/startup/. /home/jovyan/.ipython/profile_default/startup/ && \
-    mkdir -p /opt/jupyteo/scripts && \
-    cp /tmp/jupyteo/scripts/metadata.py /opt/jupyteo/scripts/metadata.py && \
+    mkdir -p /opt/var/jupyteo/scripts && \
+    cp /tmp/jupyteo/scripts/metadata.py /opt/var/jupyteo/scripts/metadata.py && \
     mkdir -p /home/jovyan/.jupyteo/conf/gui && \
-    cp -R /tmp/jupyteo/sdk /opt/jupyteo/sdk && \
+    cp -R /tmp/jupyteo/sdk /opt/var/jupyteo/sdk && \
     find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf && \
     fix-permissions /home/$NB_USER && \
     fix-permissions /opt

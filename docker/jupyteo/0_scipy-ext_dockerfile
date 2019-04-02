@@ -62,6 +62,10 @@ RUN cd /tmp && \
     fix-permissions /home/$NB_USER && \
     fix-permissions /opt
 
+# Remove if it is EO Cloud
+RUN groupadd -g 998 vboxsf
+RUN usermod -a -G vboxsf jovyan
+
 COPY spawn/docker-entrypoint.sh /srv/docker-entrypoint.sh
 RUN chmod 777 /srv/docker-entrypoint.sh && \
     find /tmp -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf

@@ -77,6 +77,13 @@ all(){
 	push ${IMAGE}
 }
 
+test(){
+	VER=$1
+	IMAGE=reg.jupyteo.com/test-notebook:${VER}
+	echo "START SEND TO ACTINA NODES: "${IMAGE}
+	push ${IMAGE}
+}
+
 push(){
 DOCKER_IMG=$1
 TIMEFORMAT='It takes %R seconds to complete push and pull'
