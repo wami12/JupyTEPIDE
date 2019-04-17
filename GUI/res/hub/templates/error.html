@@ -10,8 +10,9 @@
 
 <div class="error">
   {% block h1_error %}
+  {{status_code}} : {{status_message}}
   <h1>
-   <!-- {{status_code}} : {{status_message}} --!>
+    <!--{{status_code}} : {{status_message}} --!>
   </h1>
   {% endblock h1_error %}
   {% block error_detail %}
